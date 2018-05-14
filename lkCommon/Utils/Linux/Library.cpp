@@ -1,7 +1,8 @@
 #include "PCH.hpp"
 #include "../Library.hpp"
-#include "../lkCommon.hpp"
-#include "../Logger.hpp"
+
+#include "lkCommon.hpp"
+#include "Utils/Logger.hpp"
 
 #include <dlfcn.h>
 

@@ -1,6 +1,7 @@
 #include "PCH.hpp"
-#include "../Common.hpp"
-#include "../Logger.hpp"
+#include "lkCommon.hpp"
+
+#include "Utils/Logger.hpp"
 
 #include <strsafe.h>
 

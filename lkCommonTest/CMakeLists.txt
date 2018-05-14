@@ -3,8 +3,9 @@ PKG_CHECK_MODULES(LKCOMMON_TEST_PKG_DEPS REQUIRED
                   )
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
-                       Tests/LoggerTest.cpp
-                       Tests/WindowTest.cpp
+                       Tests/Math/Vector4Test.cpp
+                       Tests/System/WindowTest.cpp
+                       Tests/Utils/LoggerTest.cpp
                        )
 
 ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}

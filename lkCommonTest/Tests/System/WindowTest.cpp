@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "lkCommon/Window.hpp"
+#include <lkCommon/System/Window.hpp>
 
 const uint32_t TEST_WINDOW_WIDTH = 100;
 const uint32_t TEST_WINDOW_HEIGHT = 100;
@@ -59,6 +59,15 @@ protected:
     */
 
 public:
+    CallbackTestWindow()
+        : lkCommon::Window()
+        , mOnInitCalled(false)
+        , mOnOpenCalled(false)
+        , mOnCloseCalled(false)
+        , mOnUpdateCalled(false)
+    {
+    }
+
     bool OnInitCalled()
     {
         return mOnInitCalled;

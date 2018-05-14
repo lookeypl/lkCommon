@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "lkCommon/Logger.hpp"
+#include <lkCommon/Utils/Logger.hpp>
 
 TEST(Logger, LogTest)
 {

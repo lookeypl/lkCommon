@@ -1,8 +1,8 @@
 #include "PCH.hpp"
 #include "../FS.hpp"
 
-#include "../lkCommon.hpp"
-#include "../Logger.hpp"
+#include "lkCommon.hpp"
+#include "Utils/Logger.hpp"
 
 
 namespace lkCommon {

@@ -1,7 +1,7 @@
 #include "PCH.hpp"
 #include "../Window.hpp"
-#include "../lkCommon.hpp"
-#include "../Logger.hpp"
+#include "lkCommon.hpp"
+#include "Utils/Logger.hpp"
 
 
 namespace lkCommon {

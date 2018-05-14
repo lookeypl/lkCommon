@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lkCommon.hpp"
+#include "lkCommon/lkCommon.hpp"
 #include "KeyCodes.hpp"
 
 #ifdef WIN32

@@ -1,6 +1,7 @@
 #include "PCH.hpp"
 #include "../Timer.hpp"
-#include "../Logger.hpp"
+
+#include "Utils/Logger.hpp"
 
 
 namespace lkCommon {

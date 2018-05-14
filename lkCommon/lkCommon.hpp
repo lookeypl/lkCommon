@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstring>
-#include "Logger.hpp"
+#include "Utils/Logger.hpp"
 
 // Zeros memory of given structure/object/variable
 #define LKCOMMON_ZERO_MEMORY(x) memset(&x, 0, sizeof(x))
@@ -34,7 +34,7 @@
 #define LKCOMMON_INLINE __attribute__((always_inline))
 
 // Aligns given class/struct to x bytes in memory
-#define LKCOMMON_ALIGN(x) __attribute__((aligned(bytes)))
+#define LKCOMMON_ALIGN(x) __attribute__((aligned(x)))
 
 // Calls aligned malloc and returns its value. Useful for new operator overloading.
 // TODO this must be done differently (Memutils.hpp?)
