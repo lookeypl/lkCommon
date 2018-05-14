@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Win\LoggerPlatform.cpp">
+      <Filter>Win</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Logger.hpp" />
+    <ClInclude Include="LoggerPlatform.hpp" />
+    <ClInclude Include="Common.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Win">
+      <UniqueIdentifier>{aeb15c9d-8927-43b8-8de9-286949bbd2ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,36 @@
+#
+# lkCommon project - ignored files list
+#
+
+# CMake intermediate files
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Visual Studio precompiled headers
+/ipch
+
+# Visual Studio intermediate projects' directories
+/Obj
+
+# Output dir and files
+/Bin
+/bin
+*.a
+*.so
+
+# Visual Studio Performance Analysis Results
+*.vsp
+*.psess
+.vs
+
+# Other useless folders and file patterns
+/Logs
+*.opensdf
+*.opendb
+*.sdf
+*.suo
+*.vcxproj.user
+*.pyc
+*.VC.db
