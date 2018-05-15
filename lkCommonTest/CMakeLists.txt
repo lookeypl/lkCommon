@@ -1,5 +1,6 @@
 PKG_CHECK_MODULES(LKCOMMON_TEST_PKG_DEPS REQUIRED
                   xcb
+                  xcb-image
                   )
 
 SET(LKCOMMON_TEST_SRCS Main.cpp

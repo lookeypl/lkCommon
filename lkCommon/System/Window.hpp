@@ -2,6 +2,7 @@
 
 #include "lkCommon/lkCommon.hpp"
 #include "KeyCodes.hpp"
+#include "lkCommon/Utils/Image.hpp"
 
 #ifdef WIN32
 #include "Windows.h"
@@ -20,11 +21,12 @@ class Window
     std::wstring mClassName;
 
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-#elif defined(__linux__) | defined(__LINUX__)
+#elif defined(__linux__) || defined(__LINUX__)
     xcb_connection_t* mConnection;
     xcb_window_t mWindow;
     xcb_screen_t* mScreen;
     xcb_intern_atom_reply_t* mDeleteReply;
+    xcb_gcontext_t mGraphicsContext; // used for setting single pixels on screen
     int mConnScreen;
 
     void ProcessMessages();
@@ -72,6 +74,7 @@ public:
     bool SetTitle(const std::wstring& title);
     bool SetTitle(const std::string& title);
     void SetInvisible(bool invisible);
+    bool DisplayImage(int x, int y, Image& image);
     void Update(float deltaTime);
     void MouseButtonDown(int button, int x, int y);
     void MouseButtonUp(int button);
@@ -88,7 +91,7 @@ public:
     {
         return mHWND;
     }
-#elif defined(__linux__) | defined(__LINUX__)
+#elif defined(__linux__) || defined(__LINUX__)
     LKCOMMON_INLINE xcb_connection_t* GetConnection() const
     {
         return mConnection;

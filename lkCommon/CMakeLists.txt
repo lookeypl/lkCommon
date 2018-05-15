@@ -1,5 +1,6 @@
 SET(LKCOMMON_SRCS PCH.cpp
                   Math/Vector4.cpp
+                  Utils/Image.cpp
                   )
 
 SET(LKCOMMON_HDRS lkCommon.hpp
@@ -8,6 +9,7 @@ SET(LKCOMMON_HDRS lkCommon.hpp
                   System/FS.hpp
                   System/KeyCodes.hpp
                   System/Window.hpp
+                  Utils/Image.hpp
                   Utils/Library.hpp
                   Utils/Logger.hpp
                   Utils/Timer.hpp

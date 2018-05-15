@@ -3,6 +3,8 @@
 #include "lkCommon.hpp"
 #include "Utils/Logger.hpp"
 
+#include <xcb/xcb_image.h>
+
 
 namespace lkCommon {
 
@@ -149,6 +151,12 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     if (!mInvisible)
         xcb_map_window(mConnection, mWindow);
 
+    mGraphicsContext = xcb_generate_id(mConnection);
+    uint32_t value[] = { mScreen->black_pixel, mScreen->white_pixel, 0 };
+    xcb_create_gc(mConnection, mGraphicsContext, mWindow,
+                  XCB_GC_FOREGROUND | XCB_GC_BACKGROUND | XCB_GC_GRAPHICS_EXPOSURES,
+                  value);
+
     OnOpen();
     mOpened = true;
     return true;
@@ -183,6 +191,29 @@ void Window::SetInvisible(bool invisible)
         else
             xcb_map_window(mConnection, mWindow);
     }
+}
+
+bool Window::DisplayImage(int x, int y, Image& image)
+{
+    if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
+    {
+        LOGE("Displayed Image extens beyond Window borders");
+        return false;
+    }
+
+    uint8_t* data = reinterpret_cast<uint8_t*>(image.mPixels.data());
+    xcb_pixmap_t pixmap = xcb_create_pixmap_from_bitmap_data(mConnection,
+            mWindow, data, image.mWidth, image.mHeight, mScreen->root_depth,
+            mScreen->black_pixel, mScreen->white_pixel, nullptr);
+    xcb_flush(mConnection);
+
+    xcb_copy_area(mConnection, pixmap, mWindow, mGraphicsContext, 0, 0,
+                  x, y, image.mWidth, image.mHeight);
+    xcb_flush(mConnection);
+
+    xcb_free_pixmap(mConnection, pixmap);
+
+    return true;
 }
 
 void Window::MouseButtonDown(int button, int x, int y)

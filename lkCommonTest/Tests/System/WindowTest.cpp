@@ -176,3 +176,26 @@ TEST(Window, OnCloseCallback)
     w.Close();
     EXPECT_TRUE(w.OnCloseCalled());
 }
+
+TEST(Window, ImageIntegrationTest)
+{
+    lkCommon::Window w;
+
+    EXPECT_TRUE(w.Init());
+
+    // w.SetInvisible(true);
+    EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
+
+    lkCommon::Image i;
+    EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
+
+    for (uint32_t x = 0; x < TEST_WINDOW_WIDTH; ++x)
+    {
+        for (uint32_t y = 0; y < TEST_WINDOW_HEIGHT; ++y)
+        {
+            float r = x / TEST_WINDOW_WIDTH * 255.0f;
+            float g = y / TEST_WINDOW_HEIGHT * 255.0f;
+            i.SetPixel(x, y, static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(0));
+        }
+    }
+}
