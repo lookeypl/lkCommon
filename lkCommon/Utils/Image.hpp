@@ -15,18 +15,17 @@ class Image final
 
     struct Pixel
     {
-        uint8_t r;
-        uint8_t g;
         uint8_t b;
-        uint8_t a;
+        uint8_t g;
+        uint8_t r;
 
         Pixel()
-            : r(0), g(0), b(0), a(0)
+            : b(0), g(0), r(0)
         {
         }
 
-        Pixel(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-            : r(r), g(g), b(b), a(a)
+        Pixel(uint8_t r, uint8_t g, uint8_t b)
+            : b(b), g(g), r(r)
         {
         }
     };
@@ -43,7 +42,7 @@ public:
 
     bool Resize(uint32_t width, uint32_t height);
     void SetPixel(uint32_t x, uint32_t y, const Pixel& pixel);
-    void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
 };
 
 } // namespace lkCommon

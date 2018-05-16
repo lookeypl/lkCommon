@@ -43,9 +43,9 @@ void Image::SetPixel(uint32_t x, uint32_t y, const Image::Pixel& pixel)
     mPixels[coord] = pixel;
 }
 
-void Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+void Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b)
 {
-    Pixel p(r, g, b, a);
+    Pixel p(r, g, b);
     SetPixel(x, y, p);
 }
 

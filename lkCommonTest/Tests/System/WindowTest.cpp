@@ -177,7 +177,7 @@ TEST(Window, OnCloseCallback)
     EXPECT_TRUE(w.OnCloseCalled());
 }
 
-TEST(Window, ImageIntegrationTest)
+TEST(Window, DisplayImageTest)
 {
     lkCommon::Window w;
 
@@ -193,9 +193,17 @@ TEST(Window, ImageIntegrationTest)
     {
         for (uint32_t y = 0; y < TEST_WINDOW_HEIGHT; ++y)
         {
-            float r = x / TEST_WINDOW_WIDTH * 255.0f;
-            float g = y / TEST_WINDOW_HEIGHT * 255.0f;
+            float r = static_cast<float>(x) / static_cast<float>(TEST_WINDOW_WIDTH) * 255.0f;
+            float g = static_cast<float>(y) / static_cast<float>(TEST_WINDOW_HEIGHT) * 255.0f;
             i.SetPixel(x, y, static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(0));
         }
+    }
+
+    w.Update(0.1f);
+
+    while (w.IsOpen())
+    {
+        w.Update(0.1f);
+        usleep(100000);
     }
 }

@@ -42,9 +42,11 @@ const char* TranslateErrorCodeToStr(int err)
 
 Window::Window()
     : mConnection(nullptr)
+    , mColormap(0)
     , mWindow(0)
     , mScreen(nullptr)
     , mDeleteReply(nullptr)
+    , mGraphicsContext(0)
     , mConnScreen(0)
     , mWidth(0)
     , mHeight(0)
@@ -66,9 +68,6 @@ Window::~Window()
 
     if (mConnection)
     {
-        xcb_set_screen_saver(mConnection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-        if (mWindow)
-            xcb_destroy_window(mConnection, mWindow);
         xcb_flush(mConnection);
         xcb_disconnect(mConnection);
     }
@@ -92,8 +91,6 @@ bool Window::Init()
         xcb_screen_next(&xcbScreenIt);
     mScreen = xcbScreenIt.data;
 
-    xcb_set_screen_saver(mConnection, 0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-
     OnInit();
     return true;
 }
@@ -109,26 +106,35 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         return false;
     }
 
+    xcb_set_screen_saver(mConnection, 0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
+
     mWindow = xcb_generate_id(mConnection);
 
-    xcb_colormap_t colormap = xcb_generate_id(mConnection);
-    xcb_create_colormap(mConnection, XCB_COLORMAP_ALLOC_NONE, colormap, mScreen->root, mScreen->root_visual);
+    mColormap = xcb_generate_id(mConnection);
+    xcb_void_cookie_t cookie = xcb_create_colormap(mConnection, XCB_COLORMAP_ALLOC_NONE, mColormap, mScreen->root, mScreen->root_visual);
+    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
+    if (err)
+    {
+        LOGE("Failed to create colormap: X11 protocol error " << err->error_code << " ("
+             << TranslateErrorCodeToStr(err->error_code));
+        free(err);
+        return false;
+    }
 
-    uint32_t valueMask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
-    uint32_t valueList[] = {
+    uint32_t winValueMask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
+    uint32_t winValueList[] = {
         XCB_EVENT_MASK_BUTTON_1_MOTION | XCB_EVENT_MASK_BUTTON_2_MOTION | XCB_EVENT_MASK_BUTTON_PRESS |
         XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_FOCUS_CHANGE |
         XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE | XCB_EVENT_MASK_POINTER_MOTION |
         XCB_EVENT_MASK_STRUCTURE_NOTIFY,
-        colormap
+        mColormap
     };
 
-    xcb_void_cookie_t cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
-                                                         mScreen->root, x, y, mWidth, mHeight, 3,
-                                                         XCB_WINDOW_CLASS_INPUT_OUTPUT,
-                                                         mScreen->root_visual, valueMask, valueList);
-
-    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
+    cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
+                                       mScreen->root, x, y, mWidth, mHeight, 3,
+                                       XCB_WINDOW_CLASS_INPUT_OUTPUT,
+                                       mScreen->root_visual, winValueMask, winValueList);
+    err = xcb_request_check(mConnection, cookie);
     if (err)
     {
         LOGE("Failed to create a window: X11 protocol error " << err->error_code << " ("
@@ -149,13 +155,31 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     free(wmProtReply);
 
     if (!mInvisible)
-        xcb_map_window(mConnection, mWindow);
+    {
+        cookie = xcb_map_window(mConnection, mWindow);
+        err = xcb_request_check(mConnection, cookie);
+        if (err)
+        {
+            LOGE("Failed to map window: X11 protocol error " << err->error_code << " ("
+                << TranslateErrorCodeToStr(err->error_code));
+            free(err);
+            return false;
+        }
+    }
+
+    uint32_t gcValueMask = XCB_GC_BACKGROUND | XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
+    uint32_t gcValue[] = { mScreen->black_pixel, mScreen->white_pixel, 0 };
 
     mGraphicsContext = xcb_generate_id(mConnection);
-    uint32_t value[] = { mScreen->black_pixel, mScreen->white_pixel, 0 };
-    xcb_create_gc(mConnection, mGraphicsContext, mWindow,
-                  XCB_GC_FOREGROUND | XCB_GC_BACKGROUND | XCB_GC_GRAPHICS_EXPOSURES,
-                  value);
+    cookie = xcb_create_gc(mConnection, mGraphicsContext, mWindow, gcValueMask, gcValue);
+    err = xcb_request_check(mConnection, cookie);
+    if (err)
+    {
+        LOGE("Failed to create graphics context for window: X11 protocol error " << err->error_code << " ("
+            << TranslateErrorCodeToStr(err->error_code));
+        free(err);
+        return false;
+    }
 
     OnOpen();
     mOpened = true;
@@ -202,17 +226,19 @@ bool Window::DisplayImage(int x, int y, Image& image)
     }
 
     uint8_t* data = reinterpret_cast<uint8_t*>(image.mPixels.data());
-    xcb_pixmap_t pixmap = xcb_create_pixmap_from_bitmap_data(mConnection,
-            mWindow, data, image.mWidth, image.mHeight, mScreen->root_depth,
-            mScreen->black_pixel, mScreen->white_pixel, nullptr);
+    xcb_void_cookie_t cookie = xcb_put_image(mConnection, XCB_IMAGE_FORMAT_Z_PIXMAP, mWindow, mGraphicsContext,
+                                             image.mWidth, image.mHeight, x, y, 0, sizeof(Image::Pixel) * 8,
+                                             image.mWidth * image.mHeight, data);
+    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
+    if (err)
+    {
+        LOGE("Failed to put image on window: X11 protocol error " << err->error_code << " ("
+            << TranslateErrorCodeToStr(err->error_code));
+        free(err);
+        return false;
+    }
+
     xcb_flush(mConnection);
-
-    xcb_copy_area(mConnection, pixmap, mWindow, mGraphicsContext, 0, 0,
-                  x, y, image.mWidth, image.mHeight);
-    xcb_flush(mConnection);
-
-    xcb_free_pixmap(mConnection, pixmap);
-
     return true;
 }
 
@@ -318,6 +344,29 @@ void Window::Close()
 {
     if (!mOpened)
         return;
+
+    if (!mInvisible)
+        xcb_unmap_window(mConnection, mWindow);
+
+    if (mGraphicsContext)
+    {
+        xcb_free_gc(mConnection, mGraphicsContext);
+        mGraphicsContext = 0;
+    }
+
+    if (mWindow)
+    {
+        xcb_destroy_window(mConnection, mWindow);
+        mWindow = 0;
+    }
+
+    if (mColormap)
+    {
+        xcb_free_colormap(mConnection, mColormap);
+        mColormap = 0;
+    }
+
+    xcb_set_screen_saver(mConnection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
     OnClose();
     mOpened = false;
