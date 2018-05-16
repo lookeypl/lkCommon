@@ -64,7 +64,7 @@ uint64_t GetFileModificationTime(const std::string& path)
     FILETIME time;
 
     std::wstring pathWStr;
-    if (!Common::UTF8ToUTF16(path, pathWStr))
+    if (!lkCommon::UTF8ToUTF16(path, pathWStr))
         return 0;
 
     HANDLE file = CreateFile(pathWStr.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

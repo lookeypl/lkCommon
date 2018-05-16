@@ -1,7 +1,8 @@
 #include "PCH.hpp"
-#include "../Common.hpp"
+#include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"
+#include "Utils/UTF.hpp"
 
 #include <fstream>
 
@@ -52,7 +53,7 @@ void Log(LogLevel level, const std::stringstream& msg)
     SetConsoleTextAttribute(console, conInfo.wAttributes);
 
     std::wstring wideMsg;
-    Common::UTF8ToUTF16(fullMsg.str(), wideMsg);
+    UTF8ToUTF16(fullMsg.str(), wideMsg);
 
     OutputDebugStringW(wideMsg.c_str());
 }

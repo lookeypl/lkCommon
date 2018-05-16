@@ -2,11 +2,14 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Tests\VectorTest.cpp">
-      <Filter>Tests</Filter>
+    <ClCompile Include="Tests\System\WindowTest.cpp">
+      <Filter>Tests\System</Filter>
     </ClCompile>
-    <ClCompile Include="..\lkRay\Math\Vector.cpp">
-      <Filter>Modules</Filter>
+    <ClCompile Include="Tests\Utils\LoggerTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Vector4Test.cpp">
+      <Filter>Tests\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -15,6 +18,15 @@
     </Filter>
     <Filter Include="Modules">
       <UniqueIdentifier>{9838f7d0-5044-469c-a1b5-296b250c73e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Math">
+      <UniqueIdentifier>{774a6070-22d2-41b2-91ff-8991519aa5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\System">
+      <UniqueIdentifier>{8fd12019-fe8a-4cae-85c2-7ed4ac781e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Utils">
+      <UniqueIdentifier>{f09b3d21-8bbc-4c30-86c9-e5db37d71b7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

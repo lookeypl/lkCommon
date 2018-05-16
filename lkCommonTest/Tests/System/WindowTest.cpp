@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
 #include <lkCommon/System/Window.hpp>
 
+#include <thread>
+#include <chrono>
+
+
 const uint32_t TEST_WINDOW_WIDTH = 100;
 const uint32_t TEST_WINDOW_HEIGHT = 100;
 const std::string TEST_WINDOW_NAME = "lkCommonTest window";
@@ -184,7 +188,7 @@ TEST(Window, DisplayImageTest)
     EXPECT_TRUE(w.Init());
 
     // w.SetInvisible(true);
-    EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
+    EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
     lkCommon::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
@@ -204,6 +208,6 @@ TEST(Window, DisplayImageTest)
     while (w.IsOpen())
     {
         w.Update(0.1f);
-        usleep(100000);
+        std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
     }
 }

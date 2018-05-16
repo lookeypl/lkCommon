@@ -1,19 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="Win\LoggerPlatform.cpp">
-      <Filter>Win</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Logger.hpp" />
-    <ClInclude Include="LoggerPlatform.hpp" />
-    <ClInclude Include="Common.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Win">
-      <UniqueIdentifier>{aeb15c9d-8927-43b8-8de9-286949bbd2ec}</UniqueIdentifier>
+    <Filter Include="System">
+      <UniqueIdentifier>{e452611d-6182-4413-8eff-7763396df118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{15c32c6f-faa5-4736-9e7c-ef78fdc93082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Win">
+      <UniqueIdentifier>{8cd35386-267e-4c3f-92af-7e6558a5db89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Win">
+      <UniqueIdentifier>{c2f723e9-9d96-4a11-93a9-ac398508a7d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{cc9ed11e-2fad-4ff3-b1c8-d07b86922abb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lkCommon.hpp" />
+    <ClInclude Include="PCH.hpp" />
+    <ClInclude Include="System\FS.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\KeyCodes.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Window.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Image.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Library.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Logger.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Timer.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\UTF.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PCH.cpp" />
+    <ClCompile Include="Utils\Win\Library.cpp">
+      <Filter>Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Win\Logger.cpp">
+      <Filter>Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Win\Timer.cpp">
+      <Filter>Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Win\UTF.cpp">
+      <Filter>Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Win\FS.cpp">
+      <Filter>System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Win\Window.cpp">
+      <Filter>System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

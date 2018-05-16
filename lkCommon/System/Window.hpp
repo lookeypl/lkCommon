@@ -75,7 +75,7 @@ public:
     bool SetTitle(const std::wstring& title);
     bool SetTitle(const std::string& title);
     void SetInvisible(bool invisible);
-    bool DisplayImage(int x, int y, Image& image);
+    bool DisplayImage(uint32_t x, uint32_t y, Image& image);
     void Update(float deltaTime);
     void MouseButtonDown(int button, int x, int y);
     void MouseButtonUp(int button);

@@ -3,6 +3,7 @@
 
 #include "lkCommon.hpp"
 #include "Utils/Logger.hpp"
+#include "Utils/UTF.hpp"
 
 
 namespace lkCommon {

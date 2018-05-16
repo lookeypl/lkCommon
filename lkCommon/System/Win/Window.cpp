@@ -2,6 +2,7 @@
 
 #include "../Window.hpp"
 #include "Utils/Logger.hpp"
+#include "Utils/UTF.hpp"
 
 
 namespace lkCommon {
@@ -100,7 +101,7 @@ bool Window::Init()
     }
 
     WNDCLASSEX wc;
-    ZERO_MEMORY(wc);
+    LKCOMMON_ZERO_MEMORY(wc);
     wc.cbSize = sizeof(WNDCLASSEX);
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WndProc;
@@ -207,6 +208,17 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
+bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
+{
+    if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
+    {
+        LOGE("Displayed Image extens beyond Window borders");
+        return false;
+    }
+
+
+}
+
 void Window::Update(float deltaTime)
 {
     MSG msg;
@@ -282,35 +294,35 @@ void Window::OnClose()
 
 void Window::OnKeyDown(KeyCode key)
 {
-    UNUSED(key);
+    LKCOMMON_UNUSED(key);
 }
 
 void Window::OnKeyUp(KeyCode key)
 {
-    UNUSED(key);
+    LKCOMMON_UNUSED(key);
 }
 
 void Window::OnUpdate(float deltaTime)
 {
-    UNUSED(deltaTime);
+    LKCOMMON_UNUSED(deltaTime);
 }
 
 void Window::OnMouseDown(int key)
 {
-    UNUSED(key);
+    LKCOMMON_UNUSED(key);
 }
 
 void Window::OnMouseMove(int x, int y, int deltaX, int deltaY)
 {
-    UNUSED(x);
-    UNUSED(y);
-    UNUSED(deltaX);
-    UNUSED(deltaY);
+    LKCOMMON_UNUSED(x);
+    LKCOMMON_UNUSED(y);
+    LKCOMMON_UNUSED(deltaX);
+    LKCOMMON_UNUSED(deltaY);
 }
 
 void Window::OnMouseUp(int key)
 {
-    UNUSED(key);
+    LKCOMMON_UNUSED(key);
 }
 
 } // namespace lkCommon

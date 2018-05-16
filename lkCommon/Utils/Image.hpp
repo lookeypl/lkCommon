@@ -30,8 +30,8 @@ class Image final
         }
     };
 
-    int mWidth;
-    int mHeight;
+    uint32_t mWidth;
+    uint32_t mHeight;
     std::vector<Pixel> mPixels;
 
     size_t GetPixelCoord(uint32_t x, uint32_t y);

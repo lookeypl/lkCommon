@@ -217,7 +217,7 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(int x, int y, Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
 {
     if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
     {

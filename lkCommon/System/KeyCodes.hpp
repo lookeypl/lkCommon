@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef WIN32
+#include <Windows.h>
+#endif // WIN32
+
 
 namespace lkCommon {
 

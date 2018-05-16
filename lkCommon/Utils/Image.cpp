@@ -29,6 +29,7 @@ bool Image::Resize(uint32_t width, uint32_t height)
     mWidth = width;
     mHeight = height;
     mPixels.resize(mWidth * mHeight);
+    return true;
 }
 
 void Image::SetPixel(uint32_t x, uint32_t y, const Image::Pixel& pixel)
