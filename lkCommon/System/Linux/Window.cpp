@@ -42,7 +42,6 @@ const char* TranslateErrorCodeToStr(int err)
 
 Window::Window()
     : mConnection(nullptr)
-    , mColormap(0)
     , mWindow(0)
     , mScreen(nullptr)
     , mDeleteReply(nullptr)
@@ -63,11 +62,10 @@ Window::~Window()
 {
     Close();
 
-    if (mDeleteReply)
-        free(mDeleteReply);
-
     if (mConnection)
     {
+        xcb_set_screen_saver(mConnection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
+
         xcb_flush(mConnection);
         xcb_disconnect(mConnection);
     }
@@ -81,6 +79,8 @@ bool Window::Init()
         LOGE("Failed to connect to X server through XCB");
         return false;
     }
+
+    xcb_set_screen_saver(mConnection, 0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
     const xcb_setup_t* xcbSetup;
     xcb_screen_iterator_t xcbScreenIt;
@@ -106,35 +106,21 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         return false;
     }
 
-    xcb_set_screen_saver(mConnection, 0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-
     mWindow = xcb_generate_id(mConnection);
 
-    mColormap = xcb_generate_id(mConnection);
-    xcb_void_cookie_t cookie = xcb_create_colormap(mConnection, XCB_COLORMAP_ALLOC_NONE, mColormap, mScreen->root, mScreen->root_visual);
-    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
-    if (err)
-    {
-        LOGE("Failed to create colormap: X11 protocol error " << err->error_code << " ("
-             << TranslateErrorCodeToStr(err->error_code));
-        free(err);
-        return false;
-    }
-
-    uint32_t winValueMask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
+    uint32_t winValueMask = XCB_CW_EVENT_MASK;
     uint32_t winValueList[] = {
         XCB_EVENT_MASK_BUTTON_1_MOTION | XCB_EVENT_MASK_BUTTON_2_MOTION | XCB_EVENT_MASK_BUTTON_PRESS |
         XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_FOCUS_CHANGE |
         XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE | XCB_EVENT_MASK_POINTER_MOTION |
-        XCB_EVENT_MASK_STRUCTURE_NOTIFY,
-        mColormap
+        XCB_EVENT_MASK_STRUCTURE_NOTIFY
     };
 
-    cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
+    xcb_void_cookie_t cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
                                        mScreen->root, x, y, mWidth, mHeight, 3,
                                        XCB_WINDOW_CLASS_INPUT_OUTPUT,
                                        mScreen->root_visual, winValueMask, winValueList);
-    err = xcb_request_check(mConnection, cookie);
+    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
     if (err)
     {
         LOGE("Failed to create a window: X11 protocol error " << err->error_code << " ("
@@ -142,6 +128,8 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         free(err);
         return false;
     }
+
+    xcb_flush(mConnection);
 
     SetTitle(title);
 
@@ -156,30 +144,24 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
     if (!mInvisible)
     {
-        cookie = xcb_map_window(mConnection, mWindow);
-        err = xcb_request_check(mConnection, cookie);
-        if (err)
-        {
-            LOGE("Failed to map window: X11 protocol error " << err->error_code << " ("
-                << TranslateErrorCodeToStr(err->error_code));
-            free(err);
-            return false;
-        }
+        xcb_map_window(mConnection, mWindow);
     }
 
-    uint32_t gcValueMask = XCB_GC_BACKGROUND | XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-    uint32_t gcValue[] = { mScreen->black_pixel, mScreen->white_pixel, 0 };
+    uint32_t gcValueMask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
+    uint32_t gcValue[] = { mScreen->black_pixel, 0 };
 
     mGraphicsContext = xcb_generate_id(mConnection);
     cookie = xcb_create_gc(mConnection, mGraphicsContext, mWindow, gcValueMask, gcValue);
     err = xcb_request_check(mConnection, cookie);
     if (err)
     {
-        LOGE("Failed to create graphics context for window: X11 protocol error " << err->error_code << " ("
+        LOGE("Failed to create graphics context: X11 protocol error " << err->error_code << " ("
             << TranslateErrorCodeToStr(err->error_code));
         free(err);
         return false;
     }
+
+    xcb_flush(mConnection);
 
     OnOpen();
     mOpened = true;
@@ -348,6 +330,12 @@ void Window::Close()
     if (!mInvisible)
         xcb_unmap_window(mConnection, mWindow);
 
+    if (mDeleteReply)
+    {
+        free(mDeleteReply);
+        mDeleteReply = nullptr;
+    }
+
     if (mGraphicsContext)
     {
         xcb_free_gc(mConnection, mGraphicsContext);
@@ -359,14 +347,6 @@ void Window::Close()
         xcb_destroy_window(mConnection, mWindow);
         mWindow = 0;
     }
-
-    if (mColormap)
-    {
-        xcb_free_colormap(mConnection, mColormap);
-        mColormap = 0;
-    }
-
-    xcb_set_screen_saver(mConnection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
     OnClose();
     mOpened = false;

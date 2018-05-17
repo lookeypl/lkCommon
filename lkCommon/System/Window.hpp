@@ -23,7 +23,6 @@ class Window
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #elif defined(__linux__) || defined(__LINUX__)
     xcb_connection_t* mConnection;
-    xcb_colormap_t mColormap;
     xcb_window_t mWindow;
     xcb_screen_t* mScreen;
     xcb_intern_atom_reply_t* mDeleteReply;

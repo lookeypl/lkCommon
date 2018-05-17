@@ -187,7 +187,7 @@ TEST(Window, DisplayImageTest)
 
     EXPECT_TRUE(w.Init());
 
-    // w.SetInvisible(true);
+    w.SetInvisible(false);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
     lkCommon::Image i;
@@ -202,8 +202,6 @@ TEST(Window, DisplayImageTest)
             i.SetPixel(x, y, static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(0));
         }
     }
-
-    w.Update(0.1f);
 
     while (w.IsOpen())
     {
