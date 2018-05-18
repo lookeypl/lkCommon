@@ -18,6 +18,7 @@ class Window
 #ifdef WIN32
     HINSTANCE mInstance;
     HWND mHWND;
+    HDC mHDC;
     std::wstring mClassName;
 
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -71,5 +71,8 @@
     <ClCompile Include="Math\Vector4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Image.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

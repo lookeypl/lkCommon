@@ -18,14 +18,20 @@ class Image final
         uint8_t b;
         uint8_t g;
         uint8_t r;
+        uint8_t a;
 
         Pixel()
-            : b(0), g(0), r(0)
+            : b(0), g(0), r(0), a(0)
         {
         }
 
         Pixel(uint8_t r, uint8_t g, uint8_t b)
-            : b(b), g(g), r(r)
+            : b(b), g(g), r(r), a(0)
+        {
+        }
+
+        Pixel(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+            : b(b), g(g), r(r), a(a)
         {
         }
     };

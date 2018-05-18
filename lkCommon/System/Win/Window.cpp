@@ -162,6 +162,8 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         SetFocus(mHWND);
     }
 
+    mHDC = GetDC(mHWND);
+
     mOpened = true;
     mWidth = width;
     mHeight = height;
@@ -216,7 +218,27 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
         return false;
     }
 
+    HBITMAP img = CreateBitmap(image.mWidth, image.mHeight, 1, sizeof(Image::Pixel) * 8, image.mPixels.data());
+    if (img == INVALID_HANDLE_VALUE)
+    {
+        LOGE("Failed to create temporary bitmap for displayed image");
+        return false;
+    }
 
+    HDC tempDC = CreateCompatibleDC(mHDC);
+    if (tempDC == INVALID_HANDLE_VALUE)
+    {
+        LOGE("Failed to obtain a compatible DC for bitmap display");
+        DeleteObject(img);
+        return false;
+    }
+
+    SelectObject(tempDC, img);
+    BitBlt(mHDC, x, y, image.mWidth, image.mHeight, tempDC, 0, 0, SRCCOPY);
+
+    DeleteDC(tempDC);
+    DeleteObject(img);
+    return true;
 }
 
 void Window::Update(float deltaTime)

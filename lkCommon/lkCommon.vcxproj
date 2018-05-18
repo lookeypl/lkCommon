@@ -41,6 +41,7 @@
     </ClCompile>
     <ClCompile Include="System\Win\FS.cpp" />
     <ClCompile Include="System\Win\Window.cpp" />
+    <ClCompile Include="Utils\Image.cpp" />
     <ClCompile Include="Utils\Win\Library.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
