@@ -35,10 +35,10 @@ class Window
 #error "Target platform not supported"
 #endif
 
-    int mWidth;
-    int mHeight;
-    int mMouseDownX;
-    int mMouseDownY;
+    uint32_t mWidth;
+    uint32_t mHeight;
+    uint32_t mMouseDownX;
+    uint32_t mMouseDownY;
     bool mOpened;
     bool mInvisible;
     bool mKeys[255];

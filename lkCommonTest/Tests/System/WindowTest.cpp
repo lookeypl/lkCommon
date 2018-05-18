@@ -143,6 +143,7 @@ TEST(Window, OnOpenCallback)
     EXPECT_FALSE(w.OnOpenCalled());
 
     // Open should call OnOpen
+    w.SetInvisible(true);
     EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
     EXPECT_TRUE(w.OnOpenCalled());
 }
@@ -155,6 +156,7 @@ TEST(Window, OnUpdateCallback)
     EXPECT_TRUE(w.Init());
     EXPECT_FALSE(w.OnUpdateCalled());
 
+    w.SetInvisible(true);
     EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
     EXPECT_FALSE(w.OnUpdateCalled());
 
@@ -174,6 +176,7 @@ TEST(Window, OnCloseCallback)
     w.Close();
     EXPECT_FALSE(w.OnCloseCalled());
 
+    w.SetInvisible(true);
     EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
     EXPECT_FALSE(w.OnCloseCalled());
 
@@ -218,16 +221,7 @@ TEST(Window, DisplayImageTooBigTest)
     lkCommon::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH + 1, TEST_WINDOW_HEIGHT + 1));
 
-    for (uint32_t x = 0; x < TEST_WINDOW_WIDTH; ++x)
-    {
-        for (uint32_t y = 0; y < TEST_WINDOW_HEIGHT; ++y)
-        {
-            float r = static_cast<float>(x) / static_cast<float>(TEST_WINDOW_WIDTH) * 255.0f;
-            float g = static_cast<float>(y) / static_cast<float>(TEST_WINDOW_HEIGHT) * 255.0f;
-            i.SetPixel(x, y, static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(0));
-        }
-    }
-
+    // contents don't matter, the function should fail even before displaying anything
     EXPECT_FALSE(w.DisplayImage(0, 0, i));
 }
 
@@ -243,15 +237,6 @@ TEST(Window, DisplayImageOutsideBoundsTest)
     lkCommon::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
 
-    for (uint32_t x = 0; x < TEST_WINDOW_WIDTH; ++x)
-    {
-        for (uint32_t y = 0; y < TEST_WINDOW_HEIGHT; ++y)
-        {
-            float r = static_cast<float>(x) / static_cast<float>(TEST_WINDOW_WIDTH) * 255.0f;
-            float g = static_cast<float>(y) / static_cast<float>(TEST_WINDOW_HEIGHT) * 255.0f;
-            i.SetPixel(x, y, static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(0));
-        }
-    }
-
+    // contents don't matter, the function should fail even before displaying anything
     EXPECT_FALSE(w.DisplayImage(1, 1, i));
 }

@@ -49,6 +49,7 @@ public:
     bool Resize(uint32_t width, uint32_t height);
     void SetPixel(uint32_t x, uint32_t y, const Pixel& pixel);
     void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
+    void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 };
 
 } // namespace lkCommon

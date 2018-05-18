@@ -35,7 +35,7 @@ void Log(LogLevel level, const std::stringstream& msg)
         levelStr = " WRN ";
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         break;
-    case LogLevel::ERROR:
+    case LogLevel::ERR:
         levelStr = "ERROR";
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
         break;

@@ -2,16 +2,13 @@
 
 #include <sstream>
 
-#ifdef ERROR
-#undef ERROR
-#endif
 
 namespace lkCommon {
 namespace Logger {
 
 enum class LogLevel: unsigned char
 {
-    ERROR = 0,
+    ERR = 0,
     WARNING,
     INFO,
     DEBUG,
@@ -43,4 +40,4 @@ void Log(LogLevel level, const std::stringstream& msg);
 
 #define LOGI(msg) LOG(lkCommon::Logger::LogLevel::INFO, msg)
 #define LOGW(msg) LOG(lkCommon::Logger::LogLevel::WARNING, msg)
-#define LOGE(msg) LOG(lkCommon::Logger::LogLevel::ERROR, msg)
+#define LOGE(msg) LOG(lkCommon::Logger::LogLevel::ERR, msg)
