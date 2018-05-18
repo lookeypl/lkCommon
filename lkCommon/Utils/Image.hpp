@@ -13,6 +13,7 @@ class Image final
 {
     friend class Window;
 
+public:
     struct Pixel
     {
         uint8_t b;
@@ -36,6 +37,7 @@ class Image final
         }
     };
 
+private:
     uint32_t mWidth;
     uint32_t mHeight;
     std::vector<Pixel> mPixels;
@@ -47,9 +49,13 @@ public:
     ~Image();
 
     bool Resize(uint32_t width, uint32_t height);
-    void SetPixel(uint32_t x, uint32_t y, const Pixel& pixel);
-    void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
-    void SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    bool SetPixel(uint32_t x, uint32_t y, const Pixel& pixel);
+    bool SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b);
+    bool SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+
+    bool GetPixel(uint32_t x, uint32_t y, Image::Pixel& pixel);
+    bool GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b);
+    bool GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a);
 };
 
 } // namespace lkCommon

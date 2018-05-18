@@ -11,13 +11,13 @@
     <ClCompile Include="Tests\Math\Vector4Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\ImageTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">
       <UniqueIdentifier>{b1bc89d0-5608-41a6-9db0-93dc91f06190}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Modules">
-      <UniqueIdentifier>{9838f7d0-5044-469c-a1b5-296b250c73e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tests\Math">
       <UniqueIdentifier>{774a6070-22d2-41b2-91ff-8991519aa5e4}</UniqueIdentifier>
