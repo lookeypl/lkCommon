@@ -31,7 +31,7 @@ void Log(LogLevel level, const std::stringstream& msg)
         levelStr = " WRN ";
         colorStr = "\033[33m"; // Yellow (Red | Green)
         break;
-    case LogLevel::ERROR:
+    case LogLevel::ERR:
         levelStr = "ERROR";
         colorStr = "\033[91m"; // Light red
         break;

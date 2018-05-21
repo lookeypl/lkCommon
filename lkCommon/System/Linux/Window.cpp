@@ -108,12 +108,13 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
     mWindow = xcb_generate_id(mConnection);
 
-    uint32_t winValueMask = XCB_CW_EVENT_MASK;
+    uint32_t winValueMask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
     uint32_t winValueList[] = {
         XCB_EVENT_MASK_BUTTON_1_MOTION | XCB_EVENT_MASK_BUTTON_2_MOTION | XCB_EVENT_MASK_BUTTON_PRESS |
         XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_FOCUS_CHANGE |
         XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE | XCB_EVENT_MASK_POINTER_MOTION |
-        XCB_EVENT_MASK_STRUCTURE_NOTIFY
+        XCB_EVENT_MASK_STRUCTURE_NOTIFY,
+        mScreen->default_colormap
     };
 
     xcb_void_cookie_t cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
@@ -147,8 +148,8 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         xcb_map_window(mConnection, mWindow);
     }
 
-    uint32_t gcValueMask = XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-    uint32_t gcValue[] = { mScreen->black_pixel, 0 };
+    uint32_t gcValueMask = XCB_GC_BACKGROUND | XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
+    uint32_t gcValue[] = { mScreen->white_pixel, mScreen->black_pixel, 0 };
 
     mGraphicsContext = xcb_generate_id(mConnection);
     cookie = xcb_create_gc(mConnection, mGraphicsContext, mWindow, gcValueMask, gcValue);
@@ -207,6 +208,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
         return false;
     }
 
+/*
     uint8_t* data = reinterpret_cast<uint8_t*>(image.mPixels.data());
     xcb_void_cookie_t cookie = xcb_put_image(mConnection, XCB_IMAGE_FORMAT_Z_PIXMAP, mWindow, mGraphicsContext,
                                              image.mWidth, image.mHeight, x, y, 0, sizeof(Image::Pixel) * 8,
@@ -219,8 +221,33 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
         free(err);
         return false;
     }
+*/
+
+    xcb_image_t* img = xcb_image_create_native(mConnection,
+                                               image.mWidth, image.mHeight,
+                                               XCB_IMAGE_FORMAT_Z_PIXMAP,
+                                               mScreen->root_depth, nullptr,
+                                               image.mWidth * image.mHeight * sizeof(Image::Pixel),
+                                               reinterpret_cast<uint8_t*>(image.mPixels.data()));
+    if (img == nullptr)
+    {
+        LOGE("Failed to create temporary image");
+        return false;
+    }
+
+    xcb_void_cookie_t c = xcb_image_put(mConnection, mWindow, mGraphicsContext, img, x, y, 0);
+    xcb_generic_error_t* err = xcb_request_check(mConnection, c);
+    if (err)
+    {
+        LOGE("Failed to put image on window: X11 protocol error " << err->error_code << " ("
+            << TranslateErrorCodeToStr(err->error_code));
+        free(err);
+        return false;
+    }
 
     xcb_flush(mConnection);
+    xcb_image_destroy(img);
+
     return true;
 }
 
