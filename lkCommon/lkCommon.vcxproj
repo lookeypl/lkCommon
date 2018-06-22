@@ -20,6 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lkCommon.hpp" />
+    <ClInclude Include="Math\Interpolation\CubicInterpolator.hpp" />
+    <ClInclude Include="Math\Interpolation\Interpolator.hpp" />
+    <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp" />
+    <ClInclude Include="Math\RingAverage.hpp" />
+    <ClInclude Include="Math\RingAverageImpl.hpp" />
     <ClInclude Include="Math\Vector4.hpp" />
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="System\FS.hpp" />
@@ -28,10 +33,15 @@
     <ClInclude Include="System\Window.hpp" />
     <ClInclude Include="Utils\Image.hpp" />
     <ClInclude Include="Utils\Logger.hpp" />
+    <ClInclude Include="Utils\Sort.hpp" />
+    <ClInclude Include="Utils\SortImpl.hpp" />
     <ClInclude Include="Utils\Timer.hpp" />
     <ClInclude Include="Utils\UTF.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Math\Interpolation\CubicInterpolator.cpp" />
+    <ClCompile Include="Math\Interpolation\Interpolator.cpp" />
+    <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

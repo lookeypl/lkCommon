@@ -1,17 +1,27 @@
 SET(LKCOMMON_SRCS PCH.cpp
                   Math/Vector4.cpp
+                  Math/Interpolation/Interpolator.cpp
+                  Math/Interpolation/LinearInterpolator.cpp
+                  Math/Interpolation/CubicInterpolator.cpp
                   Utils/Image.cpp
                   )
 
 SET(LKCOMMON_HDRS lkCommon.hpp
                   PCH.hpp
                   Math/Vector4.hpp
+                  Math/RingAverage.hpp
+                  Math/RingAverageImpl.hpp
+                  Math/Interpolation/Interpolator.hpp
+                  Math/Interpolation/LinearInterpolator.hpp
+                  Math/Interpolation/CubicInterpolator.hpp
                   System/FS.hpp
                   System/KeyCodes.hpp
+                  System/Library.hpp
                   System/Window.hpp
                   Utils/Image.hpp
-                  Utils/Library.hpp
                   Utils/Logger.hpp
+                  Utils/Sort.hpp
+                  Utils/SortImpl.hpp
                   Utils/Timer.hpp
                   Utils/UTF.hpp
                   )
@@ -20,16 +30,16 @@ SET(LKCOMMON_HDRS lkCommon.hpp
 
 IF(WIN32)
     SET(LKCOMMON_PLATFORM_SRCS System/Win/FS.cpp
+                               System/Win/Library.cpp
                                System/Win/Window.cpp
-                               Utils/Win/Library.cpp
                                Utils/Win/Logger.cpp
                                Utils/Win/Timer.cpp
                                Utils/Win/UTF.cpp
                                )
 ELSEIF(UNIX)
     SET(LKCOMMON_PLATFORM_SRCS System/Linux/FS.cpp
+                               System/Linux/Library.cpp
                                System/Linux/Window.cpp
-                               Utils/Linux/Library.cpp
                                Utils/Linux/Logger.cpp
                                Utils/Linux/Timer.cpp
                                Utils/Linux/UTF.cpp

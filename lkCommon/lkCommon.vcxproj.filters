@@ -16,6 +16,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{cc9ed11e-2fad-4ff3-b1c8-d07b86922abb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math\Interpolation">
+      <UniqueIdentifier>{45d3ed45-27ab-496c-8730-73a212f3668c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lkCommon.hpp" />
@@ -47,6 +50,27 @@
     <ClInclude Include="System\Library.hpp">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Math\RingAverage.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\RingAverageImpl.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Sort.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SortImpl.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Interpolation\CubicInterpolator.hpp">
+      <Filter>Math\Interpolation</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Interpolation\Interpolator.hpp">
+      <Filter>Math\Interpolation</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp">
+      <Filter>Math\Interpolation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH.cpp" />
@@ -73,6 +97,15 @@
     </ClCompile>
     <ClCompile Include="System\Win\Library.cpp">
       <Filter>System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Interpolation\CubicInterpolator.cpp">
+      <Filter>Math\Interpolation</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Interpolation\Interpolator.cpp">
+      <Filter>Math\Interpolation</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp">
+      <Filter>Math\Interpolation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,10 @@
 #pragma once
 
+#ifdef WIN32
+#include <Windows.h>
+#elif defined(__linux__) | defined(__LINUX__)
+#include <time.h>
+#endif
 
 namespace lkCommon {
 namespace Utils {
