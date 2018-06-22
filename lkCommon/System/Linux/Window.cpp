@@ -200,28 +200,13 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, const Image& image)
 {
     if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
     {
         LOGE("Displayed Image extens beyond Window borders");
         return false;
     }
-
-/*
-    uint8_t* data = reinterpret_cast<uint8_t*>(image.mPixels.data());
-    xcb_void_cookie_t cookie = xcb_put_image(mConnection, XCB_IMAGE_FORMAT_Z_PIXMAP, mWindow, mGraphicsContext,
-                                             image.mWidth, image.mHeight, x, y, 0, sizeof(Image::Pixel) * 8,
-                                             image.mWidth * image.mHeight, data);
-    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
-    if (err)
-    {
-        LOGE("Failed to put image on window: X11 protocol error " << err->error_code << " ("
-            << TranslateErrorCodeToStr(err->error_code));
-        free(err);
-        return false;
-    }
-*/
 
     xcb_image_t* img = xcb_image_create_native(mConnection,
                                                image.mWidth, image.mHeight,
