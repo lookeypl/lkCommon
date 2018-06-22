@@ -1,8 +1,8 @@
-#include "PCH.hpp"
 #include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"
 
+#include <Windows.h>
 #include <strsafe.h>
 
 

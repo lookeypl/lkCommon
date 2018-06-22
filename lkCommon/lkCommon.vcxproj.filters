@@ -22,7 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lkCommon.hpp" />
-    <ClInclude Include="PCH.hpp" />
     <ClInclude Include="System\FS.hpp">
       <Filter>System</Filter>
     </ClInclude>
@@ -73,7 +72,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PCH.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp">
       <Filter>Utils\Win</Filter>
     </ClCompile>

@@ -1,5 +1,4 @@
-SET(LKCOMMON_SRCS PCH.cpp
-                  Math/Vector4.cpp
+SET(LKCOMMON_SRCS Math/Vector4.cpp
                   Math/Interpolation/Interpolator.cpp
                   Math/Interpolation/LinearInterpolator.cpp
                   Math/Interpolation/CubicInterpolator.cpp
@@ -7,7 +6,6 @@ SET(LKCOMMON_SRCS PCH.cpp
                   )
 
 SET(LKCOMMON_HDRS lkCommon.hpp
-                  PCH.hpp
                   Math/Vector4.hpp
                   Math/RingAverage.hpp
                   Math/RingAverageImpl.hpp

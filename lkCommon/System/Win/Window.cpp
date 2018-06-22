@@ -1,5 +1,3 @@
-#include "PCH.hpp"
-
 #include "../Window.hpp"
 #include "Utils/Logger.hpp"
 #include "Utils/UTF.hpp"

@@ -2,6 +2,9 @@
 
 #include "../Vector4.hpp"
 
+#include <vector>
+
+
 namespace lkCommon {
 namespace Math {
 

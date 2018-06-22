@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "Image.hpp"
 #include "Logger.hpp"
 

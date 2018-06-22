@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "../Window.hpp"
 #include "lkCommon.hpp"
 #include "Utils/Logger.hpp"
@@ -210,12 +209,13 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         return false;
     }
 
+    const uint8_t* data = reinterpret_cast<const uint8_t*>(image.GetDataPtr());
     xcb_image_t* img = xcb_image_create_native(mConnection,
                                                image.GetWidth(), image.GetHeight(),
                                                XCB_IMAGE_FORMAT_Z_PIXMAP,
                                                mScreen->root_depth, nullptr,
-                                               image.GetWidth() * image.GetHeight() * sizeof(Image::Pixel),
-                                               reinterpret_cast<uint8_t*>(image.GetDataPtr()));
+                                               image.GetWidth() * image.GetHeight() * sizeof(Utils::Image::Pixel),
+                                               const_cast<uint8_t*>(data));
     if (img == nullptr)
     {
         LOGE("Failed to create temporary image");

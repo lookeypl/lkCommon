@@ -35,6 +35,7 @@ TEST(QuickSort, SimpleFloatArray)
     ASSERT_TRUE(unsorted == SORTED_UP_FLOAT);
 }
 
+// TODO perf tests should be separated
 TEST(QuickSort, FloatPerfTest)
 {
     lkCommon::Utils::Timer t;
@@ -94,6 +95,7 @@ TEST(BitonicSort, SimpleFloat)
     ASSERT_TRUE(unsorted == SORTED_DOWN_FLOAT);
 }
 
+// TODO perf tests should be separated
 TEST(BitonicSort, FloatPerfTest)
 {
     lkCommon::Utils::Timer t;

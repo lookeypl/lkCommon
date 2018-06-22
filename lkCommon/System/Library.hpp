@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef WIN32
+#include <Windows.h>
+#endif // WIN32
+
+#include <string>
+
 
 namespace lkCommon {
 namespace System {

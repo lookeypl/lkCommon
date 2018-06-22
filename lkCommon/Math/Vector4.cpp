@@ -1,7 +1,7 @@
-#include "PCH.hpp"
 #include "Vector4.hpp"
 
 #include <smmintrin.h>
+#include <cmath>
 
 
 namespace lkCommon {

@@ -4,9 +4,12 @@ PKG_CHECK_MODULES(LKCOMMON_TEST_PKG_DEPS REQUIRED
                   )
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
+                       Tests/Math/RingAverageTest.cpp
                        Tests/Math/Vector4Test.cpp
                        Tests/System/WindowTest.cpp
+                       Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp
+                       Tests/Utils/SortTest.cpp
                        )
 
 ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}
@@ -17,6 +20,7 @@ ADD_DEPENDENCIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET} gtest)
 
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TEST_TARGET}
                            PUBLIC ${LKCOMMON_ROOT_DIRECTORY}
+                           PUBLIC ${LKCOMMON_DIRECTORY}
                            )
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET}

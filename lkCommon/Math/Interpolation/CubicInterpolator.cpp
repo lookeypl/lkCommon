@@ -1,5 +1,7 @@
-#include "PCH.hpp"
 #include "CubicInterpolator.hpp"
+
+#include <vector>
+
 
 namespace lkCommon {
 namespace Math {

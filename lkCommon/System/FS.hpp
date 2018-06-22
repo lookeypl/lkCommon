@@ -1,5 +1,8 @@
 #pragma once
 
+#include <string>
+
+
 namespace lkCommon {
 namespace System {
 namespace FS {

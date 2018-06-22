@@ -1,10 +1,11 @@
-#include "PCH.hpp"
 #include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"
 #include "Utils/UTF.hpp"
 
+#include <Windows.h>
 #include <fstream>
+#include <iostream>
 
 namespace lkCommon {
 namespace Utils {

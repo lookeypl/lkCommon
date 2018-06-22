@@ -5,7 +5,8 @@
 #include "lkCommon/Utils/Image.hpp"
 
 #ifdef WIN32
-#include "Windows.h"
+#include <Windows.h>
+#include <windowsx.h>
 #elif defined(__linux__) || defined(__LINUX__)
 #include <xcb/xcb.h>
 #endif

@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "../UTF.hpp"
 
 #include "lkCommon.hpp"
