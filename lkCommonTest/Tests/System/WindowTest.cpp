@@ -10,7 +10,7 @@ const uint32_t TEST_WINDOW_HEIGHT = 200;
 const std::string TEST_WINDOW_NAME = "lkCommonTest window";
 const float TEST_WINDOW_UPDATE_DELTA_TIME = 1.0f;
 
-class CallbackTestWindow: public lkCommon::Window
+class CallbackTestWindow: public lkCommon::System::Window
 {
     bool mOnInitCalled;
     bool mOnOpenCalled;
@@ -64,7 +64,7 @@ protected:
 
 public:
     CallbackTestWindow()
-        : lkCommon::Window()
+        : lkCommon::System::Window()
         , mOnInitCalled(false)
         , mOnOpenCalled(false)
         , mOnCloseCalled(false)
@@ -95,26 +95,26 @@ public:
 
 TEST(Window, Constructor)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
     EXPECT_FALSE(w.IsOpen());
 }
 
 TEST(Window, Init)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
     EXPECT_TRUE(w.Init());
 }
 
 TEST(Window, OpenWithoutInit)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
     w.SetInvisible(true);
     EXPECT_FALSE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 }
 
 TEST(Window, Open)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
     w.SetInvisible(true);
     EXPECT_TRUE(w.Init());
     EXPECT_FALSE(w.IsOpen());
@@ -186,14 +186,14 @@ TEST(Window, OnCloseCallback)
 
 TEST(Window, DisplayImageTest)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
 
     EXPECT_TRUE(w.Init());
 
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
 
     for (uint32_t x = 0; x < TEST_WINDOW_WIDTH; ++x)
@@ -211,14 +211,14 @@ TEST(Window, DisplayImageTest)
 
 TEST(Window, DisplayImageTooBigTest)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
 
     EXPECT_TRUE(w.Init());
 
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH + 1, TEST_WINDOW_HEIGHT + 1));
 
     // contents don't matter, the function should fail even before displaying anything
@@ -227,14 +227,14 @@ TEST(Window, DisplayImageTooBigTest)
 
 TEST(Window, DisplayImageOutsideBoundsTest)
 {
-    lkCommon::Window w;
+    lkCommon::System::Window w;
 
     EXPECT_TRUE(w.Init());
 
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
 
     // contents don't matter, the function should fail even before displaying anything

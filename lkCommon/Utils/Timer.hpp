@@ -2,6 +2,7 @@
 
 
 namespace lkCommon {
+namespace Utils {
 
 class Timer
 {
@@ -22,4 +23,5 @@ public:
     double Stop(); // Stops the measurement, returns time from Start() in seconds
 };
 
+} // namespace Utils
 } // namespace lkCommon

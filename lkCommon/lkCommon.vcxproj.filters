@@ -32,9 +32,6 @@
     <ClInclude Include="Utils\Image.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Library.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Logger.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -47,12 +44,12 @@
     <ClInclude Include="Math\Vector4.hpp">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="System\Library.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH.cpp" />
-    <ClCompile Include="Utils\Win\Library.cpp">
-      <Filter>Utils\Win</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Win\Logger.cpp">
       <Filter>Utils\Win</Filter>
     </ClCompile>
@@ -73,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="Utils\Image.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Win\Library.cpp">
+      <Filter>System\Win</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

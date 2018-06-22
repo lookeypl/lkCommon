@@ -5,6 +5,7 @@
 
 
 namespace lkCommon {
+namespace Utils {
 
 Timer::Timer()
 {
@@ -32,4 +33,5 @@ double Timer::Stop()
     return delta;
 }
 
+} // namespace Utils
 } // namespace lkCommon

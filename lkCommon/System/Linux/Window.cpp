@@ -6,8 +6,6 @@
 #include <xcb/xcb_image.h>
 
 
-namespace lkCommon {
-
 namespace {
 
 const char* TranslateErrorCodeToStr(int err)
@@ -38,6 +36,10 @@ const char* TranslateErrorCodeToStr(int err)
 }
 
 } // namespace
+
+
+namespace lkCommon {
+namespace System {
 
 
 Window::Window()
@@ -200,20 +202,20 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, const Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
 {
-    if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
+    if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
         LOGE("Displayed Image extens beyond Window borders");
         return false;
     }
 
     xcb_image_t* img = xcb_image_create_native(mConnection,
-                                               image.mWidth, image.mHeight,
+                                               image.GetWidth(), image.GetHeight(),
                                                XCB_IMAGE_FORMAT_Z_PIXMAP,
                                                mScreen->root_depth, nullptr,
-                                               image.mWidth * image.mHeight * sizeof(Image::Pixel),
-                                               reinterpret_cast<uint8_t*>(image.mPixels.data()));
+                                               image.GetWidth() * image.GetHeight() * sizeof(Image::Pixel),
+                                               reinterpret_cast<uint8_t*>(image.GetDataPtr()));
     if (img == nullptr)
     {
         LOGE("Failed to create temporary image");
@@ -412,4 +414,5 @@ void Window::OnMouseUp(int key)
     LKCOMMON_UNUSED(key);
 }
 
+} // namespace System
 } // namespace lkCommon

@@ -3,23 +3,40 @@
 
 const uint32_t TEST_WIDTH = 10;
 const uint32_t TEST_HEIGHT = 20;
-const lkCommon::Image::Pixel TEST_PIXEL(10, 30, 20, 15);
-const lkCommon::Image::Pixel TEST_PIXEL_2(20, 10, 18, 99);
+const lkCommon::Utils::Image::Pixel TEST_PIXEL(10, 30, 20, 15);
+const lkCommon::Utils::Image::Pixel TEST_PIXEL_2(20, 10, 18, 99);
 
-bool ComparePixels(const lkCommon::Image::Pixel& p1, const lkCommon::Image::Pixel& p2, bool withAlpha)
+bool ComparePixels(const lkCommon::Utils::Image::Pixel& p1, const lkCommon::Utils::Image::Pixel& p2, bool withAlpha)
 {
     return (p1.r == p2.r) && (p1.g == p2.g) && (p1.b == p2.b) && (withAlpha ? (p1.a == p2.a) : true);
 }
 
 TEST(Image, ResizeTest)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
+}
+
+TEST(Image, GetDimensions)
+{
+    lkCommon::Utils::Image i;
+    EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
+    EXPECT_EQ(i.GetWidth(), TEST_WIDTH);
+    EXPECT_EQ(i.GetHeight(), TEST_HEIGHT);
+}
+
+TEST(Image, GetDataPointer)
+{
+    lkCommon::Utils::Image i;
+
+    EXPECT_EQ(i.GetDataPtr(), nullptr);
+    EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
+    EXPECT_NE(i.GetDataPtr(), nullptr);
 }
 
 TEST(Image, SetPixel)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
     EXPECT_TRUE(i.SetPixel(0, 0, TEST_PIXEL));
@@ -33,7 +50,7 @@ TEST(Image, SetPixel)
 
 TEST(Image, SetPixelOutOfBounds)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
     EXPECT_FALSE(i.SetPixel(TEST_WIDTH, 0, TEST_PIXEL));
@@ -47,14 +64,14 @@ TEST(Image, SetPixelOutOfBounds)
 
 TEST(Image, GetPixelStruct)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
     EXPECT_TRUE(i.SetPixel(0, 0, TEST_PIXEL));
     EXPECT_TRUE(i.SetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, TEST_PIXEL_2));
 
-    lkCommon::Image::Pixel r1;
-    lkCommon::Image::Pixel r2;
+    lkCommon::Utils::Image::Pixel r1;
+    lkCommon::Utils::Image::Pixel r2;
     EXPECT_TRUE(i.GetPixel(0, 0, r1));
     EXPECT_TRUE(i.GetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, r2));
 
@@ -65,14 +82,14 @@ TEST(Image, GetPixelStruct)
 
 TEST(Image, GetPixelRGB)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
     EXPECT_TRUE(i.SetPixel(0, 0, TEST_PIXEL));
     EXPECT_TRUE(i.SetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, TEST_PIXEL_2));
 
-    lkCommon::Image::Pixel r1;
-    lkCommon::Image::Pixel r2;
+    lkCommon::Utils::Image::Pixel r1;
+    lkCommon::Utils::Image::Pixel r2;
     EXPECT_TRUE(i.GetPixel(0, 0, r1.r, r1.g, r1.b));
     EXPECT_TRUE(i.GetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, r2.r, r2.g, r2.b));
 
@@ -83,14 +100,14 @@ TEST(Image, GetPixelRGB)
 
 TEST(Image, GetPixelRGBA)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
     EXPECT_TRUE(i.SetPixel(0, 0, TEST_PIXEL));
     EXPECT_TRUE(i.SetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, TEST_PIXEL_2));
 
-    lkCommon::Image::Pixel r1;
-    lkCommon::Image::Pixel r2;
+    lkCommon::Utils::Image::Pixel r1;
+    lkCommon::Utils::Image::Pixel r2;
     EXPECT_TRUE(i.GetPixel(0, 0, r1.r, r1.g, r1.b, r1.a));
     EXPECT_TRUE(i.GetPixel(TEST_WIDTH - 1, TEST_HEIGHT - 1, r2.r, r2.g, r2.b, r2.a));
 
@@ -101,11 +118,11 @@ TEST(Image, GetPixelRGBA)
 
 TEST(Image, GetPixelOutOfBounds)
 {
-    lkCommon::Image i;
+    lkCommon::Utils::Image i;
 
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
 
-    lkCommon::Image::Pixel r1;
+    lkCommon::Utils::Image::Pixel r1;
     EXPECT_FALSE(i.GetPixel(TEST_WIDTH, TEST_HEIGHT, r1));
     EXPECT_FALSE(i.GetPixel(TEST_WIDTH, TEST_HEIGHT, r1.r, r1.g, r1.b));
     EXPECT_FALSE(i.GetPixel(TEST_WIDTH, TEST_HEIGHT, r1.r, r1.g, r1.b, r1.a));

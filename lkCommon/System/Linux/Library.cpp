@@ -8,6 +8,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 Library::Library()
     : mModule(nullptr)
@@ -67,4 +68,5 @@ void Library::Close()
     mModule = nullptr;
 }
 
+} // namespace System
 } // namespace lkCommon

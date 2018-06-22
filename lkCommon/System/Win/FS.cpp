@@ -7,12 +7,13 @@
 
 
 namespace lkCommon {
+namespace System {
 namespace FS {
 
 bool CreateDir(const std::string& path)
 {
     std::wstring pathWStr;
-    UTF8ToUTF16(path, pathWStr);
+    Utils::UTF8ToUTF16(path, pathWStr);
 
     return CreateDirectory(pathWStr.c_str(), NULL);
 }
@@ -20,7 +21,7 @@ bool CreateDir(const std::string& path)
 bool Exists(const std::string& path)
 {
     std::wstring pathWStr;
-    UTF8ToUTF16(path, pathWStr);
+    Utils::UTF8ToUTF16(path, pathWStr);
     DWORD attribs = GetFileAttributes(pathWStr.c_str());
 
     return (attribs != INVALID_FILE_ATTRIBUTES);
@@ -35,7 +36,7 @@ std::string GetExecutablePath()
 
     std::wstring pathWStr(path);
     std::string pathStr;
-    lkCommon::UTF16ToUTF8(pathWStr, pathStr);
+    lkCommon::Utils::UTF16ToUTF8(pathWStr, pathStr);
 
     std::string unifiedPathStr = UnifySlashes(pathStr);
     return unifiedPathStr;
@@ -64,7 +65,7 @@ uint64_t GetFileModificationTime(const std::string& path)
     FILETIME time;
 
     std::wstring pathWStr;
-    if (!lkCommon::UTF8ToUTF16(path, pathWStr))
+    if (!lkCommon::Utils::UTF8ToUTF16(path, pathWStr))
         return 0;
 
     HANDLE file = CreateFile(pathWStr.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -107,7 +108,7 @@ std::string JoinPaths(const std::string& a, const std::string& b)
 bool RemoveFile(const std::string& path)
 {
     std::wstring pathWStr;
-    if (!UTF8ToUTF16(path, pathWStr))
+    if (!Utils::UTF8ToUTF16(path, pathWStr))
         return false;
     return DeleteFile(pathWStr.c_str());
 }
@@ -115,7 +116,7 @@ bool RemoveFile(const std::string& path)
 bool SetCWD(const std::string& path)
 {
     std::wstring wPath;
-    lkCommon::UTF8ToUTF16(path, wPath);
+    lkCommon::Utils::UTF8ToUTF16(path, wPath);
     if (!SetCurrentDirectory(wPath.c_str()))
     {
         DWORD err = GetLastError();
@@ -128,7 +129,7 @@ bool SetCWD(const std::string& path)
 
     std::wstring cwdWStr(cwdBuf);
     std::string cwdStr;
-    UTF16ToUTF8(cwdWStr, cwdStr);
+    Utils::UTF16ToUTF8(cwdWStr, cwdStr);
 
     LOGI("Set current working directory to: " << UnifySlashes(cwdStr));
     return true;
@@ -148,4 +149,5 @@ std::string UnifySlashes(const std::string& path)
 }
 
 } // namespace FS
+} // namespace System
 } // namespace lkCommon

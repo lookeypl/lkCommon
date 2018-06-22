@@ -7,6 +7,7 @@
 #include <fstream>
 
 namespace lkCommon {
+namespace Utils {
 namespace Logger {
 
 std::ofstream logFile;
@@ -59,4 +60,5 @@ void Log(LogLevel level, const std::stringstream& msg)
 }
 
 } // namespace Logger
+} // namespace Utils
 } // namespace lkCommon

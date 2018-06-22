@@ -6,6 +6,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 #ifdef WIN32
 
@@ -265,4 +266,5 @@ enum class KeyCode: unsigned int
 #error Target platform not supported.
 #endif
 
+} // namespace System
 } // namespace lkCommon

@@ -4,6 +4,7 @@
 
 
 namespace lkCommon {
+namespace Utils {
 
 Image::Image()
 {
@@ -94,4 +95,5 @@ bool Image::GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b,
     return true;
 }
 
+} // namespace Utils
 } // namespace lkCommon

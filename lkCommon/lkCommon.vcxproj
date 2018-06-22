@@ -24,9 +24,9 @@
     <ClInclude Include="PCH.hpp" />
     <ClInclude Include="System\FS.hpp" />
     <ClInclude Include="System\KeyCodes.hpp" />
+    <ClInclude Include="System\Library.hpp" />
     <ClInclude Include="System\Window.hpp" />
     <ClInclude Include="Utils\Image.hpp" />
-    <ClInclude Include="Utils\Library.hpp" />
     <ClInclude Include="Utils\Logger.hpp" />
     <ClInclude Include="Utils\Timer.hpp" />
     <ClInclude Include="Utils\UTF.hpp" />
@@ -40,9 +40,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="System\Win\FS.cpp" />
+    <ClCompile Include="System\Win\Library.cpp" />
     <ClCompile Include="System\Win\Window.cpp" />
     <ClCompile Include="Utils\Image.cpp" />
-    <ClCompile Include="Utils\Win\Library.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
     <ClCompile Include="Utils\Win\UTF.cpp" />

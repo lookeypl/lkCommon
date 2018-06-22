@@ -1,6 +1,7 @@
 #pragma once
 
 namespace lkCommon {
+namespace System {
 namespace FS {
 
 bool CreateDir(const std::string& path);
@@ -58,4 +59,5 @@ bool SetCWD(const std::string& path);
 std::string UnifySlashes(const std::string& path);
 
 } // namespace FS
+} // namespace System
 } // namespace lkCommon

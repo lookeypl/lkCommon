@@ -3,6 +3,7 @@
 
 
 namespace lkCommon {
+namespace Utils {
 
 Timer::Timer()
 {
@@ -29,4 +30,5 @@ double Timer::Stop()
     return static_cast<double>(diff) / static_cast<double>(mFreq.QuadPart);
 }
 
+} // namespace Utils
 } // namespace lkCommon

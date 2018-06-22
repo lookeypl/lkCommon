@@ -12,6 +12,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 class Window
 {
@@ -75,7 +76,7 @@ public:
     bool SetTitle(const std::wstring& title);
     bool SetTitle(const std::string& title);
     void SetInvisible(bool invisible);
-    bool DisplayImage(uint32_t x, uint32_t y, const Image& image);
+    bool DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image);
     void Update(float deltaTime);
     void MouseButtonDown(int button, int x, int y);
     void MouseButtonUp(int button);
@@ -122,4 +123,5 @@ public:
     }
 };
 
+} // namespace System
 } // namespace lkCommon

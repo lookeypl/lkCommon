@@ -7,6 +7,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 Library::Library()
     : mModule(0)
@@ -30,7 +31,7 @@ bool Library::Open(const std::string& path)
         pathExt.append(ext);
 
     std::wstring widePath;
-    if (!UTF8ToUTF16(pathExt, widePath))
+    if (!Utils::UTF8ToUTF16(pathExt, widePath))
         return false;
 
     mModule = LoadLibrary(widePath.c_str());
@@ -67,4 +68,5 @@ void Library::Close()
     mModule = nullptr;
 }
 
+} // namespace System
 } // namespace lkCommon

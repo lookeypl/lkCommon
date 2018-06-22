@@ -6,6 +6,7 @@
 
 
 namespace lkCommon {
+namespace Utils {
 
 // This function should be unused under Linux
 bool UTF8ToUTF16(const std::string& in, std::wstring& out)
@@ -22,4 +23,5 @@ bool UTF16ToUTF8(const std::wstring& in, std::string& out)
     return false;
 }
 
+} // namespace Utils
 } // namespace lkCommon

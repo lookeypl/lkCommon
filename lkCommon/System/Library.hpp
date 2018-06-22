@@ -2,6 +2,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 class Library
 {
@@ -29,4 +30,5 @@ public:
     void Close();
 };
 
+} // namespace System
 } // namespace lkCommon

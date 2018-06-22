@@ -6,6 +6,7 @@
 
 
 namespace lkCommon {
+namespace System {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 const DWORD WINDOWED_EX_STYLE = WS_EX_WINDOWEDGE;
@@ -133,7 +134,7 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
     // TODO FULLSCREEN
     std::wstring wideTitle;
-    if (!UTF8ToUTF16(title, wideTitle))
+    if (!Utils::UTF8ToUTF16(title, wideTitle))
         return false;
 
     RECT wr;
@@ -189,7 +190,7 @@ bool Window::SetTitle(const std::string& title)
 {
     // Convert title to UTF16
     std::wstring wideTitle;
-    if (!UTF8ToUTF16(title, wideTitle))
+    if (!Utils::UTF8ToUTF16(title, wideTitle))
     {
         return false;
     }
@@ -210,15 +211,15 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, const Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
 {
-    if ((x + image.mWidth > mWidth) || (y + image.mHeight > mHeight))
+    if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
         LOGE("Displayed Image extens beyond Window borders");
         return false;
     }
 
-    HBITMAP img = CreateBitmap(image.mWidth, image.mHeight, 1, sizeof(Image::Pixel) * 8, image.mPixels.data());
+    HBITMAP img = CreateBitmap(image.GetWidth(), image.GetHeight(), 1, sizeof(Utils::Image::Pixel) * 8, image.GetDataPtr());
     if (img == INVALID_HANDLE_VALUE)
     {
         LOGE("Failed to create temporary bitmap for displayed image");
@@ -234,7 +235,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Image& image)
     }
 
     SelectObject(tempDC, img);
-    BitBlt(mHDC, x, y, image.mWidth, image.mHeight, tempDC, 0, 0, SRCCOPY);
+    BitBlt(mHDC, x, y, image.GetWidth(), image.GetHeight(), tempDC, 0, 0, SRCCOPY);
 
     DeleteDC(tempDC);
     DeleteObject(img);
@@ -347,4 +348,5 @@ void Window::OnMouseUp(int key)
     LKCOMMON_UNUSED(key);
 }
 
+} // namespace System
 } // namespace lkCommon

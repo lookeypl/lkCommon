@@ -5,15 +5,17 @@
 #include "Utils/Logger.hpp"
 
 
-namespace lkCommon {
-namespace FS {
-
 namespace {
 
 const std::string PROC_SELF_EXE_PATH = "/proc/self/exe";
 const uint32_t CHAR_BUFFER_SIZE = 512;
 
 } // namespace
+
+
+namespace lkCommon {
+namespace System {
+namespace FS {
 
 bool CreateDir(const std::string& path)
 {
@@ -128,4 +130,5 @@ std::string UnifySlashes(const std::string& path)
 }
 
 } // namespace FS
+} // namespace System
 } // namespace lkCommon

@@ -3,16 +3,17 @@
 #include <cstdint>
 #include <vector>
 
+#include <lkCommon.hpp>
+
 
 namespace lkCommon {
+namespace Utils {
 
 /**
  * A basic Image, which can be filled with whatever data is required
  */
 class Image final
 {
-    friend class Window;
-
 public:
     struct Pixel
     {
@@ -56,6 +57,22 @@ public:
     bool GetPixel(uint32_t x, uint32_t y, Image::Pixel& pixel);
     bool GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b);
     bool GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a);
+
+    LKCOMMON_INLINE uint32_t GetWidth() const
+    {
+        return mWidth;
+    }
+
+    LKCOMMON_INLINE uint32_t GetHeight() const
+    {
+        return mHeight;
+    }
+
+    LKCOMMON_INLINE const Pixel* GetDataPtr() const
+    {
+        return mPixels.data();
+    }
 };
 
+} // namespace Utils
 } // namespace lkCommon
