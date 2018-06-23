@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <vector>
 
-#include <lkCommon.hpp>
+#include <lkCommon/lkCommon.hpp>
 
 
 namespace lkCommon {
