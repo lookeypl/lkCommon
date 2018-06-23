@@ -70,6 +70,9 @@
     <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp">
       <Filter>Math\Interpolation</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Constants.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\Win\Logger.cpp">

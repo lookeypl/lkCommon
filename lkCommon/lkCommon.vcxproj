@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lkCommon.hpp" />
+    <ClInclude Include="Math\Constants.hpp" />
     <ClInclude Include="Math\Interpolation\CubicInterpolator.hpp" />
     <ClInclude Include="Math\Interpolation\Interpolator.hpp" />
     <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp" />

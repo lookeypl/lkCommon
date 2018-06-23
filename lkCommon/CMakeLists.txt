@@ -6,9 +6,10 @@ SET(LKCOMMON_SRCS Math/Vector4.cpp
                   )
 
 SET(LKCOMMON_HDRS lkCommon.hpp
-                  Math/Vector4.hpp
+                  Math/Constants.hpp
                   Math/RingAverage.hpp
                   Math/RingAverageImpl.hpp
+                  Math/Vector4.hpp
                   Math/Interpolation/Interpolator.hpp
                   Math/Interpolation/LinearInterpolator.hpp
                   Math/Interpolation/CubicInterpolator.hpp
