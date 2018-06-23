@@ -44,11 +44,13 @@ Vector4::Vector4(Vector4&& other)
 
 Vector4& Vector4::operator=(const Vector4& other)
 {
+    value.m = _mm_load_ps(other.value.f);
     return *this;
 }
 
 Vector4& Vector4::operator=(Vector4&& other)
 {
+    value.m = _mm_load_ps(other.value.f);
     return *this;
 }
 
@@ -206,38 +208,17 @@ bool Vector4::operator==(const Vector4& other) const
     return res.f[0] && res.f[1] && res.f[2] && res.f[3];
 }
 
-bool Vector4::operator<(const Vector4& other) const
+bool Vector4::operator!=(const Vector4& other) const
 {
     Vector4f res;
-    res.m = _mm_cmplt_ps(value.m, other.value.m);
-    return res.f[0] && res.f[1] && res.f[2] && res.f[3];
-}
-
-bool Vector4::operator>(const Vector4& other) const
-{
-    Vector4f res;
-    res.m = _mm_cmpgt_ps(value.m, other.value.m);
-    return res.f[0] && res.f[1] && res.f[2] && res.f[3];
-}
-
-bool Vector4::operator<=(const Vector4& other) const
-{
-    Vector4f res;
-    res.m = _mm_cmple_ps(value.m, other.value.m);
-    return res.f[0] && res.f[1] && res.f[2] && res.f[3];
-}
-
-bool Vector4::operator>=(const Vector4& other) const
-{
-    Vector4f res;
-    res.m = _mm_cmpge_ps(value.m, other.value.m);
-    return res.f[0] && res.f[1] && res.f[2] && res.f[3];
+    res.m = _mm_cmpneq_ps(value.m, other.value.m);
+    return res.f[0] || res.f[1] || res.f[2] || res.f[3];
 }
 
 // Friendships
 std::ostream& operator<<(std::ostream& os, const Vector4& v)
 {
-    os << "[" << v.value.f[0] << ", " << v.value.f[1] << "," << v.value.f[2] << "," << v.value.f[3] << "]";
+    os << "[" << v.value.f[0] << ", " << v.value.f[1] << ", " << v.value.f[2] << ", " << v.value.f[3] << "]";
     return os;
 }
 

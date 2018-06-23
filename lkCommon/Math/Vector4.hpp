@@ -64,10 +64,7 @@ public:
 
     // Comparison
     bool operator==(const Vector4& other) const;
-    bool operator<(const Vector4& other) const;
-    bool operator>(const Vector4& other) const;
-    bool operator<=(const Vector4& other) const;
-    bool operator>=(const Vector4& other) const;
+    bool operator!=(const Vector4& other) const;
 
     // Friendships
     friend std::ostream& operator<<(std::ostream& os, const Vector4& v);

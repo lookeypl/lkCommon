@@ -26,14 +26,43 @@ const Vector4 resultNorm(1.0f, 0.0f, 0.0f, 0.0f);
 TEST(Vector4, Constructor)
 {
     Vector4 a;
-    EXPECT_TRUE(resultZero == a);
+    ASSERT_EQ(resultZero, a);
 }
 
 TEST(Vector4, ConstructorSingleFloat)
 {
     Vector4 a(1.0f);
+    ASSERT_EQ(resultOne, a);
+}
 
-    EXPECT_TRUE(resultOne == a);
+TEST(Vector4, CopyConstructor)
+{
+    Vector4 v(resultOne);
+    ASSERT_EQ(v, resultOne);
+}
+
+TEST(Vector4, MoveConstructor)
+{
+    Vector4 v(resultOne);
+    Vector4 v2(std::move(v));
+    ASSERT_EQ(v2, resultOne);
+}
+
+TEST(Vector4, CopySubstitution)
+{
+    Vector4 v(2.0f);
+    ASSERT_NE(v, resultOne);
+    v = resultOne;
+    ASSERT_EQ(v, resultOne);
+}
+
+TEST(Vector4, MoveSubstitution)
+{
+    Vector4 v(resultOne);
+    Vector4 v2(2.0f);
+    ASSERT_NE(v, v2);
+    v2 = std::move(v);
+    ASSERT_EQ(v2, resultOne);
 }
 
 TEST(Vector4, AddVector4)
@@ -41,14 +70,14 @@ TEST(Vector4, AddVector4)
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
     Vector4 b(2.0f, 3.0f, 4.0f, 5.0f);
 
-    EXPECT_TRUE(resultAdd == (a + b));
+    ASSERT_EQ(resultAdd, (a + b));
 }
 
 TEST(Vector4, AddFloat)
 {
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
 
-    EXPECT_TRUE(resultAdd2 == (a + 2.0f));
+    ASSERT_EQ(resultAdd2, (a + 2.0f));
 }
 
 TEST(Vector4, SubtractVector4)
@@ -56,14 +85,14 @@ TEST(Vector4, SubtractVector4)
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
     Vector4 b(2.0f, 3.0f, 4.0f, 5.0f);
 
-    EXPECT_TRUE(resultSub == (a - b));
+    ASSERT_EQ(resultSub, (a - b));
 }
 
 TEST(Vector4, SubtractFloat)
 {
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
 
-    EXPECT_TRUE(resultSub2 == (a - 2.0f));
+    ASSERT_EQ(resultSub2, (a - 2.0f));
 }
 
 TEST(Vector4, MultiplyVector4)
@@ -71,14 +100,14 @@ TEST(Vector4, MultiplyVector4)
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
     Vector4 b(2.0f, 3.0f, 4.0f, 5.0f);
 
-    EXPECT_TRUE(resultMul == (a * b));
+    ASSERT_EQ(resultMul, (a * b));
 }
 
 TEST(Vector4, MultiplyFloat)
 {
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
 
-    EXPECT_TRUE(resultMul2 == (a * 2.0f));
+    ASSERT_EQ(resultMul2, (a * 2.0f));
 }
 
 TEST(Vector4, DivideVector4)
@@ -86,14 +115,14 @@ TEST(Vector4, DivideVector4)
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
     Vector4 b(2.0f, 4.0f, 6.0f, 8.0f);
 
-    EXPECT_TRUE(resultDiv == (a / b));
+    ASSERT_EQ(resultDiv, (a / b));
 }
 
 TEST(Vector4, DivideFloat)
 {
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
 
-    EXPECT_TRUE(resultDiv2 == (a / 2.0f));
+    ASSERT_EQ(resultDiv2, (a / 2.0f));
 }
 
 TEST(Vector4, Dot)
@@ -101,7 +130,7 @@ TEST(Vector4, Dot)
     Vector4 a(1.0f, 2.0f, 3.0f, 4.0f);
     Vector4 b(2.0f, 3.0f, 4.0f, 5.0f);
 
-    EXPECT_EQ(40.0f, a.Dot(b));
+    ASSERT_EQ(40.0f, a.Dot(b));
 }
 
 TEST(Vector4, Cross)
@@ -109,14 +138,14 @@ TEST(Vector4, Cross)
     Vector4 a(1.0f, 0.0f, 0.0f, 0.0f);
     Vector4 b(0.0f, 1.0f, 0.0f, 0.0f);
 
-    EXPECT_TRUE(resultCross == a.Cross(b));
+    ASSERT_EQ(resultCross, a.Cross(b));
 }
 
 TEST(Vector4, Length)
 {
     Vector4 a(2.0f, 0.0f, 0.0f, 0.0f);
 
-    EXPECT_EQ(2.0f, a.Length());
+    ASSERT_EQ(2.0f, a.Length());
 }
 
 TEST(Vector4, Normalize)
@@ -124,48 +153,25 @@ TEST(Vector4, Normalize)
     Vector4 a(2.0f, 0.0f, 0.0f, 0.0f);
     a.Normalize();
 
-    EXPECT_TRUE(resultNorm == a);
+    ASSERT_EQ(resultNorm, a);
 }
 
 TEST(Vector4, Equal)
 {
     Vector4 a(1.0f);
+    Vector4 b(1.0f);
+    Vector4 c(1.0f, 1.0f, 1.0f, 1.1f);
 
-    EXPECT_TRUE(a == a);
+    ASSERT_TRUE(a == b);
+    ASSERT_FALSE(a == c);
 }
 
-TEST(Vector4, Greater)
+TEST(Vector4, NotEqual)
 {
     Vector4 a(1.0f);
-    Vector4 b(2.0f);
-
-    ASSERT_GT(b, a);
-}
-
-TEST(Vector4, GreaterEqual)
-{
-    Vector4 a(1.0f);
-    Vector4 b(2.0f);
+    Vector4 b(1.0f, 1.0f, 1.0f, 1.1f);
     Vector4 c(1.0f);
 
-    ASSERT_GE(b, a);
-    ASSERT_GE(c, a);
-}
-
-TEST(Vector4, Less)
-{
-    Vector4 a(1.0f);
-    Vector4 b(2.0f);
-
-    ASSERT_LT(a, b);
-}
-
-TEST(Vector4, LessEqual)
-{
-    Vector4 a(1.0f);
-    Vector4 b(2.0f);
-    Vector4 c(1.0f);
-
-    ASSERT_LE(a, b);
-    ASSERT_LE(a, c);
+    ASSERT_TRUE(a != b);
+    ASSERT_FALSE(a != c);
 }
