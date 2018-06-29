@@ -174,11 +174,14 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
 bool Window::SetTitle(const std::wstring& title)
 {
-    if (!SetWindowText(mHWND, title.c_str()))
+    if (mOpened)
     {
-        DWORD error = GetLastError();
-        LOGE("Failed to set title string: " << static_cast<int>(error));
-        return false;
+        if (!SetWindowText(mHWND, title.c_str()))
+        {
+            DWORD error = GetLastError();
+            LOGE("Failed to set title string: " << static_cast<int>(error));
+            return false;
+        }
     }
 
     return true;
