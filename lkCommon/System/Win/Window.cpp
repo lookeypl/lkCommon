@@ -220,7 +220,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         return false;
     }
 
-    HBITMAP img = CreateBitmap(image.GetWidth(), image.GetHeight(), 1, sizeof(Utils::Image::Pixel) * 8, image.GetDataPtr());
+    HBITMAP img = CreateBitmap(image.GetWidth(), image.GetHeight(), 1, sizeof(Utils::Pixel<uint8_t, 4>) * 8, image.GetDataPtr());
     if (img == INVALID_HANDLE_VALUE)
     {
         LOGE("Failed to create temporary bitmap for displayed image");

@@ -20,6 +20,9 @@
     <ClCompile Include="Tests\Utils\SortTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="PixelTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

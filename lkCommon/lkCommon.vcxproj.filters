@@ -73,6 +73,12 @@
     <ClInclude Include="Math\Constants.hpp">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\Pixel.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PixelImpl.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\Win\Logger.cpp">

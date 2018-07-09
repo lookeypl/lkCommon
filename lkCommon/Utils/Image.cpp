@@ -33,7 +33,7 @@ bool Image::Resize(uint32_t width, uint32_t height)
     return true;
 }
 
-bool Image::SetPixel(uint32_t x, uint32_t y, const Image::Pixel& pixel)
+bool Image::SetPixel(uint32_t x, uint32_t y, const Pixel<uint8_t, 4>& pixel)
 {
     size_t coord = GetPixelCoord(x, y);
     if (coord == SIZE_MAX)
@@ -47,17 +47,17 @@ bool Image::SetPixel(uint32_t x, uint32_t y, const Image::Pixel& pixel)
 
 bool Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b)
 {
-    Pixel p(r, g, b);
-    return SetPixel(x, y, p);
+    uint8_t pixels[] = {r, g, b, 0};
+    return SetPixel(x, y, Pixel<uint8_t, 4>(pixels));
 }
 
 bool Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-    Pixel p(r, g, b, a);
-    return SetPixel(x, y, p);
+    uint8_t pixels[] = {r, g, b, a};
+    return SetPixel(x, y, Pixel<uint8_t, 4>(pixels));
 }
 
-bool Image::GetPixel(uint32_t x, uint32_t y, Image::Pixel& pixel)
+bool Image::GetPixel(uint32_t x, uint32_t y, Pixel<uint8_t, 4>& pixel)
 {
     size_t coord = GetPixelCoord(x, y);
     if (coord == SIZE_MAX)
@@ -71,26 +71,26 @@ bool Image::GetPixel(uint32_t x, uint32_t y, Image::Pixel& pixel)
 
 bool Image::GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b)
 {
-    Pixel p;
+    Pixel<uint8_t, 4> p;
     if (!GetPixel(x, y, p))
         return false;
 
-    r = p.r;
-    g = p.g;
-    b = p.b;
+    r = p.mColors[2];
+    g = p.mColors[1];
+    b = p.mColors[0];
     return true;
 }
 
 bool Image::GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a)
 {
-    Pixel p;
+    Pixel<uint8_t, 4> p;
     if (!GetPixel(x, y, p))
         return false;
 
-    r = p.r;
-    g = p.g;
-    b = p.b;
-    a = p.a;
+    r = p.mColors[2];
+    g = p.mColors[1];
+    b = p.mColors[0];
+    a = p.mColors[3];
     return true;
 }
 

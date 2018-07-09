@@ -33,6 +33,7 @@
     <ClInclude Include="System\Window.hpp" />
     <ClInclude Include="Utils\Image.hpp" />
     <ClInclude Include="Utils\Logger.hpp" />
+    <ClInclude Include="Utils\Pixel.hpp" />
     <ClInclude Include="Utils\Sort.hpp" />
     <ClInclude Include="Utils\SortImpl.hpp" />
     <ClInclude Include="Utils\Timer.hpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="System\Win\Library.cpp" />
     <ClCompile Include="System\Win\Window.cpp" />
     <ClCompile Include="Utils\Image.cpp" />
+    <ClInclude Include="Utils\PixelImpl.hpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
     <ClCompile Include="Utils\Win\UTF.cpp" />

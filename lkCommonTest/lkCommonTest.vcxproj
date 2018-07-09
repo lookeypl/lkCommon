@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PixelTest.cpp" />
     <ClCompile Include="Tests\Math\RingAverageTest.cpp" />
     <ClCompile Include="Tests\Math\Vector4Test.cpp" />
     <ClCompile Include="Tests\System\WindowTest.cpp" />
