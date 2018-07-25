@@ -76,12 +76,6 @@ Pixel<T, ComponentCount>::Pixel(const T colors[ComponentCount])
 }
 
 template <typename T, size_t ComponentCount>
-T* Pixel<T, ComponentCount>::GetColors()
-{
-    return mColors;
-}
-
-template <typename T, size_t ComponentCount>
 bool Pixel<T, ComponentCount>::operator==(const Pixel<T, ComponentCount>& other) const
 {
     for (size_t i = 0; i < ComponentCount; ++i)

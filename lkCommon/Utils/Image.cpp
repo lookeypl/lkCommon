@@ -2,6 +2,19 @@
 #include "Logger.hpp"
 
 
+namespace {
+
+// swaps B and R components to adjust them for destination media
+template <typename T>
+lkCommon::Utils::Pixel<T, 4> FixColorComponents(const lkCommon::Utils::Pixel<T, 4>& p)
+{
+    T pixelRaw[4] = { p.mColors[2], p.mColors[1], p.mColors[0], p.mColors[3] };
+    return lkCommon::Utils::Pixel<T, 4>(pixelRaw);
+}
+
+} // namespace
+
+
 namespace lkCommon {
 namespace Utils {
 
@@ -41,20 +54,8 @@ bool Image::SetPixel(uint32_t x, uint32_t y, const Pixel<uint8_t, 4>& pixel)
         return false;
     }
 
-    mPixels[coord] = pixel;
+    mPixels[coord] = FixColorComponents(pixel);
     return true;
-}
-
-bool Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b)
-{
-    uint8_t pixels[] = {r, g, b, 0};
-    return SetPixel(x, y, Pixel<uint8_t, 4>(pixels));
-}
-
-bool Image::SetPixel(uint32_t x, uint32_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-{
-    uint8_t pixels[] = {r, g, b, a};
-    return SetPixel(x, y, Pixel<uint8_t, 4>(pixels));
 }
 
 bool Image::GetPixel(uint32_t x, uint32_t y, Pixel<uint8_t, 4>& pixel)
@@ -65,32 +66,7 @@ bool Image::GetPixel(uint32_t x, uint32_t y, Pixel<uint8_t, 4>& pixel)
         return false;
     }
 
-    pixel = mPixels[coord];
-    return true;
-}
-
-bool Image::GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b)
-{
-    Pixel<uint8_t, 4> p;
-    if (!GetPixel(x, y, p))
-        return false;
-
-    r = p.mColors[2];
-    g = p.mColors[1];
-    b = p.mColors[0];
-    return true;
-}
-
-bool Image::GetPixel(uint32_t x, uint32_t y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a)
-{
-    Pixel<uint8_t, 4> p;
-    if (!GetPixel(x, y, p))
-        return false;
-
-    r = p.mColors[2];
-    g = p.mColors[1];
-    b = p.mColors[0];
-    a = p.mColors[3];
+    pixel = FixColorComponents(mPixels[coord]);
     return true;
 }
 
