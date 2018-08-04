@@ -79,6 +79,12 @@
     <ClInclude Include="Utils\PixelImpl.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="System\Info.hpp">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ThreadPool.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils\Win\Logger.cpp">
@@ -113,6 +119,12 @@
     </ClCompile>
     <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp">
       <Filter>Math\Interpolation</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Info.cpp">
+      <Filter>System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ThreadPool.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,6 +23,12 @@
     <ClCompile Include="PixelTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\System\InfoTest.cpp">
+      <Filter>Tests\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

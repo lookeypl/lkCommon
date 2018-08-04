@@ -28,6 +28,7 @@
     <ClInclude Include="Math\RingAverageImpl.hpp" />
     <ClInclude Include="Math\Vector4.hpp" />
     <ClInclude Include="System\FS.hpp" />
+    <ClInclude Include="System\Info.hpp" />
     <ClInclude Include="System\KeyCodes.hpp" />
     <ClInclude Include="System\Library.hpp" />
     <ClInclude Include="System\Window.hpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Utils\Pixel.hpp" />
     <ClInclude Include="Utils\Sort.hpp" />
     <ClInclude Include="Utils\SortImpl.hpp" />
+    <ClInclude Include="Utils\ThreadPool.hpp" />
     <ClInclude Include="Utils\Timer.hpp" />
     <ClInclude Include="Utils\UTF.hpp" />
   </ItemGroup>
@@ -44,11 +46,13 @@
     <ClCompile Include="Math\Interpolation\Interpolator.cpp" />
     <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
+    <ClCompile Include="System\Info.cpp" />
     <ClCompile Include="System\Win\FS.cpp" />
     <ClCompile Include="System\Win\Library.cpp" />
     <ClCompile Include="System\Win\Window.cpp" />
     <ClCompile Include="Utils\Image.cpp" />
     <ClInclude Include="Utils\PixelImpl.hpp" />
+    <ClCompile Include="Utils\ThreadPool.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
     <ClCompile Include="Utils\Win\UTF.cpp" />

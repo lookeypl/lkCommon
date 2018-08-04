@@ -157,10 +157,12 @@
     <ClCompile Include="PixelTest.cpp" />
     <ClCompile Include="Tests\Math\RingAverageTest.cpp" />
     <ClCompile Include="Tests\Math\Vector4Test.cpp" />
+    <ClCompile Include="Tests\System\InfoTest.cpp" />
     <ClCompile Include="Tests\System\WindowTest.cpp" />
     <ClCompile Include="Tests\Utils\ImageTest.cpp" />
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />
     <ClCompile Include="Tests\Utils\SortTest.cpp" />
+    <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

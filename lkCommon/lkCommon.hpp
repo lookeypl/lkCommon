@@ -58,6 +58,8 @@
 
 #ifdef _DEBUG
 
+#include <cassert>
+
 // Assertion macro. If expression exp is not true, logs error message and calls assert()
 // Macro is active only when building with _DEBUG macro predefined
 #define LKCOMMON_ASSERT(exp, msg) do \
