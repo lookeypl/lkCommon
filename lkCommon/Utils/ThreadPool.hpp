@@ -35,7 +35,10 @@ struct Thread
 {
     std::thread thread;
     Task assignedTask;
-    bool busy;
+    uint16_t tid;
+    std::atomic<bool> taskReady;
+    std::mutex stateMutex;
+    std::condition_variable taskReadyCV;
 
     Thread();
     ~Thread();
@@ -50,7 +53,7 @@ class ThreadPool
 
     std::mutex mDispatchThreadMutex;
     std::condition_variable mDispatchThreadCV;
-    bool mDispatchThreadExitFlag;
+    std::atomic<bool> mDispatchThreadExitFlag;
     uint32_t mAvailableWorkerThreads;
 
     std::thread mDispatchThread;

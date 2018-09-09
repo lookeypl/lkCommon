@@ -1,4 +1,5 @@
 #include "ThreadPool.hpp"
+#include <limits>
 
 
 namespace lkCommon {
@@ -18,7 +19,11 @@ Task::Task(TaskCallback&& callback)
 
 Thread::Thread()
     : thread()
-    , busy(false)
+    , assignedTask()
+    , tid(std::numeric_limits<uint16_t>::max())
+    , taskReady(false)
+    , stateMutex()
+    , taskReadyCV()
 {
 }
 
@@ -39,6 +44,14 @@ ThreadPool::ThreadPool(size_t threads)
     , mTaskQueue()
 {
     mDispatchThread = std::thread(&ThreadPool::DispatchThreadFunction, this);
+
+    uint16_t tidCounter = 0;
+    for (auto& t: mWorkerThreads)
+    {
+        t.tid = tidCounter;
+        t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
+        tidCounter++;
+    }
 }
 
 ThreadPool::~ThreadPool()
@@ -54,12 +67,19 @@ ThreadPool::~ThreadPool()
 
     // now all tasks should be dispatched, wait for each of worker threads
     for (auto& t: mWorkerThreads)
+    {
         if (t.thread.joinable())
+        {
+            t.taskReadyCV.notify_all();
             t.thread.join();
+        }
+    }
 }
 
 void ThreadPool::DispatchThreadFunction()
 {
+    LOGD("Dispatch thread started");
+
     while (true)
     {
         UniqueLock dispatchThreadLock(mDispatchThreadMutex);
@@ -76,13 +96,11 @@ void ThreadPool::DispatchThreadFunction()
         // then CV above will never wait. Try to avoid that.
         if (mAvailableWorkerThreads > 0)
         {
-            LockGuard lock(mWorkerThreadStateMutex);
-
             // get first free thread (should be available)
             uint32_t thread = 0;
             for (thread; thread < mWorkerThreads.size(); ++thread)
             {
-                if (!mWorkerThreads[thread].busy)
+                if (!mWorkerThreads[thread].taskReady)
                     break;
             }
 
@@ -91,43 +109,64 @@ void ThreadPool::DispatchThreadFunction()
 
             // prepare the thread
             Thread& t = mWorkerThreads[thread];
-            t.busy = true;
-            mAvailableWorkerThreads--;
 
-            // join the thread to ensure it stopped execution (shouldn't take long, the thread is already done)
-            if (t.thread.joinable())
-                t.thread.join();
+            {
+                LockGuard lock(mWorkerThreadStateMutex);
+                mAvailableWorkerThreads--;
+            }
 
             // assign a task from queue
             {
-                LockGuard taskQueueLock(mTaskQueueMutex);
+                LockGuard lock(mTaskQueueMutex);
                 t.assignedTask = std::move(mTaskQueue.front());
                 mTaskQueue.pop();
+                t.taskReadyCV.notify_all();
             }
-
-            // do the job
-            t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
         }
     }
+
+    LOGD("Dispatch thread stopped");
 }
 
 void ThreadPool::WorkerThreadFunction(Thread& self)
 {
-    // do the thing we are meant to do
-    self.assignedTask.function();
+    LOGD(self.tid << ": Worker thread started");
 
-    // mark the thread as free to do other tasks
+    while (true)
     {
-        LockGuard lock(mWorkerThreadStateMutex);
-        self.busy = false;
-        mAvailableWorkerThreads++;
+        {
+            UniqueLock cvLock(self.stateMutex);
+            LOGD("taskReady = " << self.taskReady << ", dispatchExitFlag = " << mDispatchThreadExitFlag);
+            self.taskReadyCV.wait(cvLock, [this, &self]() {
+                return (self.taskReady == true) || (mDispatchThreadExitFlag == true);
+            });
+        }
 
-        if (mAvailableWorkerThreads == mWorkerThreads.size())
-            mTasksDoneCV.notify_all();
+        if (mDispatchThreadExitFlag)
+        {
+            LOGD(self.tid << ": Exiting");
+            break;
+        }
+
+        // do the thing we are meant to do
+        self.assignedTask.function();
+
+        // mark the thread as free to do other tasks
+        {
+            LockGuard lock(self.stateMutex);
+            self.taskReady = false;
+        }
+
+        {
+            LockGuard lock(mWorkerThreadStateMutex);
+            mAvailableWorkerThreads++;
+        }
+
+        // notify dispatcher that we are done
+        mDispatchThreadCV.notify_all();
     }
 
-    // notify dispatcher that we are done
-    mDispatchThreadCV.notify_all();
+    LOGD(self.tid << ": Worker thread stopped");
 }
 
 void ThreadPool::AddTask(TaskCallback&& callback)
