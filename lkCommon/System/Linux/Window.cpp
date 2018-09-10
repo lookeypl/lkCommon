@@ -214,7 +214,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
                                                image.GetWidth(), image.GetHeight(),
                                                XCB_IMAGE_FORMAT_Z_PIXMAP,
                                                mScreen->root_depth, nullptr,
-                                               image.GetWidth() * image.GetHeight() * sizeof(Utils::Image::Pixel),
+                                               image.GetWidth() * image.GetHeight() * sizeof(Utils::Pixel<uint8_t, 4>),
                                                const_cast<uint8_t*>(data));
     if (img == nullptr)
     {

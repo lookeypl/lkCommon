@@ -3,6 +3,7 @@ SET(LKCOMMON_SRCS Math/Vector4.cpp
                   Math/Interpolation/LinearInterpolator.cpp
                   Math/Interpolation/CubicInterpolator.cpp
                   Utils/Image.cpp
+                  Utils/ThreadPool.cpp
                   )
 
 SET(LKCOMMON_HDRS lkCommon.hpp
@@ -14,6 +15,7 @@ SET(LKCOMMON_HDRS lkCommon.hpp
                   Math/Interpolation/LinearInterpolator.hpp
                   Math/Interpolation/CubicInterpolator.hpp
                   System/FS.hpp
+                  System/Info.hpp
                   System/KeyCodes.hpp
                   System/Library.hpp
                   System/Window.hpp
@@ -21,6 +23,7 @@ SET(LKCOMMON_HDRS lkCommon.hpp
                   Utils/Logger.hpp
                   Utils/Sort.hpp
                   Utils/SortImpl.hpp
+                  Utils/ThreadPool.hpp
                   Utils/Timer.hpp
                   Utils/UTF.hpp
                   )
@@ -37,6 +40,7 @@ IF(WIN32)
                                )
 ELSEIF(UNIX)
     SET(LKCOMMON_PLATFORM_SRCS System/Linux/FS.cpp
+                               System/Linux/Info.cpp
                                System/Linux/Library.cpp
                                System/Linux/Window.cpp
                                Utils/Linux/Logger.cpp

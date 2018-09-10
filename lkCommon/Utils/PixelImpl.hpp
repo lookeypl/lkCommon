@@ -9,7 +9,9 @@ namespace {
 template <typename Src, typename Dst>
 LKCOMMON_INLINE Dst ConvertColor(Src source)
 {
-    static_assert(false, "Incompatible types provided for conversion");
+    static_assert(std::is_same<uint8_t, typename std::remove_cv<Src>::type>::value
+               || std::is_same<float, typename std::remove_cv<Src>::type>::value,
+               "Incompatible types provided for conversion");
 }
 
 template <>
@@ -29,7 +31,9 @@ LKCOMMON_INLINE float ConvertColor(uint8_t source)
 template <typename T>
 LKCOMMON_INLINE T Clamp(T x)
 {
-    staic_assert(false, "Incompatible type provided for clamping");
+    staic_assert(std::is_same<uint8_t, typename std::remove_cv<T>::type>::value
+              || std::is_same<float, typename std::remove_cv<T>::type>::value,
+              "Incompatible type provided for clamping");
 }
 
 template <>

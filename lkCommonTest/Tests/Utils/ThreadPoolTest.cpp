@@ -32,6 +32,8 @@ TEST(ThreadPool, AddTasksSimple)
     tp.AddTask(task);
     tp.AddTask(task);
     tp.AddTask(task);
+
+    tp.WaitForTasks();
 }
 
 TEST(ThreadPool, AddTasksSimpleSingleThread)
@@ -47,4 +49,6 @@ TEST(ThreadPool, AddTasksSimpleSingleThread)
     tp.AddTask(task);
     tp.AddTask(task);
     tp.AddTask(task);
+
+    tp.WaitForTasks();
 }

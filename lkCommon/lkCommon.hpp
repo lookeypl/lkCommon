@@ -31,7 +31,7 @@
 #elif defined(__linux__) || defined(__LINUX__)
 
 // Forces inlining of given function
-#define LKCOMMON_INLINE __attribute__((always_inline))
+#define LKCOMMON_INLINE inline __attribute__((always_inline))
 
 // Aligns given class/struct to x bytes in memory
 #define LKCOMMON_ALIGN(x) __attribute__((aligned(x)))

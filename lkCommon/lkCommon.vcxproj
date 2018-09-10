@@ -46,7 +46,7 @@
     <ClCompile Include="Math\Interpolation\Interpolator.cpp" />
     <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
-    <ClCompile Include="System\Info.cpp" />
+    <ClCompile Include="System\Win\Info.cpp" />
     <ClCompile Include="System\Win\FS.cpp" />
     <ClCompile Include="System\Win\Library.cpp" />
     <ClCompile Include="System\Win\Window.cpp" />

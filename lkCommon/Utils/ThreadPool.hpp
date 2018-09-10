@@ -59,6 +59,7 @@ class ThreadPool
     std::thread mDispatchThread;
     std::mutex mWorkerThreadStateMutex;
     ThreadContainer mWorkerThreads;
+    std::condition_variable mStartupStateCV;
 
     std::mutex mTaskQueueMutex;
     std::condition_variable mTasksDoneCV;

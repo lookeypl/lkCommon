@@ -36,7 +36,7 @@ ThreadPool::ThreadPool(size_t threads)
     : mDispatchThreadMutex()
     , mDispatchThreadCV()
     , mDispatchThreadExitFlag(false)
-    , mAvailableWorkerThreads(threads)
+    , mAvailableWorkerThreads(0)
     , mDispatchThread()
     , mWorkerThreadStateMutex()
     , mWorkerThreads(threads)
@@ -51,6 +51,13 @@ ThreadPool::ThreadPool(size_t threads)
         t.tid = tidCounter;
         t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
         tidCounter++;
+    }
+
+    {
+        UniqueLock lock(mWorkerThreadStateMutex);
+        mStartupStateCV.wait(lock, [this, &threads]() {
+            return (mAvailableWorkerThreads == threads);
+        });
     }
 }
 
@@ -82,25 +89,28 @@ void ThreadPool::DispatchThreadFunction()
 
     while (true)
     {
-        UniqueLock dispatchThreadLock(mDispatchThreadMutex);
-        mDispatchThreadCV.wait(dispatchThreadLock, [this]
         {
-            return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mDispatchThreadExitFlag;
-        });
+            UniqueLock dispatchThreadLock(mDispatchThreadMutex);
+            mDispatchThreadCV.wait(dispatchThreadLock, [this]
+            {
+                return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mDispatchThreadExitFlag;
+            });
+        }
 
-        if (mDispatchThreadExitFlag && mTaskQueue.empty())
+        if (mDispatchThreadExitFlag && mTaskQueue.empty() &&
+            mAvailableWorkerThreads == mWorkerThreads.size())
             return;
 
         // TODO THIS MIGHT SPIN-LOOP DISPATCH THREAD
         // Situation where ExitFlag == true and there are no working threads available,
         // then CV above will never wait. Try to avoid that.
-        if (mAvailableWorkerThreads > 0)
+        if (mAvailableWorkerThreads > 0 && !mTaskQueue.empty())
         {
             // get first free thread (should be available)
             uint32_t thread = 0;
             for (thread; thread < mWorkerThreads.size(); ++thread)
             {
-                if (!mWorkerThreads[thread].taskReady)
+                if (mWorkerThreads[thread].taskReady == false)
                     break;
             }
 
@@ -110,18 +120,21 @@ void ThreadPool::DispatchThreadFunction()
             // prepare the thread
             Thread& t = mWorkerThreads[thread];
 
-            {
-                LockGuard lock(mWorkerThreadStateMutex);
-                mAvailableWorkerThreads--;
-            }
-
             // assign a task from queue
             {
                 LockGuard lock(mTaskQueueMutex);
                 t.assignedTask = std::move(mTaskQueue.front());
                 mTaskQueue.pop();
-                t.taskReadyCV.notify_all();
             }
+
+            // update states and get ready
+            {
+                LockGuard lock(mWorkerThreadStateMutex);
+                mWorkerThreads[thread].taskReady = true;
+                mAvailableWorkerThreads--;
+            }
+
+            t.taskReadyCV.notify_all();
         }
     }
 
@@ -132,11 +145,18 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
 {
     LOGD(self.tid << ": Worker thread started");
 
+    {
+        LockGuard lock(mWorkerThreadStateMutex);
+        mAvailableWorkerThreads++;
+        mStartupStateCV.notify_all();
+    }
+
     while (true)
     {
         {
             UniqueLock cvLock(self.stateMutex);
-            LOGD("taskReady = " << self.taskReady << ", dispatchExitFlag = " << mDispatchThreadExitFlag);
+            LOGD(self.tid << ": taskReady = " << self.taskReady
+                          << ", dispatchExitFlag = " << mDispatchThreadExitFlag);
             self.taskReadyCV.wait(cvLock, [this, &self]() {
                 return (self.taskReady == true) || (mDispatchThreadExitFlag == true);
             });

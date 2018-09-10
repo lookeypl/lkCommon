@@ -10,6 +10,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp
                        Tests/Utils/SortTest.cpp
+                       Tests/Utils/ThreadPoolTest.cpp
                        )
 
 ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}
