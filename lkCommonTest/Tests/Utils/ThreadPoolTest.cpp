@@ -4,7 +4,7 @@
 
 using namespace lkCommon::Utils;
 
-const uint64_t TASK_COUNT_UNTIL_VALUE = 1'000'000'000;
+const uint64_t TASK_COUNT_UNTIL_VALUE = 400'000'000;
 
 
 TEST(ThreadPool, Constructor)
@@ -32,8 +32,6 @@ TEST(ThreadPool, AddTasksSimple)
     tp.AddTask(task);
     tp.AddTask(task);
     tp.AddTask(task);
-
-    tp.WaitForTasks();
 }
 
 TEST(ThreadPool, AddTasksSimpleSingleThread)
@@ -49,6 +47,87 @@ TEST(ThreadPool, AddTasksSimpleSingleThread)
     tp.AddTask(task);
     tp.AddTask(task);
     tp.AddTask(task);
-
-    tp.WaitForTasks();
 }
+
+TEST(ThreadPool, AddTasksComplex)
+{
+    auto task = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE)
+            i++;
+    };
+
+    auto taskDouble = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE * 2)
+            i++;
+    };
+
+    auto taskHalf = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE / 2)
+            i++;
+    };
+
+    // init pool
+    ThreadPool tp(3);
+
+    // add first tasks
+    tp.AddTask(task);
+    tp.AddTask(taskDouble);
+    tp.AddTask(taskHalf);
+
+    // synchronization point
+    tp.WaitForTasks();
+
+
+    // add more tasks
+    tp.AddTask(task);
+    tp.AddTask(taskDouble);
+    tp.AddTask(taskDouble);
+    tp.AddTask(taskHalf);
+    tp.AddTask(taskHalf);
+    tp.AddTask(task);
+}
+
+TEST(ThreadPool, AddTasksDoubleThreadCount)
+{
+    auto task = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE)
+            i++;
+    };
+
+    auto taskDouble = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE * 2)
+            i++;
+    };
+
+    auto taskHalf = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE / 2)
+            i++;
+    };
+
+    uint32_t cpuCount = lkCommon::System::Info::GetCPUCount() * 2;
+
+    // init pool
+    ThreadPool tp(cpuCount);
+
+    uint32_t taskSelector = 0;
+    const uint32_t taskCollectionCount = 3;
+
+    for (uint32_t i = 0; i < cpuCount * 2; ++i)
+    {
+        taskSelector = i % taskCollectionCount;
+        switch (taskSelector)
+        {
+        case 0: tp.AddTask(task); break;
+        case 1: tp.AddTask(taskDouble); break;
+        case 2: tp.AddTask(taskHalf); break;
+        default: break;
+        }
+    }
+}
+

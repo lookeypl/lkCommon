@@ -63,6 +63,8 @@ ThreadPool::ThreadPool(size_t threads)
 
 ThreadPool::~ThreadPool()
 {
+    WaitForTasks();
+
     {
         LockGuard lock(mDispatchThreadMutex);
         mDispatchThreadExitFlag = true; // enables flag, which will purge the thread pool
@@ -99,7 +101,10 @@ void ThreadPool::DispatchThreadFunction()
 
         if (mDispatchThreadExitFlag && mTaskQueue.empty() &&
             mAvailableWorkerThreads == mWorkerThreads.size())
+        {
+            mTasksDoneCV.notify_all();
             return;
+        }
 
         // TODO THIS MIGHT SPIN-LOOP DISPATCH THREAD
         // Situation where ExitFlag == true and there are no working threads available,
@@ -180,6 +185,9 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
         {
             LockGuard lock(mWorkerThreadStateMutex);
             mAvailableWorkerThreads++;
+
+            if (mAvailableWorkerThreads == mWorkerThreads.size())
+                mTasksDoneCV.notify_all();
         }
 
         // notify dispatcher that we are done
@@ -200,10 +208,14 @@ void ThreadPool::AddTask(TaskCallback&& callback)
 
 void ThreadPool::WaitForTasks()
 {
+    LOGD("WaitForTasks invoked");
+
     UniqueLock lock(mTaskQueueMutex);
     mTasksDoneCV.wait(lock, [this]
     {
-        return (mTaskQueue.empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
+        bool test = (mTaskQueue.empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
+        LOGD("Checking if tasks done: " << test);
+        return test;
     });
 }
 
