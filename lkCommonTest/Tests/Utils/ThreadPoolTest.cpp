@@ -80,7 +80,6 @@ TEST(ThreadPool, AddTasksComplex)
     // synchronization point
     tp.WaitForTasks();
 
-
     // add more tasks
     tp.AddTask(task);
     tp.AddTask(taskDouble);
