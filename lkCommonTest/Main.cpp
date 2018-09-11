@@ -5,9 +5,21 @@
  */
 
 #include <gtest/gtest.h>
+#include <System/FS.hpp>
 
 int main(int argc, char* argv[])
 {
+    if (!lkCommon::System::FS::SetCWD(
+            lkCommon::System::FS::JoinPaths(
+                lkCommon::System::FS::GetParentDir(lkCommon::System::FS::GetExecutablePath()),
+                "../../.."
+                )
+            )
+        )
+    {
+        return -1;
+    }
+
     testing::InitGoogleTest(&argc, argv);
 
     int result = RUN_ALL_TESTS();

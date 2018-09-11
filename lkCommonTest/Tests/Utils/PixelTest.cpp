@@ -10,7 +10,7 @@ const uint8_t TEST_PIXEL_RAW_UINT_2[] = {20, 10, 255, 99};
 const float TEST_PIXEL_RAW_FLOAT[] = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
 const float TEST_PIXEL_RAW_FLOAT_2[] = { 20.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f, 99.0f / 255.0f };
 
-const Pixel<uint8_t, 4> TEST_PIXEL_UINT_ZEROS(0ui8);
+const Pixel<uint8_t, 4> TEST_PIXEL_UINT_ZEROS(static_cast<uint8_t>(0));
 const Pixel<uint8_t, 4> TEST_PIXEL_UINT_MAX(255);
 const Pixel<uint8_t, 4> TEST_PIXEL_UINT(TEST_PIXEL_RAW_UINT);
 const Pixel<uint8_t, 4> TEST_PIXEL_UINT_2(TEST_PIXEL_RAW_UINT_2);

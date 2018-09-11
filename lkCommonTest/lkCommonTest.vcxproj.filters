@@ -20,7 +20,7 @@
     <ClCompile Include="Tests\Utils\SortTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="PixelTest.cpp">
+    <ClCompile Include="Tests\Utils\PixelTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Tests\System\InfoTest.cpp">

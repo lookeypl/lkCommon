@@ -9,6 +9,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/System/WindowTest.cpp
                        Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp
+                       Tests/Utils/PixelTest.cpp
                        Tests/Utils/SortTest.cpp
                        Tests/Utils/ThreadPoolTest.cpp
                        )

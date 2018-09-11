@@ -129,4 +129,3 @@ TEST(ThreadPool, AddTasksDoubleThreadCount)
         }
     }
 }
-
