@@ -33,14 +33,14 @@ Thread::~Thread()
 
 
 ThreadPool::ThreadPool(size_t threads)
-    : mDispatchThreadMutex()
-    , mDispatchThreadCV()
+    : mDispatchThreadCV()
     , mDispatchThreadExitFlag(false)
-    , mAvailableWorkerThreads(0)
     , mDispatchThread()
-    , mWorkerThreadStateMutex()
+    , mAvailableWorkerThreads(0)
     , mWorkerThreads(threads)
-    , mTaskQueueMutex()
+    , mPoolStateMutex()
+    , mStartupStateCV()
+    , mTasksDoneCV()
     , mTaskQueue()
 {
     mDispatchThread = std::thread(&ThreadPool::DispatchThreadFunction, this);
@@ -54,7 +54,7 @@ ThreadPool::ThreadPool(size_t threads)
     }
 
     {
-        UniqueLock lock(mWorkerThreadStateMutex);
+        UniqueLock lock(mPoolStateMutex);
         mStartupStateCV.wait(lock, [this, &threads]() {
             return (mAvailableWorkerThreads == threads);
         });
@@ -66,7 +66,7 @@ ThreadPool::~ThreadPool()
     WaitForTasks();
 
     {
-        LockGuard lock(mDispatchThreadMutex);
+        LockGuard lock(mPoolStateMutex);
         mDispatchThreadExitFlag = true; // enables flag, which will purge the thread pool
     }
     mDispatchThreadCV.notify_all();
@@ -92,7 +92,7 @@ void ThreadPool::DispatchThreadFunction()
     while (true)
     {
         {
-            UniqueLock dispatchThreadLock(mDispatchThreadMutex);
+            UniqueLock dispatchThreadLock(mPoolStateMutex);
             mDispatchThreadCV.wait(dispatchThreadLock, [this]
             {
                 return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mDispatchThreadExitFlag;
@@ -125,18 +125,18 @@ void ThreadPool::DispatchThreadFunction()
             // prepare the thread
             Thread& t = mWorkerThreads[thread];
 
-            // assign a task from queue
+            // assign a task from queue and update das
             {
-                LockGuard lock(mTaskQueueMutex);
+                LockGuard lock(mPoolStateMutex);
+
+                mAvailableWorkerThreads--;
                 t.assignedTask = std::move(mTaskQueue.front());
                 mTaskQueue.pop();
             }
 
-            // update states and get ready
             {
-                LockGuard lock(mWorkerThreadStateMutex);
-                mWorkerThreads[thread].taskReady = true;
-                mAvailableWorkerThreads--;
+                LockGuard lock(t.stateMutex);
+                t.taskReady = true;
             }
 
             t.taskReadyCV.notify_all();
@@ -151,7 +151,7 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
     LOGD(self.tid << ": Worker thread started");
 
     {
-        LockGuard lock(mWorkerThreadStateMutex);
+        LockGuard lock(mPoolStateMutex);
         mAvailableWorkerThreads++;
         mStartupStateCV.notify_all();
     }
@@ -160,8 +160,6 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
     {
         {
             UniqueLock cvLock(self.stateMutex);
-            LOGD(self.tid << ": taskReady = " << self.taskReady
-                          << ", dispatchExitFlag = " << mDispatchThreadExitFlag);
             self.taskReadyCV.wait(cvLock, [this, &self]() {
                 return (self.taskReady == true) || (mDispatchThreadExitFlag == true);
             });
@@ -169,7 +167,6 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
 
         if (mDispatchThreadExitFlag)
         {
-            LOGD(self.tid << ": Exiting");
             break;
         }
 
@@ -183,7 +180,7 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
         }
 
         {
-            LockGuard lock(mWorkerThreadStateMutex);
+            LockGuard lock(mPoolStateMutex);
             mAvailableWorkerThreads++;
 
             if (mAvailableWorkerThreads == mWorkerThreads.size())
@@ -200,7 +197,7 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
 void ThreadPool::AddTask(TaskCallback&& callback)
 {
     {
-        LockGuard lock(mTaskQueueMutex);
+        LockGuard lock(mPoolStateMutex);
         mTaskQueue.emplace(std::move(callback));
     }
     mDispatchThreadCV.notify_all();
@@ -210,12 +207,10 @@ void ThreadPool::WaitForTasks()
 {
     LOGD("WaitForTasks invoked");
 
-    UniqueLock lock(mTaskQueueMutex);
+    UniqueLock lock(mPoolStateMutex);
     mTasksDoneCV.wait(lock, [this]
     {
-        bool test = (mTaskQueue.empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
-        LOGD("Checking if tasks done: " << test);
-        return test;
+        return (mTaskQueue.empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
     });
 }
 

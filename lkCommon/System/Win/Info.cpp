@@ -1,4 +1,4 @@
-#include "Info.hpp"
+#include "../Info.hpp"
 #include <Windows.h>
 
 namespace lkCommon {

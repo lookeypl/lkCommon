@@ -51,17 +51,15 @@ class ThreadPool
     using LockGuard = std::lock_guard<std::mutex>;
     using UniqueLock = std::unique_lock<std::mutex>;
 
-    std::mutex mDispatchThreadMutex;
     std::condition_variable mDispatchThreadCV;
     std::atomic<bool> mDispatchThreadExitFlag;
-    uint32_t mAvailableWorkerThreads;
 
     std::thread mDispatchThread;
-    std::mutex mWorkerThreadStateMutex;
+    uint32_t mAvailableWorkerThreads;
     ThreadContainer mWorkerThreads;
-    std::condition_variable mStartupStateCV;
 
-    std::mutex mTaskQueueMutex;
+    std::mutex mPoolStateMutex;
+    std::condition_variable mStartupStateCV;
     std::condition_variable mTasksDoneCV;
     TaskContainer mTaskQueue;
 

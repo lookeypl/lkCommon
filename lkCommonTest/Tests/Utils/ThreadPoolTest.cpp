@@ -5,6 +5,7 @@
 using namespace lkCommon::Utils;
 
 const uint64_t TASK_COUNT_UNTIL_VALUE = 400'000'000;
+const uint64_t TASK_COUNT_UNTIL_VALUE_SMALL = 4'000'000;
 
 
 TEST(ThreadPool, Constructor)
@@ -109,15 +110,15 @@ TEST(ThreadPool, AddTasksDoubleThreadCount)
             i++;
     };
 
-    uint32_t cpuCount = lkCommon::System::Info::GetCPUCount() * 2;
+    size_t cpuCount = lkCommon::System::Info::GetCPUCount() * 2;
 
     // init pool
     ThreadPool tp(cpuCount);
 
-    uint32_t taskSelector = 0;
-    const uint32_t taskCollectionCount = 3;
+    size_t taskSelector = 0;
+    const size_t taskCollectionCount = 3;
 
-    for (uint32_t i = 0; i < cpuCount * 2; ++i)
+    for (size_t i = 0; i < cpuCount * 2; ++i)
     {
         taskSelector = i % taskCollectionCount;
         switch (taskSelector)
@@ -127,5 +128,29 @@ TEST(ThreadPool, AddTasksDoubleThreadCount)
         case 2: tp.AddTask(taskHalf); break;
         default: break;
         }
+    }
+}
+
+TEST(ThreadPool, StressTest)
+{
+    auto task = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE_SMALL)
+            i++;
+    };
+
+    size_t taskCount = 100;
+
+    // init pool
+    ThreadPool tp;
+
+    for (size_t j = 0; j < 15; ++j)
+    {
+        for (size_t i = 0; i < taskCount; ++i)
+        {
+            tp.AddTask(task);
+        }
+
+        tp.WaitForTasks();
     }
 }
