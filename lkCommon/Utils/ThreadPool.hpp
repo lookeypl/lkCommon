@@ -5,7 +5,6 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <atomic>
 #include <functional>
 
 #include <lkCommon/System/Info.hpp>
@@ -36,7 +35,7 @@ struct Thread
     std::thread thread;
     Task assignedTask;
     uint16_t tid;
-    std::atomic<bool> taskReady;
+    bool taskReady;
     std::mutex stateMutex;
     std::condition_variable taskReadyCV;
 
@@ -52,7 +51,7 @@ class ThreadPool
     using UniqueLock = std::unique_lock<std::mutex>;
 
     std::condition_variable mDispatchThreadCV;
-    std::atomic<bool> mDispatchThreadExitFlag;
+    bool mExitFlag;
 
     std::thread mDispatchThread;
     uint32_t mAvailableWorkerThreads;

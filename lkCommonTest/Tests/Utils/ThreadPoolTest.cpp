@@ -5,7 +5,7 @@
 using namespace lkCommon::Utils;
 
 const uint64_t TASK_COUNT_UNTIL_VALUE = 400'000'000;
-const uint64_t TASK_COUNT_UNTIL_VALUE_SMALL = 4'000'000;
+const uint64_t TASK_COUNT_UNTIL_VALUE_SMALL = 100'000;
 
 
 TEST(ThreadPool, Constructor)
@@ -139,16 +139,38 @@ TEST(ThreadPool, StressTest)
             i++;
     };
 
-    size_t taskCount = 100;
+    auto taskDouble = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE_SMALL * 2)
+            i++;
+    };
+
+    auto taskHalf = []() {
+        volatile uint64_t i = 0;
+        while (i != TASK_COUNT_UNTIL_VALUE_SMALL / 2)
+            i++;
+    };
+
+    const size_t taskCount = 200;
 
     // init pool
     ThreadPool tp;
 
-    for (size_t j = 0; j < 15; ++j)
+    size_t taskSelector = 0;
+    const size_t taskCollectionCount = 3;
+
+    for (size_t j = 0; j < 30; ++j)
     {
         for (size_t i = 0; i < taskCount; ++i)
         {
-            tp.AddTask(task);
+            taskSelector = i % taskCollectionCount;
+            switch (taskSelector)
+            {
+            case 0: tp.AddTask(task); break;
+            case 1: tp.AddTask(taskDouble); break;
+            case 2: tp.AddTask(taskHalf); break;
+            default: break;
+            }
         }
 
         tp.WaitForTasks();

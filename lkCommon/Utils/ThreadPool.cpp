@@ -34,7 +34,7 @@ Thread::~Thread()
 
 ThreadPool::ThreadPool(size_t threads)
     : mDispatchThreadCV()
-    , mDispatchThreadExitFlag(false)
+    , mExitFlag(false)
     , mDispatchThread()
     , mAvailableWorkerThreads(0)
     , mWorkerThreads(threads)
@@ -67,7 +67,7 @@ ThreadPool::~ThreadPool()
 
     {
         LockGuard lock(mPoolStateMutex);
-        mDispatchThreadExitFlag = true; // enables flag, which will purge the thread pool
+        mExitFlag = true; // enables flag, which will purge the thread pool
     }
     mDispatchThreadCV.notify_all();
 
@@ -95,15 +95,14 @@ void ThreadPool::DispatchThreadFunction()
             UniqueLock dispatchThreadLock(mPoolStateMutex);
             mDispatchThreadCV.wait(dispatchThreadLock, [this]
             {
-                return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mDispatchThreadExitFlag;
+                return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mExitFlag;
             });
         }
 
-        if (mDispatchThreadExitFlag && mTaskQueue.empty() &&
-            mAvailableWorkerThreads == mWorkerThreads.size())
+        if (mExitFlag && mTaskQueue.empty() && mAvailableWorkerThreads == mWorkerThreads.size())
         {
             mTasksDoneCV.notify_all();
-            return;
+            break;
         }
 
         // TODO THIS MIGHT SPIN-LOOP DISPATCH THREAD
@@ -116,7 +115,9 @@ void ThreadPool::DispatchThreadFunction()
             for (thread; thread < mWorkerThreads.size(); ++thread)
             {
                 if (mWorkerThreads[thread].taskReady == false)
+                {
                     break;
+                }
             }
 
             // if there's no free thread, programmer screwed up =(
@@ -161,11 +162,11 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
         {
             UniqueLock cvLock(self.stateMutex);
             self.taskReadyCV.wait(cvLock, [this, &self]() {
-                return (self.taskReady == true) || (mDispatchThreadExitFlag == true);
+                return (self.taskReady == true) || (mExitFlag == true);
             });
         }
 
-        if (mDispatchThreadExitFlag)
+        if (mExitFlag)
         {
             break;
         }
@@ -205,8 +206,6 @@ void ThreadPool::AddTask(TaskCallback&& callback)
 
 void ThreadPool::WaitForTasks()
 {
-    LOGD("WaitForTasks invoked");
-
     UniqueLock lock(mPoolStateMutex);
     mTasksDoneCV.wait(lock, [this]
     {
