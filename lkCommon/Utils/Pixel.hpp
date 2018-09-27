@@ -46,6 +46,9 @@ struct Pixel
     friend std::ostream& operator<< <T, ComponentCount>(std::ostream& o, const Pixel<T, ComponentCount>& p);
 };
 
+using PixelFloat4 = lkCommon::Utils::Pixel<float, 4>;
+using PixelUint4 = lkCommon::Utils::Pixel<uint8_t, 4>;
+
 } // namespace Utils
 } // namespace lkCommon
 

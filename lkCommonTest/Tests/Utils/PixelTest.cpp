@@ -10,19 +10,19 @@ const uint8_t TEST_PIXEL_RAW_UINT_2[4] = {20, 10, 255, 99};
 const float TEST_PIXEL_RAW_FLOAT[4] = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
 const float TEST_PIXEL_RAW_FLOAT_2[4] = { 20.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f, 99.0f / 255.0f };
 
-const Pixel<uint8_t, 4> TEST_PIXEL_UINT_ZEROS(static_cast<uint8_t>(0));
-const Pixel<uint8_t, 4> TEST_PIXEL_UINT_MAX(255);
-const Pixel<uint8_t, 4> TEST_PIXEL_UINT(TEST_PIXEL_RAW_UINT);
-const Pixel<uint8_t, 4> TEST_PIXEL_UINT_2(TEST_PIXEL_RAW_UINT_2);
-const Pixel<float, 4> TEST_PIXEL_FLOAT_ZEROS(0.0f);
-const Pixel<float, 4> TEST_PIXEL_FLOAT_MAX(1.0f);
-const Pixel<float, 4> TEST_PIXEL_FLOAT(TEST_PIXEL_RAW_FLOAT);
-const Pixel<float, 4> TEST_PIXEL_FLOAT_2(TEST_PIXEL_RAW_FLOAT_2);
+const PixelUint4 TEST_PIXEL_UINT_ZEROS(static_cast<uint8_t>(0));
+const PixelUint4 TEST_PIXEL_UINT_MAX(255);
+const PixelUint4 TEST_PIXEL_UINT(TEST_PIXEL_RAW_UINT);
+const PixelUint4 TEST_PIXEL_UINT_2(TEST_PIXEL_RAW_UINT_2);
+const PixelFloat4 TEST_PIXEL_FLOAT_ZEROS(0.0f);
+const PixelFloat4 TEST_PIXEL_FLOAT_MAX(1.0f);
+const PixelFloat4 TEST_PIXEL_FLOAT(TEST_PIXEL_RAW_FLOAT);
+const PixelFloat4 TEST_PIXEL_FLOAT_2(TEST_PIXEL_RAW_FLOAT_2);
 
 TEST(Pixel, DefaultConstructor)
 {
-    Pixel<uint8_t, 4> pixelUint;
-    Pixel<float, 4> pixelFloat;
+    PixelUint4 pixelUint;
+    PixelFloat4 pixelFloat;
 
     EXPECT_EQ(TEST_PIXEL_UINT_ZEROS, pixelUint);
     EXPECT_EQ(TEST_PIXEL_FLOAT_ZEROS, pixelFloat);
@@ -30,8 +30,8 @@ TEST(Pixel, DefaultConstructor)
 
 TEST(Pixel, ConstructorSingleArgument)
 {
-    Pixel<uint8_t, 4> pixelUint(255);
-    Pixel<float, 4> pixelFloat(1.0f);
+    PixelUint4 pixelUint(255);
+    PixelFloat4 pixelFloat(1.0f);
 
     EXPECT_EQ(TEST_PIXEL_UINT_MAX, pixelUint);
     EXPECT_EQ(TEST_PIXEL_FLOAT_MAX, pixelFloat);
@@ -41,8 +41,8 @@ TEST(Pixel, ConstructorSingleArgument)
 
 TEST(Pixel, ConstructorArray)
 {
-    Pixel<uint8_t, 4> pixelUint(TEST_PIXEL_RAW_UINT);
-    Pixel<float, 4> pixelFloat(TEST_PIXEL_RAW_FLOAT);
+    PixelUint4 pixelUint(TEST_PIXEL_RAW_UINT);
+    PixelFloat4 pixelFloat(TEST_PIXEL_RAW_FLOAT);
 
     EXPECT_EQ(TEST_PIXEL_UINT, pixelUint);
     EXPECT_EQ(TEST_PIXEL_FLOAT, pixelFloat);
@@ -52,8 +52,8 @@ TEST(Pixel, ConstructorArray)
 
 TEST(Pixel, ConstructorInitializerList)
 {
-    Pixel<uint8_t, 4> pixelUint({10, 30, 20, 15});
-    Pixel<float, 4> pixelFloat = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
+    PixelUint4 pixelUint({10, 30, 20, 15});
+    PixelFloat4 pixelFloat = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
 
     EXPECT_EQ(TEST_PIXEL_UINT, pixelUint);
     EXPECT_EQ(TEST_PIXEL_FLOAT, pixelFloat);
@@ -61,20 +61,20 @@ TEST(Pixel, ConstructorInitializerList)
 
 TEST(Pixel, ConstructorFloatOverMax)
 {
-    Pixel<float, 4> pixelFloat(2.0f);
+    PixelFloat4 pixelFloat(2.0f);
     EXPECT_EQ(TEST_PIXEL_FLOAT_MAX, pixelFloat);
 }
 
 TEST(Pixel, ConstructorFloatBelowZero)
 {
-    Pixel<float, 4> pixelFloat(-1.0f);
+    PixelFloat4 pixelFloat(-1.0f);
     EXPECT_EQ(TEST_PIXEL_FLOAT_ZEROS, pixelFloat);
 }
 
 TEST(Pixel, CastUintToFloat)
 {
-    Pixel<float, 4> PIXEL_FLOAT = TEST_PIXEL_UINT;
-    Pixel<float, 4> PIXEL_FLOAT_2 = TEST_PIXEL_UINT_2;
+    PixelFloat4 PIXEL_FLOAT = TEST_PIXEL_UINT;
+    PixelFloat4 PIXEL_FLOAT_2 = TEST_PIXEL_UINT_2;
 
     EXPECT_EQ(TEST_PIXEL_FLOAT, PIXEL_FLOAT);
     EXPECT_EQ(TEST_PIXEL_FLOAT_2, PIXEL_FLOAT_2);
@@ -83,8 +83,8 @@ TEST(Pixel, CastUintToFloat)
 
 TEST(Pixel, CastFloatToUint)
 {
-    Pixel<uint8_t, 4> PIXEL_UINT = TEST_PIXEL_FLOAT;
-    Pixel<uint8_t, 4> PIXEL_UINT_2 = TEST_PIXEL_FLOAT_2;
+    PixelUint4 PIXEL_UINT = TEST_PIXEL_FLOAT;
+    PixelUint4 PIXEL_UINT_2 = TEST_PIXEL_FLOAT_2;
 
     EXPECT_EQ(TEST_PIXEL_UINT, PIXEL_UINT);
     EXPECT_EQ(TEST_PIXEL_UINT_2, PIXEL_UINT_2);
