@@ -5,10 +5,10 @@
 
 using namespace lkCommon::Utils;
 
-const uint8_t TEST_PIXEL_RAW_UINT[] = {10, 30, 20, 15};
-const uint8_t TEST_PIXEL_RAW_UINT_2[] = {20, 10, 255, 99};
-const float TEST_PIXEL_RAW_FLOAT[] = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
-const float TEST_PIXEL_RAW_FLOAT_2[] = { 20.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f, 99.0f / 255.0f };
+const uint8_t TEST_PIXEL_RAW_UINT[4] = {10, 30, 20, 15};
+const uint8_t TEST_PIXEL_RAW_UINT_2[4] = {20, 10, 255, 99};
+const float TEST_PIXEL_RAW_FLOAT[4] = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
+const float TEST_PIXEL_RAW_FLOAT_2[4] = { 20.0f / 255.0f, 10.0f / 255.0f, 255.0f / 255.0f, 99.0f / 255.0f };
 
 const Pixel<uint8_t, 4> TEST_PIXEL_UINT_ZEROS(static_cast<uint8_t>(0));
 const Pixel<uint8_t, 4> TEST_PIXEL_UINT_MAX(255);
@@ -48,6 +48,15 @@ TEST(Pixel, ConstructorArray)
     EXPECT_EQ(TEST_PIXEL_FLOAT, pixelFloat);
     EXPECT_NE(TEST_PIXEL_UINT_ZEROS, pixelUint);
     EXPECT_NE(TEST_PIXEL_FLOAT_ZEROS, pixelFloat);
+}
+
+TEST(Pixel, ConstructorInitializerList)
+{
+    Pixel<uint8_t, 4> pixelUint({10, 30, 20, 15});
+    Pixel<float, 4> pixelFloat = { 10.0f / 255.0f, 30.0f / 255.0f, 20.0f / 255.0f, 15.0f / 255.0f };
+
+    EXPECT_EQ(TEST_PIXEL_UINT, pixelUint);
+    EXPECT_EQ(TEST_PIXEL_FLOAT, pixelFloat);
 }
 
 TEST(Pixel, ConstructorFloatOverMax)

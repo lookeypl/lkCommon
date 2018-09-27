@@ -80,6 +80,78 @@ Pixel<T, ComponentCount>::Pixel(const T colors[ComponentCount])
 }
 
 template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>::Pixel(std::initializer_list<T> l)
+    : mColors{static_cast<T>(0)}
+{
+    size_t limit = ComponentCount < l.size() ? ComponentCount : l.size();
+    size_t ctr = 0;
+    for (auto& item: l)
+    {
+        if (ctr == limit)
+        {
+            break;
+        }
+
+        mColors[ctr] = item;
+        ctr++;
+    }
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator=(std::initializer_list<T> l)
+{
+    memset(mColors, 0x0, sizeof(T) * ComponentCount);
+
+    size_t limit = ComponentCount < l.size() ? ComponentCount : l.size();
+    size_t ctr = 0;
+    for (auto& item: l)
+    {
+        if (ctr == limit)
+        {
+            break;
+        }
+
+        mColors[ctr] = item;
+        ctr++;
+    }
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>::Pixel(const Pixel<T, ComponentCount>& other)
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+        mColors[i] = other.mColors[i];
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>::Pixel(Pixel<T, ComponentCount>&& other)
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+        mColors[i] = other.mColors[i];
+
+    memset(other.mColors, 0x0, sizeof(T) * ComponentCount);
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator=(const Pixel<T, ComponentCount>& other)
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+        mColors[i] = other.mColors[i];
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator=(Pixel<T, ComponentCount>&& other)
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+        mColors[i] = other.mColors[i];
+
+    memset(other.mColors, 0x0, sizeof(T) * ComponentCount);
+    return *this;
+}
+
+
+template <typename T, size_t ComponentCount>
 bool Pixel<T, ComponentCount>::operator==(const Pixel<T, ComponentCount>& other) const
 {
     for (size_t i = 0; i < ComponentCount; ++i)
