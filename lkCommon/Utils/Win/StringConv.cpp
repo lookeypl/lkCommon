@@ -9,7 +9,7 @@
 namespace lkCommon {
 namespace Utils {
 
-bool UTF8ToUTF16(const std::string& in, std::wstring& out)
+bool StringToWString(const std::string& in, std::wstring& out)
 {
     const int bufSize = 1024;
     wchar_t buf[bufSize];
@@ -26,6 +26,7 @@ bool UTF8ToUTF16(const std::string& in, std::wstring& out)
 
     ++inChars; // trailing zero
 
+    // FIXME below code depends on bufSize
     int result = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, in.c_str(),
                                      static_cast<int>(inChars), buf, bufSize);
     if (!result)
@@ -39,7 +40,7 @@ bool UTF8ToUTF16(const std::string& in, std::wstring& out)
     return true;
 }
 
-bool UTF16ToUTF8(const std::wstring& in, std::string& out)
+bool WStringToString(const std::wstring& in, std::string& out)
 {
     const int bufferSize = 1024;
     char buffer[bufferSize];

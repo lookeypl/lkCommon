@@ -39,7 +39,7 @@
     <ClInclude Include="Utils\SortImpl.hpp" />
     <ClInclude Include="Utils\ThreadPool.hpp" />
     <ClInclude Include="Utils\Timer.hpp" />
-    <ClInclude Include="Utils\UTF.hpp" />
+    <ClInclude Include="Utils\StringConv.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Math\Interpolation\CubicInterpolator.cpp" />
@@ -55,7 +55,7 @@
     <ClCompile Include="Utils\ThreadPool.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
-    <ClCompile Include="Utils\Win\UTF.cpp" />
+    <ClCompile Include="Utils\Win\StringConv.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

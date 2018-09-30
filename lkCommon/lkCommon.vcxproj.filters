@@ -40,7 +40,7 @@
     <ClInclude Include="Utils\Timer.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\UTF.hpp">
+    <ClInclude Include="Utils\StringConv.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Math\Vector4.hpp">
@@ -93,7 +93,7 @@
     <ClCompile Include="Utils\Win\Timer.cpp">
       <Filter>Utils\Win</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Win\UTF.cpp">
+    <ClCompile Include="Utils\Win\StringConv.cpp">
       <Filter>Utils\Win</Filter>
     </ClCompile>
     <ClCompile Include="System\Win\FS.cpp">

@@ -72,9 +72,8 @@ public:
     Window();
     ~Window();
 
-    bool Init();
+    bool Init(const std::string& className = std::string());
     bool Open(int x, int y, int width, int height, const std::string& title);
-    bool SetTitle(const std::wstring& title);
     bool SetTitle(const std::string& title);
     void SetInvisible(bool invisible);
     bool DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image);

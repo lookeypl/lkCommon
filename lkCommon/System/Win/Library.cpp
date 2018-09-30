@@ -2,7 +2,7 @@
 
 #include "lkCommon.hpp"
 #include "Utils/Logger.hpp"
-#include "Utils/UTF.hpp"
+#include "Utils/StringConv.hpp"
 
 
 namespace lkCommon {
@@ -30,7 +30,7 @@ bool Library::Open(const std::string& path)
         pathExt.append(ext);
 
     std::wstring widePath;
-    if (!Utils::UTF8ToUTF16(pathExt, widePath))
+    if (!Utils::StringToWString(pathExt, widePath))
         return false;
 
     mModule = LoadLibrary(widePath.c_str());

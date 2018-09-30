@@ -1,7 +1,7 @@
 #include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"
-#include "Utils/UTF.hpp"
+#include "Utils/StringConv.hpp"
 
 #include <Windows.h>
 #include <fstream>
@@ -55,9 +55,10 @@ void Log(LogLevel level, const std::stringstream& msg)
     SetConsoleTextAttribute(console, conInfo.wAttributes);
 
     std::wstring wideMsg;
-    UTF8ToUTF16(fullMsg.str(), wideMsg);
-
-    OutputDebugStringW(wideMsg.c_str());
+    if (StringToWString(fullMsg.str(), wideMsg))
+    {
+        OutputDebugStringW(wideMsg.c_str());
+    }
 }
 
 } // namespace Logger

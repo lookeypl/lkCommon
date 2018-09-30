@@ -81,15 +81,26 @@ LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-bool Window::Init()
+bool Window::Init(const std::string& className)
 {
     if (mInstance)
         return true;
 
-    const void* addr = static_cast<const void*>(this);
-    std::wstringstream sstream;
-    sstream << addr;
-    mClassName = L"lkCommon_Class_" + sstream.str();
+    if (className.empty())
+    {
+        const void* addr = static_cast<const void*>(this);
+        std::wstringstream sstream;
+        sstream << addr;
+        mClassName = L"lkCommon_DefaultClass_" + sstream.str();
+    }
+    else
+    {
+        if (!Utils::StringToWString(className, mClassName))
+        {
+            LOGE("Failed to convert class name string to wstring");
+            return false;
+        }
+    }
 
     mInstance = GetModuleHandle(0);
     if (!mInstance)
@@ -131,9 +142,12 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     }
 
     // TODO FULLSCREEN
-    std::wstring wideTitle;
-    if (!Utils::UTF8ToUTF16(title, wideTitle))
+    std::wstring titleWstr;
+    if (!Utils::StringToWString(title, titleWstr))
+    {
+        LOGE("Failed to convert title string to wstring");
         return false;
+    }
 
     RECT wr;
     wr.left = (long)x;
@@ -142,7 +156,7 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     wr.bottom = y + height;
     AdjustWindowRectEx(&wr, WINDOWED_STYLE, false, WINDOWED_EX_STYLE);
 
-    mHWND = CreateWindowEx(WINDOWED_EX_STYLE, mClassName.c_str(), wideTitle.c_str(), WINDOWED_STYLE,
+    mHWND = CreateWindowEx(WINDOWED_EX_STYLE, mClassName.c_str(), titleWStr.c_str(), WINDOWED_STYLE,
                            wr.left, wr.top, (wr.right - wr.left), (wr.bottom - wr.top), nullptr, nullptr,
                            mInstance, nullptr);
     if (!mHWND)
@@ -172,11 +186,18 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     return true;
 }
 
-bool Window::SetTitle(const std::wstring& title)
+bool Window::SetTitle(const std::string& title)
 {
     if (mOpened)
     {
-        if (!SetWindowText(mHWND, title.c_str()))
+        std::wstring wideTitle;
+        if (!Utils::StringToWString(title, wideTitle))
+        {
+            LOGE("Failed to convert title string to wstring");
+            return false;
+        }
+
+        if (!SetWindowText(mHWND, wideTitle.c_str()))
         {
             DWORD error = GetLastError();
             LOGE("Failed to set title string: " << static_cast<int>(error));
@@ -185,18 +206,6 @@ bool Window::SetTitle(const std::wstring& title)
     }
 
     return true;
-}
-
-bool Window::SetTitle(const std::string& title)
-{
-    // Convert title to UTF16
-    std::wstring wideTitle;
-    if (!Utils::UTF8ToUTF16(title, wideTitle))
-    {
-        return false;
-    }
-
-    return SetTitle(wideTitle);
 }
 
 void Window::SetInvisible(bool invisible)

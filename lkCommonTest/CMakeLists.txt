@@ -11,6 +11,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Utils/LoggerTest.cpp
                        Tests/Utils/PixelTest.cpp
                        Tests/Utils/SortTest.cpp
+                       Tests/Utils/StringConvTest.cpp
                        Tests/Utils/ThreadPoolTest.cpp
                        )
 

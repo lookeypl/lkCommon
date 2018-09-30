@@ -25,7 +25,7 @@ SET(LKCOMMON_HDRS lkCommon.hpp
                   Utils/SortImpl.hpp
                   Utils/ThreadPool.hpp
                   Utils/Timer.hpp
-                  Utils/UTF.hpp
+                  Utils/StringConv.hpp
                   )
 
 
@@ -36,7 +36,7 @@ IF(WIN32)
                                System/Win/Window.cpp
                                Utils/Win/Logger.cpp
                                Utils/Win/Timer.cpp
-                               Utils/Win/UTF.cpp
+                               Utils/Win/StringConv.cpp
                                )
 ELSEIF(UNIX)
     SET(LKCOMMON_PLATFORM_SRCS System/Linux/FS.cpp
@@ -45,7 +45,7 @@ ELSEIF(UNIX)
                                System/Linux/Window.cpp
                                Utils/Linux/Logger.cpp
                                Utils/Linux/Timer.cpp
-                               Utils/Linux/UTF.cpp
+                               Utils/Linux/StringConv.cpp
                                )
 ELSE()
     MESSAGE(FATAL_ERROR "Platform unsupported")

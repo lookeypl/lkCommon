@@ -34,6 +34,12 @@ const char* TranslateErrorCodeToStr(int err)
     }
 }
 
+bool ReportUnsupportedUTF16()
+{
+    LOGE("Setting a widechar title on Linux is unsupported");
+    return false;
+}
+
 } // namespace
 
 
@@ -72,7 +78,7 @@ Window::~Window()
     }
 }
 
-bool Window::Init()
+bool Window::Init(const std::string& className)
 {
     mConnection = xcb_connect(nullptr, &mConnScreen);
     if (xcb_connection_has_error(mConnection))
@@ -168,13 +174,6 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     OnOpen();
     mOpened = true;
     return true;
-}
-
-bool Window::SetTitle(const std::wstring& title)
-{
-    LKCOMMON_UNUSED(title);
-    LOGE("Setting a widechar title on Linux is unsupported");
-    return false;
 }
 
 bool Window::SetTitle(const std::string& title)
