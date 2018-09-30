@@ -176,6 +176,78 @@ bool Pixel<T, ComponentCount>::operator!=(const Pixel<T, ComponentCount>& other)
 }
 
 template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const Pixel<T, ComponentCount>& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] += other.mColors[i];
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const Pixel<T, ComponentCount>& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] -= other.mColors[i];
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const Pixel<T, ComponentCount>& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] *= other.mColors[i];
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/(const Pixel<T, ComponentCount>& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] /= other.mColors[i];
+    return *this;
+}
+
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const T& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] += other;
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const T& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] -= other;
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const T& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] *= other;
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/(const T& other)
+{
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] /= other;
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
+T Pixel<T, ComponentCount>::operator[](size_t i) const
+{
+    LKCOMMON_ASSERT(i < ComponentCount, "Too big index provided");
+    return mColors[i];
+}
+
+template <typename T, size_t ComponentCount>
 template <typename ConvType>
 Pixel<T, ComponentCount>::operator Pixel<ConvType, ComponentCount>() const
 {
@@ -189,8 +261,22 @@ Pixel<T, ComponentCount>::operator Pixel<ConvType, ComponentCount>() const
     return p;
 }
 
-template <typename T, size_t ComponentCount>
-std::ostream& operator<<(std::ostream& o, const Pixel<T, ComponentCount>& p)
+template <size_t ComponentCount>
+std::ostream& operator<< (std::ostream& o, const Pixel<uint8_t, ComponentCount>& p)
+{
+    o << "[";
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        if (i != 0)
+            o << ", ";
+        o << static_cast<uint32_t>(p.mColors[i]);
+    }
+    o << "]";
+    return o;
+}
+
+template <size_t ComponentCount>
+std::ostream& operator<< (std::ostream& o, const Pixel<float, ComponentCount>& p)
 {
     o << "[";
     for (size_t i = 0; i < ComponentCount; ++i)

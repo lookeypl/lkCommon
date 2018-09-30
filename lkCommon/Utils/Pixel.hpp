@@ -9,9 +9,10 @@ namespace lkCommon {
 namespace Utils {
 
 
-// predeclarations for Pixel class definition
+// predeclarations for Pixel class definition, needed for ostream operator overload
 template <typename T, size_t ComponentCount> struct Pixel;
 
+// ostream operator overload for easier debugging
 template <typename T, size_t ComponentCount>
 std::ostream& operator<< (std::ostream& o, const Pixel<T, ComponentCount>& p);
 
@@ -19,30 +20,55 @@ std::ostream& operator<< (std::ostream& o, const Pixel<T, ComponentCount>& p);
 template <typename T, size_t ComponentCount>
 struct Pixel
 {
-    static_assert(std::is_same<uint8_t, typename std::remove_cv<T>::type>::value
-               || std::is_same<float, typename std::remove_cv<T>::type>::value,
-                  "Unsupported template type. Only provided types are: uint8_t, float");
+    // some assertions to limit uses for our class
+    static_assert(ComponentCount > 0, "Cannot create a Pixel with 0 components");
+    static_assert(std::is_same<uint8_t, typename std::remove_cv<T>::type>::value ||
+                  std::is_same<float, typename std::remove_cv<T>::type>::value,
+                  "Unsupported template type. Only supported types are: uint8_t, float");
 
+    // container for the colors
     T mColors[ComponentCount];
 
-
+    // Constructors and assignment from initializer list
     Pixel();
     Pixel(T color);
     Pixel(const T colors[ComponentCount]);
     Pixel(std::initializer_list<T> l);
     Pixel& operator=(std::initializer_list<T> l);
 
+    // Copy/move constructors
     Pixel(const Pixel& other);
     Pixel(Pixel&& other);
     Pixel& operator=(const Pixel& other);
     Pixel& operator=(Pixel&& other);
 
+    // comparison operators
     bool operator==(const Pixel<T, ComponentCount>& other) const;
     bool operator!=(const Pixel<T, ComponentCount>& other) const;
 
+    // arithmetic operators vs other Pixel
+    // NOTE these do *not* check for overflows
+    Pixel<T, ComponentCount>& operator+(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator-(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator*(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator/(const Pixel<T, ComponentCount>& other);
+
+    // arithmetic operators vs a constant
+    // NOTE these do *not* check for overflows
+    Pixel<T, ComponentCount>& operator+(const T& other);
+    Pixel<T, ComponentCount>& operator-(const T& other);
+    Pixel<T, ComponentCount>& operator*(const T& other);
+    Pixel<T, ComponentCount>& operator/(const T& other);
+
+    // array subscript operator for easy access to components
+    T operator[](size_t i) const;
+
+    // cast operator
+    // NOTE casting from higher precision type to lower (ex. float -> uint8_t) MIGHT clamp the result
     template <typename ConvType>
     operator Pixel<ConvType, ComponentCount>() const;
 
+    // helper for printing the contents
     friend std::ostream& operator<< <T, ComponentCount>(std::ostream& o, const Pixel<T, ComponentCount>& p);
 };
 
