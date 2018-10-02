@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Pixel utility template class implementation.
+ */
+
 #pragma once
 
 #include <cstdint>
@@ -5,18 +11,26 @@
 #include <initializer_list>
 #include <lkCommon/lkCommon.hpp>
 
+
 namespace lkCommon {
 namespace Utils {
-
 
 // predeclarations for Pixel class definition, needed for ostream operator overload
 template <typename T, size_t ComponentCount> struct Pixel;
 
-// ostream operator overload for easier debugging
+/**
+ * STL ostream operator overload for easier debugging.
+ */
 template <typename T, size_t ComponentCount>
 std::ostream& operator<< (std::ostream& o, const Pixel<T, ComponentCount>& p);
 
 
+/**
+ * Template structure containing a single Pixel of given type @p T with
+ * @p ComponentCount components.
+ *
+ * Its main goal is to provide a common
+ */
 template <typename T, size_t ComponentCount>
 struct Pixel
 {

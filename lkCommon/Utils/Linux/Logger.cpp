@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Logger module implementation
+ */
+
 #include "../Logger.hpp"
 
 #include <fstream>
@@ -23,7 +29,7 @@ void Log(LogLevel level, const std::stringstream& msg)
     switch (level)
     {
     case LogLevel::DEBUG:
-        levelStr = "DEBUG";
+        levelStr = " DBG ";
         colorStr = "\033[36m"; // Cyan (Blue | Green)
         break;
     case LogLevel::INFO:
@@ -32,12 +38,15 @@ void Log(LogLevel level, const std::stringstream& msg)
         break;
     case LogLevel::WARNING:
         levelStr = " WRN ";
-        colorStr = "\033[33m"; // Yellow (Red | Green)
+        colorStr = "\033[93m"; // Bright Yellow (Red | Green)
         break;
-    case LogLevel::ERR:
+    case LogLevel::ERROR:
         levelStr = "ERROR";
         colorStr = "\033[91m"; // Light red
         break;
+    case LogLevel::MEMORY:
+        levelStr = " MEM ";
+        colorStr = "\033[33m"; // Yellow (Red | Green)
     }
 
     std::stringstream fullMsg;

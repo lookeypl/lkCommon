@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Basic Thread Pool implementation
+ */
+
 #pragma once
 
 #include <vector>
@@ -16,6 +22,11 @@ namespace Utils {
 
 using TaskCallback = std::function<void()>;
 
+/**
+ * Structure representing a task to be executed on a separate thread.
+ *
+ * Task is non-copyable to prevent
+ */
 struct Task
 {
     TaskCallback function;
@@ -30,6 +41,9 @@ struct Task
     Task& operator=(Task&& other) = default;
 };
 
+/**
+ * Internal representation of a thread with all its required elements
+ */
 struct Thread
 {
     std::thread thread;
@@ -43,6 +57,20 @@ struct Thread
     ~Thread();
 };
 
+/**
+ * Thread Pool class used to launch tasks on different threads.
+ *
+ * Main purpose of this utility is to allow performing independent tasks while
+ * maximizing CPU usage. By default, the module initializes with amount of
+ * threads matching logical CPU count in the system.
+ *
+ * The pool spawns one dispatcher thread responsible for assigning tasks and
+ * N worker threads to perform Tasks provided by user. Tasks added by user are
+ * enqueued and performed in a FIFO basis. There is no dependency mechanism
+ * provided and tasks are not synchronized between each other. If tasks happen
+ * to share a common resource, it is user's duty to ensure there is
+ * no race/synchronization issues while accessing it.
+ */
 class ThreadPool
 {
     using ThreadContainer = std::vector<Thread>;
@@ -62,17 +90,64 @@ class ThreadPool
     std::condition_variable mTasksDoneCV;
     TaskContainer mTaskQueue;
 
+    void SpawnThreads();
     void DispatchThreadFunction();
     void WorkerThreadFunction(Thread& t);
 
 public:
-    ThreadPool(size_t threads = System::Info::GetCPUCount());
+    /**
+     * Default ThreadPool constructor. Spawns dispatcher thread and amount of
+     * worker threads equal to logical CPU count in current system.
+     *
+     * Constructor is left when all worker threads report ready to process
+     * tasks.
+     */
+    ThreadPool();
+
+    /**
+     * Initializes ThreadPool with provided thread count. Spawns dispatcher
+     * thread and @p threads count of worker threads.
+     *
+     * Constructor is left when all worker threads report ready to process
+     * tasks.
+     *
+     * @p[in] threads Amount of worker threads to spawn.
+     */
+    ThreadPool(size_t threads);
+
+    /**
+     * Destroys Thread Pool. If there are any tasks left to complete, destructor
+     * waits for them to finish, signals end of work and joins all threads
+     * created on constructor stage.
+     */
     ~ThreadPool();
 
+    /**
+     * Adds new task to Task queue which will execute @p callback callback.
+     *
+     * @p[in] callback Callback for task to be called by Thread Pool. Callback
+     *                 is moved by this function, so after completing it
+     *                 the parameter is left in unspecified state.
+     *
+     * @note This function is thread-safe and can be called by multiple threads.
+     */
     void AddTask(TaskCallback&& callback);
+
+    /**
+     * Waits for task queue to empty and for worker threads to finish executing
+     * tasks.
+     *
+     * After exiting this function user can be sure there is no more tasks left
+     * to perform in queue and all worker threads are in idle state.
+     */
     void WaitForTasks();
 
-    LKCOMMON_INLINE size_t GetThreadCount() const
+    /**
+     * Returns worker thread count which is currently used by Pool.
+     *
+     * @result Amount of threads used by Pool.
+     */
+    LKCOMMON_INLINE size_t GetWorkerThreadCount() const
     {
         return mWorkerThreads.size();
     }

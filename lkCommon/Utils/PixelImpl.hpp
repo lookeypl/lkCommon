@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Pixel utility template class implementation.
+ */
+
 #include "Pixel.hpp"
 #pragma once
 

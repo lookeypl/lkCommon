@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Basic Thread Pool implementation
+ */
+
 #include "ThreadPool.hpp"
 #include <limits>
 
@@ -32,6 +38,20 @@ Thread::~Thread()
 }
 
 
+ThreadPool::ThreadPool()
+    : mDispatchThreadCV()
+    , mExitFlag(false)
+    , mDispatchThread()
+    , mAvailableWorkerThreads(0)
+    , mWorkerThreads(lkCommon::System::Info::GetCPUCount())
+    , mPoolStateMutex()
+    , mStartupStateCV()
+    , mTasksDoneCV()
+    , mTaskQueue()
+{
+    SpawnThreads();
+}
+
 ThreadPool::ThreadPool(size_t threads)
     : mDispatchThreadCV()
     , mExitFlag(false)
@@ -43,22 +63,7 @@ ThreadPool::ThreadPool(size_t threads)
     , mTasksDoneCV()
     , mTaskQueue()
 {
-    mDispatchThread = std::thread(&ThreadPool::DispatchThreadFunction, this);
-
-    uint16_t tidCounter = 0;
-    for (auto& t: mWorkerThreads)
-    {
-        t.tid = tidCounter;
-        t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
-        tidCounter++;
-    }
-
-    {
-        UniqueLock lock(mPoolStateMutex);
-        mStartupStateCV.wait(lock, [this, &threads]() {
-            return (mAvailableWorkerThreads == threads);
-        });
-    }
+    SpawnThreads();
 }
 
 ThreadPool::~ThreadPool()
@@ -82,6 +87,26 @@ ThreadPool::~ThreadPool()
             t.taskReadyCV.notify_all();
             t.thread.join();
         }
+    }
+}
+
+void ThreadPool::SpawnThreads()
+{
+    mDispatchThread = std::thread(&ThreadPool::DispatchThreadFunction, this);
+
+    uint16_t tidCounter = 0;
+    for (auto& t: mWorkerThreads)
+    {
+        t.tid = tidCounter;
+        t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
+        tidCounter++;
+    }
+
+    {
+        UniqueLock lock(mPoolStateMutex);
+        mStartupStateCV.wait(lock, [this]() {
+            return (mAvailableWorkerThreads == mWorkerThreads.size());
+        });
     }
 }
 

@@ -11,13 +11,13 @@ const uint64_t TASK_COUNT_UNTIL_VALUE_SMALL = 100'000;
 TEST(ThreadPool, Constructor)
 {
     ThreadPool tp;
-    EXPECT_EQ(lkCommon::System::Info::GetCPUCount(), tp.GetThreadCount());
+    EXPECT_EQ(lkCommon::System::Info::GetCPUCount(), tp.GetWorkerThreadCount());
 }
 
 TEST(ThreadPool, ConstructorSingleThread)
 {
     ThreadPool tp(1);
-    EXPECT_EQ(1, tp.GetThreadCount());
+    EXPECT_EQ(1, tp.GetWorkerThreadCount());
 }
 
 TEST(ThreadPool, AddTasksSimple)

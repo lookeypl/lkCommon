@@ -15,6 +15,23 @@ bool CompareRawPixels(const uint8_t p1[4], const uint8_t p2[4], bool withAlpha)
     return (p1[2] == p2[2]) && (p1[1] == p2[1]) && (p1[0] == p2[0]) && (withAlpha ? (p1[3] == p2[3]) : true);
 }
 
+TEST(Image, ConstructorDefault)
+{
+    lkCommon::Utils::Image i;
+
+    EXPECT_EQ(0, i.GetWidth());
+    EXPECT_EQ(0, i.GetHeight());
+}
+
+TEST(Image, ConstructorSize)
+{
+    lkCommon::Utils::Image i(TEST_WIDTH, TEST_HEIGHT);
+
+    EXPECT_EQ(TEST_WIDTH, i.GetWidth());
+    EXPECT_EQ(TEST_HEIGHT, i.GetHeight());
+    EXPECT_NE(nullptr, i.GetDataPtr());
+}
+
 TEST(Image, ResizeTest)
 {
     lkCommon::Utils::Image i;

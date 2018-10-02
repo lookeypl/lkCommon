@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Logger module implementation
+ */
+
 #include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"

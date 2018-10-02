@@ -14,6 +14,8 @@
  * while implementing different lkCommon modules on Linux.
  */
 
+#pragma once
+
 #include <string>
 
 

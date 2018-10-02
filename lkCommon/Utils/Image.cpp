@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Image module implementation
+ */
+
 #include "Image.hpp"
 #include "Logger.hpp"
 
@@ -19,6 +25,16 @@ namespace lkCommon {
 namespace Utils {
 
 Image::Image()
+    : mWidth(0)
+    , mHeight(0)
+    , mPixels()
+{
+}
+
+Image::Image(uint32_t width, uint32_t height)
+    : mWidth(width)
+    , mHeight(height)
+    , mPixels(mWidth * mHeight)
 {
 }
 
@@ -42,7 +58,14 @@ bool Image::Resize(uint32_t width, uint32_t height)
 {
     mWidth = width;
     mHeight = height;
-    mPixels.resize(mWidth * mHeight);
+
+    try {
+        mPixels.resize(mWidth * mHeight);
+    } catch (std::exception& e) {
+        LOGE("Failed to resize Image: " << e.what());
+        return false;
+    }
+
     return true;
 }
 

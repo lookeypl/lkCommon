@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @author LKostyra (costyrra.xl@gmail.com)
+ * @brief  Module supporting conversion between Char Strings and Wide Char Strings
+ */
+
 #include "lkCommon.hpp"
 
 #include "Utils/Logger.hpp"
