@@ -10,30 +10,9 @@
 
 namespace {
 
-// converters
-
-template <typename Src, typename Dst>
-LKCOMMON_INLINE Dst ConvertColor(Src source)
-{
-    static_assert(std::is_same<uint8_t, typename std::remove_cv<Src>::type>::value
-               || std::is_same<float, typename std::remove_cv<Src>::type>::value,
-               "Incompatible types provided for conversion");
-}
-
-template <>
-LKCOMMON_INLINE uint8_t ConvertColor(float source)
-{
-    return static_cast<uint8_t>(source * 255);
-}
-
-template <>
-LKCOMMON_INLINE float ConvertColor(uint8_t source)
-{
-    return static_cast<float>(source) / 255.0f;
-}
-
 
 // value range clamps per type (ex. limits float to 0.0f - 1.0f range)
+
 template <typename T>
 LKCOMMON_INLINE T Clamp(T x)
 {
@@ -53,6 +32,28 @@ LKCOMMON_INLINE float Clamp(float x)
 {
     x = (x > 1.0f ? 1.0f : x);
     return (x < 0.0f ? 0.0f : x);
+}
+
+// converters
+
+template <typename Src, typename Dst>
+LKCOMMON_INLINE Dst ConvertColor(Src source)
+{
+    static_assert(std::is_same<uint8_t, typename std::remove_cv<Src>::type>::value
+               || std::is_same<float, typename std::remove_cv<Src>::type>::value,
+               "Incompatible types provided for conversion");
+}
+
+template <>
+LKCOMMON_INLINE uint8_t ConvertColor(float source)
+{
+    return static_cast<uint8_t>(Clamp(source) * 255);
+}
+
+template <>
+LKCOMMON_INLINE float ConvertColor(uint8_t source)
+{
+    return static_cast<float>(Clamp(source)) / 255.0f;
 }
 
 

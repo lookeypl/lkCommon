@@ -48,6 +48,11 @@ const PixelFloat4 TEST_PIXEL_FLOAT_MUL_3_CONSTANT   ({  40.0f,  60.0f,  80.0f,  
 const PixelFloat4 TEST_PIXEL_FLOAT_DIV_3_CONSTANT   ({  10.0f,  15.0f,  20.0f,  12.0f });
 
 
+const float TEST_CONSTANT_CLAMP_FLOAT_POSITIVE = 2.0f;
+const float TEST_CONSTANT_CLAMP_FLOAT_NEGATIVE = -0.5f;
+const float TEST_CONSTANT_CLAMP_UINT = 255;
+
+
 TEST(Pixel, DefaultConstructor)
 {
     PixelUint4 pixelUint;
@@ -246,4 +251,22 @@ TEST(Pixel, DivConstantFloat)
     PixelFloat4 val1 = TEST_PIXEL_FLOAT_3;
     float val2 = TEST_CONSTANT_FLOAT;
     EXPECT_EQ(TEST_PIXEL_FLOAT_DIV_3_CONSTANT, val1 / val2);
+}
+
+TEST(Pixel, FloatToUintCastClampTest)
+{
+    PixelFloat4 val1(TEST_CONSTANT_CLAMP_FLOAT_POSITIVE);
+    PixelUint4 val2 = static_cast<PixelUint4>(val1);
+    EXPECT_EQ(TEST_PIXEL_UINT_MAX, val2);
+
+    PixelFloat4 val3(TEST_CONSTANT_CLAMP_FLOAT_NEGATIVE);
+    val2 = static_cast<PixelUint4>(val3);
+    EXPECT_EQ(TEST_PIXEL_UINT_ZEROS, val2);
+}
+
+TEST(Pixel, UintToFloatCastClampTest)
+{
+    PixelUint4 val1(TEST_CONSTANT_CLAMP_UINT);
+    PixelFloat4 val2 = static_cast<PixelFloat4>(val1);
+    EXPECT_EQ(TEST_PIXEL_FLOAT_MAX, val2);
 }
