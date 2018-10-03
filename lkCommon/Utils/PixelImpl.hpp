@@ -12,7 +12,6 @@ namespace {
 
 
 // value range clamps per type (ex. limits float to 0.0f - 1.0f range)
-
 template <typename T>
 LKCOMMON_INLINE T Clamp(T x)
 {
@@ -33,6 +32,7 @@ LKCOMMON_INLINE float Clamp(float x)
     x = (x > 1.0f ? 1.0f : x);
     return (x < 0.0f ? 0.0f : x);
 }
+
 
 // converters
 
@@ -183,7 +183,7 @@ bool Pixel<T, ComponentCount>::operator!=(const Pixel<T, ComponentCount>& other)
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const Pixel<T, ComponentCount>& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+=(const Pixel<T, ComponentCount>& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] += other.mColors[i];
@@ -191,7 +191,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const Pixel<T, Com
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const Pixel<T, ComponentCount>& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-=(const Pixel<T, ComponentCount>& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] -= other.mColors[i];
@@ -199,7 +199,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const Pixel<T, Com
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const Pixel<T, ComponentCount>& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*=(const Pixel<T, ComponentCount>& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] *= other.mColors[i];
@@ -207,7 +207,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const Pixel<T, Com
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/(const Pixel<T, ComponentCount>& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/=(const Pixel<T, ComponentCount>& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] /= other.mColors[i];
@@ -216,7 +216,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/(const Pixel<T, Com
 
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const T& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+=(const T& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] += other;
@@ -224,7 +224,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator+(const T& other)
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const T& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-=(const T& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] -= other;
@@ -232,7 +232,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator-(const T& other)
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const T& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*=(const T& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] *= other;
@@ -240,7 +240,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator*(const T& other)
 }
 
 template <typename T, size_t ComponentCount>
-Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/(const T& other)
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/=(const T& other)
 {
     for (uint32_t i = 0; i < ComponentCount; ++i)
         mColors[i] /= other;
@@ -295,6 +295,63 @@ std::ostream& operator<< (std::ostream& o, const Pixel<float, ComponentCount>& p
     o << "]";
     return o;
 }
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator+ (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs)
+{
+    lhs += rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator- (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs)
+{
+    lhs -= rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs)
+{
+    lhs *= rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs)
+{
+    lhs /= rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator+ (Pixel<T, ComponentCount> lhs, const T& rhs)
+{
+    lhs += rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator- (Pixel<T, ComponentCount> lhs, const T& rhs)
+{
+    lhs -= rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const T& rhs)
+{
+    lhs *= rhs;
+    return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const T& rhs)
+{
+    lhs /= rhs;
+    return lhs;
+}
+
 
 } // namespace Utils
 } // namespace lkCommon

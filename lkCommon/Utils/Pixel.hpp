@@ -19,10 +19,26 @@ namespace Utils {
 template <typename T, size_t ComponentCount> struct Pixel;
 
 /**
- * STL ostream operator overload for easier debugging.
+ * Operator declarations for friendships
  */
 template <typename T, size_t ComponentCount>
 std::ostream& operator<< (std::ostream& o, const Pixel<T, ComponentCount>& p);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator+ (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator- (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator+ (Pixel<T, ComponentCount> lhs, const T& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator- (Pixel<T, ComponentCount> lhs, const T& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const T& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const T& rhs);
 
 
 /**
@@ -62,17 +78,17 @@ struct Pixel
 
     // arithmetic operators vs other Pixel
     // NOTE these do *not* check for overflows
-    Pixel<T, ComponentCount>& operator+(const Pixel<T, ComponentCount>& other);
-    Pixel<T, ComponentCount>& operator-(const Pixel<T, ComponentCount>& other);
-    Pixel<T, ComponentCount>& operator*(const Pixel<T, ComponentCount>& other);
-    Pixel<T, ComponentCount>& operator/(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator+=(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator-=(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator*=(const Pixel<T, ComponentCount>& other);
+    Pixel<T, ComponentCount>& operator/=(const Pixel<T, ComponentCount>& other);
 
-    // arithmetic operators vs a constant
+    // arithmetic operators vs a single component type
     // NOTE these do *not* check for overflows
-    Pixel<T, ComponentCount>& operator+(const T& other);
-    Pixel<T, ComponentCount>& operator-(const T& other);
-    Pixel<T, ComponentCount>& operator*(const T& other);
-    Pixel<T, ComponentCount>& operator/(const T& other);
+    Pixel<T, ComponentCount>& operator+=(const T& other);
+    Pixel<T, ComponentCount>& operator-=(const T& other);
+    Pixel<T, ComponentCount>& operator*=(const T& other);
+    Pixel<T, ComponentCount>& operator/=(const T& other);
 
     // array subscript operator for easy access to components
     T operator[](size_t i) const;
@@ -82,8 +98,16 @@ struct Pixel
     template <typename ConvType>
     operator Pixel<ConvType, ComponentCount>() const;
 
-    // helper for printing the contents
+    // friendships
     friend std::ostream& operator<< <T, ComponentCount>(std::ostream& o, const Pixel<T, ComponentCount>& p);
+    friend Pixel<T, ComponentCount> operator+ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+    friend Pixel<T, ComponentCount> operator- <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+    friend Pixel<T, ComponentCount> operator* <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+    friend Pixel<T, ComponentCount> operator/ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
+    friend Pixel<T, ComponentCount> operator+ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
+    friend Pixel<T, ComponentCount> operator- <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
+    friend Pixel<T, ComponentCount> operator* <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
+    friend Pixel<T, ComponentCount> operator/ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
 };
 
 using PixelFloat4 = lkCommon::Utils::Pixel<float, 4>;
