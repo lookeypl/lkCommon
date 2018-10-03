@@ -1,6 +1,6 @@
 #include "../Window.hpp"
 #include "Utils/Logger.hpp"
-#include "Utils/UTF.hpp"
+#include "Utils/StringConv.hpp"
 
 
 namespace lkCommon {
@@ -142,8 +142,8 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     }
 
     // TODO FULLSCREEN
-    std::wstring titleWstr;
-    if (!Utils::StringToWString(title, titleWstr))
+    std::wstring titleWStr;
+    if (!Utils::StringToWString(title, titleWStr))
     {
         LOGE("Failed to convert title string to wstring");
         return false;
@@ -302,9 +302,17 @@ void Window::Close()
     if (mInstance != 0)
     {
         if (mHWND != 0)
-            DestroyWindow(mHWND);
+        {
+            if (!DestroyWindow(mHWND))
+            {
+                LOGE("Failed to destroy window on close");
+            }
+        }
 
-        UnregisterClass(mClassName.c_str(), mInstance);
+        if (!UnregisterClassW(mClassName.c_str(), mInstance))
+        {
+            LOGE("Failed to unregister class on close");
+        }
     }
 
     mOpened = false;

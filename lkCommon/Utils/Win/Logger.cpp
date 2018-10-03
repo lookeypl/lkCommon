@@ -13,6 +13,9 @@
 #include <fstream>
 #include <iostream>
 
+#undef ERROR
+
+
 namespace lkCommon {
 namespace Utils {
 namespace Logger {

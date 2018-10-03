@@ -16,7 +16,8 @@ namespace Utils {
  * Namespace keeping logging-related utilities.
  *
  * Available Log levels:
- * \li ERROR - indicates an error message, colored in bright red.
+ * \li ERR - indicates an error message, colored in bright red. Name is
+ * deliberately shorter to prevent collision with Windows API ERROR define.
  * \li WARNING - indicates a warning message, colored in bright yellow.
  * \li INFO - indicates a regular message, displayed without color enhancements.
  * \li DEBUG - indicates a debug message, colored in light blue. Debug logs are
@@ -51,7 +52,7 @@ namespace Logger {
  */
 enum class LogLevel: unsigned char
 {
-    ERROR = 0,
+    ERR = 0,
     WARNING,
     INFO,
     DEBUG,
@@ -116,4 +117,4 @@ void Log(LogLevel level, const std::stringstream& msg);
 /**
  * Macro for logging Error messages.
  */
-#define LOGE(msg) LOG(lkCommon::Utils::Logger::LogLevel::ERROR, msg)
+#define LOGE(msg) LOG(lkCommon::Utils::Logger::LogLevel::ERR, msg)
