@@ -12,6 +12,16 @@
 #include <lkCommon/lkCommon.hpp>
 #include <lkCommon/Utils/Pixel.hpp>
 
+#ifdef WIN32
+#define NOMINMAX
+#include <Windows.h>
+#elif defined(__linux__) | defined(__LINUX__)
+#include <xcb/xcb.h>
+#include <xcb/xcb_image.h>
+#else
+#error "Platform not supported"
+#endif
+
 
 namespace lkCommon {
 namespace Utils {
@@ -34,7 +44,21 @@ class Image final
     uint32_t mHeight;
     std::vector<PixelUint4> mPixels;
 
+#ifdef WIN32
+    // empty, Windows implementation does not require platform-specific code
+#elif defined(__linux__) | defined(__LINUX__)
+    xcb_connection_t* mConnection; // TODO globalize
+    xcb_screen_t* mScreen;
+    int mConnScreen;
+    xcb_image_t* mXcbImage;
+#else
+#error "Platform not supported"
+#endif
+
     size_t GetPixelCoord(uint32_t x, uint32_t y);
+    void InitPlatformSpecific();
+    bool ResizePlatformSpecific();
+    void ReleasePlatformSpecific();
 
 public:
     /**
@@ -87,6 +111,16 @@ public:
      * @result True if succeeds, false when x or y are out of bounds.
      */
     bool GetPixel(uint32_t x, uint32_t y, Pixel<uint8_t, 4>& pixel);
+
+    /**
+     * Acquires platform-specific bitmap handle.
+     *
+     * @note This function should be used ONLY by platform-specific modules.
+     * Result can be easily casted there to:
+     *   - HBITMAP on Windows
+     *   - xcb_image* on Linux
+     */
+    void* GetPlatformImageHandle() const;
 
     /**
      * Returns width of Image.

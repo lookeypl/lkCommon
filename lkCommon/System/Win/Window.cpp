@@ -11,18 +11,32 @@ const DWORD WINDOWED_EX_STYLE = WS_EX_WINDOWEDGE;
 const DWORD WINDOWED_STYLE = WS_OVERLAPPEDWINDOW;
 
 Window::Window()
-    : mInstance(0)
-    , mHWND(0)
-    , mWidth(0)
+    : mWidth(0)
     , mHeight(0)
+    , mMouseDownX(0)
+    , mMouseDownY(0)
     , mOpened(false)
     , mInvisible(false)
+    , mKeys{false, }
+    , mMouseButtons{false, }
+    , mInstance(NULL)
+    , mHWND(static_cast<HWND>(INVALID_HANDLE_VALUE))
+    , mHDC(static_cast<HDC>(INVALID_HANDLE_VALUE))
+    , mClassName()
 {
 }
 
 Window::~Window()
 {
     Close();
+
+    if (mInstance != 0)
+    {
+        if (!UnregisterClassW(mClassName.c_str(), mInstance))
+        {
+            LOGE("Failed to unregister class on close");
+        }
+    }
 }
 
 LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -176,6 +190,11 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     }
 
     mHDC = GetDC(mHWND);
+    if (mHDC == INVALID_HANDLE_VALUE)
+    {
+        LOGE("Failed to acquire Window's DC");
+        return false;
+    }
 
     mOpened = true;
     mWidth = width;
@@ -225,30 +244,30 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
 {
     if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
-        LOGE("Displayed Image extens beyond Window borders");
+        LOGE("Displayed Image extends beyond Window borders");
         return false;
     }
 
-    HBITMAP img = CreateBitmap(image.GetWidth(), image.GetHeight(), 1, sizeof(Utils::Pixel<uint8_t, 4>) * 8, image.GetDataPtr());
-    if (img == INVALID_HANDLE_VALUE)
+    // Utils::Image holds the image from top to bottom, hence -height
+    BITMAPINFO bitmapInfo = {0,};
+    bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bitmapInfo.bmiHeader.biWidth = static_cast<LONG>(image.GetWidth());
+    bitmapInfo.bmiHeader.biHeight = -static_cast<LONG>(image.GetHeight());
+    bitmapInfo.bmiHeader.biPlanes = 1;
+    bitmapInfo.bmiHeader.biBitCount = 32;
+    bitmapInfo.bmiHeader.biCompression = BI_RGB;
+    int res = StretchDIBits(mHDC,
+                            x, y, image.GetWidth(), image.GetHeight(),
+                            0, 0, image.GetWidth(), image.GetHeight(),
+                            image.GetDataPtr(), &bitmapInfo, DIB_RGB_COLORS,
+                            SRCCOPY);
+    if (res == 0)
     {
-        LOGE("Failed to create temporary bitmap for displayed image");
+        DWORD err = GetLastError();
+        LOGE("Failed to copy image to window: " << static_cast<int>(err));
         return false;
     }
 
-    HDC tempDC = CreateCompatibleDC(mHDC);
-    if (tempDC == INVALID_HANDLE_VALUE)
-    {
-        LOGE("Failed to obtain a compatible DC for bitmap display");
-        DeleteObject(img);
-        return false;
-    }
-
-    SelectObject(tempDC, img);
-    BitBlt(mHDC, x, y, image.GetWidth(), image.GetHeight(), tempDC, 0, 0, SRCCOPY);
-
-    DeleteDC(tempDC);
-    DeleteObject(img);
     return true;
 }
 
@@ -299,19 +318,11 @@ void Window::Close()
 
     OnClose();
 
-    if (mInstance != 0)
+    if (mHWND != 0)
     {
-        if (mHWND != 0)
+        if (!DestroyWindow(mHWND))
         {
-            if (!DestroyWindow(mHWND))
-            {
-                LOGE("Failed to destroy window on close");
-            }
-        }
-
-        if (!UnregisterClassW(mClassName.c_str(), mInstance))
-        {
-            LOGE("Failed to unregister class on close");
+            LOGE("Failed to destroy window on close");
         }
     }
 

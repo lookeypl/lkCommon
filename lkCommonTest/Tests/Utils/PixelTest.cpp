@@ -50,7 +50,7 @@ const PixelFloat4 TEST_PIXEL_FLOAT_DIV_3_CONSTANT   ({  10.0f,  15.0f,  20.0f,  
 
 const float TEST_CONSTANT_CLAMP_FLOAT_POSITIVE = 2.0f;
 const float TEST_CONSTANT_CLAMP_FLOAT_NEGATIVE = -0.5f;
-const float TEST_CONSTANT_CLAMP_UINT = 255;
+const uint8_t TEST_CONSTANT_CLAMP_UINT = 255;
 
 
 TEST(Pixel, DefaultConstructor)

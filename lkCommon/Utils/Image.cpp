@@ -28,18 +28,41 @@ Image::Image()
     : mWidth(0)
     , mHeight(0)
     , mPixels()
+#ifdef WIN32
+    // empty
+#elif defined(__linux__) | defined(__LINUX__)
+    , mConnection(nullptr)
+    , mScreen(nullptr)
+    , mConnScreen(0)
+    , mXcbImage(nullptr)
+#else
+#error "Platform not supported"
+#endif
 {
+    InitPlatformSpecific();
 }
 
 Image::Image(uint32_t width, uint32_t height)
     : mWidth(width)
     , mHeight(height)
     , mPixels(mWidth * mHeight)
+#ifdef WIN32
+    // empty
+#elif defined(__linux__) | defined(__LINUX__)
+    , mConnection(nullptr)
+    , mScreen(nullptr)
+    , mConnScreen(0)
+    , mXcbImage(nullptr)
+#else
+#error "Platform not supported"
+#endif
 {
+    InitPlatformSpecific();
 }
 
 Image::~Image()
 {
+    ReleasePlatformSpecific();
 }
 
 size_t Image::GetPixelCoord(uint32_t x, uint32_t y)
@@ -66,7 +89,7 @@ bool Image::Resize(uint32_t width, uint32_t height)
         return false;
     }
 
-    return true;
+    return ResizePlatformSpecific();
 }
 
 bool Image::SetPixel(uint32_t x, uint32_t y, const Pixel<uint8_t, 4>& pixel)

@@ -126,5 +126,8 @@
     <ClCompile Include="Utils\ThreadPool.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Win\ImageWin.cpp">
+      <Filter>Utils\Win</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

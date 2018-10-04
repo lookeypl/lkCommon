@@ -53,6 +53,7 @@
     <ClCompile Include="Utils\Image.cpp" />
     <ClInclude Include="Utils\PixelImpl.hpp" />
     <ClCompile Include="Utils\ThreadPool.cpp" />
+    <ClCompile Include="Utils\Win\ImageWin.cpp" />
     <ClCompile Include="Utils\Win\Logger.cpp" />
     <ClCompile Include="Utils\Win\Timer.cpp" />
     <ClCompile Include="Utils\Win\StringConv.cpp" />

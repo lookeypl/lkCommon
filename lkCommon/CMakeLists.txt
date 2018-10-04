@@ -34,6 +34,7 @@ IF(WIN32)
     SET(LKCOMMON_PLATFORM_SRCS System/Win/FS.cpp
                                System/Win/Library.cpp
                                System/Win/Window.cpp
+                               Utils/Win/ImageWin.cpp
                                Utils/Win/Logger.cpp
                                Utils/Win/Timer.cpp
                                Utils/Win/StringConv.cpp
@@ -43,6 +44,7 @@ ELSEIF(UNIX)
                                System/Linux/Info.cpp
                                System/Linux/Library.cpp
                                System/Linux/Window.cpp
+                               Utils/Linux/ImageLinux.cpp
                                Utils/Linux/Logger.cpp
                                Utils/Linux/Timer.cpp
                                Utils/Linux/StringConv.cpp

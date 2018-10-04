@@ -48,13 +48,7 @@ namespace System {
 
 
 Window::Window()
-    : mConnection(nullptr)
-    , mWindow(0)
-    , mScreen(nullptr)
-    , mDeleteReply(nullptr)
-    , mGraphicsContext(0)
-    , mConnScreen(0)
-    , mWidth(0)
+    : mWidth(0)
     , mHeight(0)
     , mMouseDownX(0)
     , mMouseDownY(0)
@@ -62,6 +56,12 @@ Window::Window()
     , mInvisible(false)
     , mKeys{false}
     , mMouseButtons{false}
+    , mConnection(nullptr)
+    , mWindow(0)
+    , mScreen(nullptr)
+    , mDeleteReply(nullptr)
+    , mGraphicsContext(0)
+    , mConnScreen(0)
 {
 }
 
@@ -207,7 +207,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         LOGE("Displayed Image extens beyond Window borders");
         return false;
     }
-
+/*
     const uint8_t* data = reinterpret_cast<const uint8_t*>(image.GetDataPtr());
     xcb_image_t* img = xcb_image_create_native(mConnection,
                                                image.GetWidth(), image.GetHeight(),
@@ -219,8 +219,9 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
     {
         LOGE("Failed to create temporary image");
         return false;
-    }
+    }*/
 
+    xcb_image_t* img = reinterpret_cast<xcb_image_t*>(image.GetPlatformImageHandle());
     xcb_void_cookie_t c = xcb_image_put(mConnection, mWindow, mGraphicsContext, img, x, y, 0);
     xcb_generic_error_t* err = xcb_request_check(mConnection, c);
     if (err)
@@ -232,7 +233,6 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
     }
 
     xcb_flush(mConnection);
-    xcb_image_destroy(img);
 
     return true;
 }

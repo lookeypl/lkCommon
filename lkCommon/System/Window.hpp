@@ -17,6 +17,15 @@ namespace System {
 
 class Window
 {
+    uint32_t mWidth;
+    uint32_t mHeight;
+    uint32_t mMouseDownX;
+    uint32_t mMouseDownY;
+    bool mOpened;
+    bool mInvisible;
+    bool mKeys[255];
+    bool mMouseButtons[3];
+
 #ifdef WIN32
     HINSTANCE mInstance;
     HWND mHWND;
@@ -25,7 +34,7 @@ class Window
 
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #elif defined(__linux__) || defined(__LINUX__)
-    xcb_connection_t* mConnection;
+    xcb_connection_t* mConnection; // TODO globalize the connection to XCB
     xcb_window_t mWindow;
     xcb_screen_t* mScreen;
     xcb_intern_atom_reply_t* mDeleteReply;
@@ -36,15 +45,6 @@ class Window
 #else
 #error "Target platform not supported"
 #endif
-
-    uint32_t mWidth;
-    uint32_t mHeight;
-    uint32_t mMouseDownX;
-    uint32_t mMouseDownY;
-    bool mOpened;
-    bool mInvisible;
-    bool mKeys[255];
-    bool mMouseButtons[3];
 
 protected:
     LKCOMMON_INLINE bool IsKeyPressed(KeyCode key) const
