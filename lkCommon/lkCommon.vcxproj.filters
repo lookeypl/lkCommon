@@ -1,133 +1,150 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="System">
-      <UniqueIdentifier>{e452611d-6182-4413-8eff-7763396df118}</UniqueIdentifier>
+    <Filter Include="include">
+      <UniqueIdentifier>{c488a317-26eb-4019-8bc8-bc54dae53372}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{15c32c6f-faa5-4736-9e7c-ef78fdc93082}</UniqueIdentifier>
+    <Filter Include="source">
+      <UniqueIdentifier>{93ef2703-bda1-476a-b8e6-24210c3762c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\Win">
-      <UniqueIdentifier>{8cd35386-267e-4c3f-92af-7e6558a5db89}</UniqueIdentifier>
+    <Filter Include="source\Math">
+      <UniqueIdentifier>{da8c8d1b-7095-4900-896b-2332eb58d1da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\Win">
-      <UniqueIdentifier>{c2f723e9-9d96-4a11-93a9-ac398508a7d6}</UniqueIdentifier>
+    <Filter Include="source\System">
+      <UniqueIdentifier>{78390684-39e9-4fcc-a812-bdb96f057f48}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{cc9ed11e-2fad-4ff3-b1c8-d07b86922abb}</UniqueIdentifier>
+    <Filter Include="source\Utils">
+      <UniqueIdentifier>{8e957dab-a18f-45c5-b3e7-4f03a0b2b71c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math\Interpolation">
-      <UniqueIdentifier>{45d3ed45-27ab-496c-8730-73a212f3668c}</UniqueIdentifier>
+    <Filter Include="include\lkCommon">
+      <UniqueIdentifier>{2ddd14c7-daf1-46c5-8fe2-a23af339ee47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\Math">
+      <UniqueIdentifier>{f6dc3812-67d9-4299-8f2c-22de125c5b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\System">
+      <UniqueIdentifier>{a9c43c50-c7aa-481e-b304-ef358a4c2ea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\Utils">
+      <UniqueIdentifier>{964da1fe-6501-4e8f-b75c-c7aa2280e961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\System\Win">
+      <UniqueIdentifier>{e793cc2e-f630-4701-8d4a-6f93f8deb17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Utils\Win">
+      <UniqueIdentifier>{5c207b01-67a4-49e0-a9a5-a74b02aac96b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lkCommon.hpp" />
-    <ClInclude Include="System\FS.hpp">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\KeyCodes.hpp">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Window.hpp">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Image.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Logger.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Timer.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\StringConv.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector4.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Library.hpp">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\RingAverage.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\RingAverageImpl.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Sort.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\SortImpl.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Interpolation\CubicInterpolator.hpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Interpolation\Interpolator.hpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Constants.hpp">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Pixel.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\PixelImpl.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Info.hpp">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\ThreadPool.hpp">
-      <Filter>Utils</Filter>
-    </ClInclude>
+    <ClCompile Include="source\Math\CubicInterpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Interpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\LinearInterpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector4.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\FS.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Info.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Library.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Window.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\ImageWin.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\Logger.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\StringConv.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\Timer.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Image.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\ThreadPool.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Utils\Win\Logger.cpp">
-      <Filter>Utils\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Win\Timer.cpp">
-      <Filter>Utils\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Win\StringConv.cpp">
-      <Filter>Utils\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Win\FS.cpp">
-      <Filter>System\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Win\Window.cpp">
-      <Filter>System\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector4.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Image.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Win\Library.cpp">
-      <Filter>System\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Interpolation\CubicInterpolator.cpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Interpolation\Interpolator.cpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp">
-      <Filter>Math\Interpolation</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Win\Info.cpp">
-      <Filter>System\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\ThreadPool.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Win\ImageWin.cpp">
-      <Filter>Utils\Win</Filter>
-    </ClCompile>
+    <ClInclude Include="include\lkCommon\lkCommon.hpp">
+      <Filter>include\lkCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Constants.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\CubicInterpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Interpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\LinearInterpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RingAverage.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RingAverageImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector4.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\FS.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Info.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\KeyCodes.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Library.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Window.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Image.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Logger.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Pixel.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Sort.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\SortImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StringConv.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Timer.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

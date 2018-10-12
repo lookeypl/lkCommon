@@ -19,44 +19,44 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lkCommon.hpp" />
-    <ClInclude Include="Math\Constants.hpp" />
-    <ClInclude Include="Math\Interpolation\CubicInterpolator.hpp" />
-    <ClInclude Include="Math\Interpolation\Interpolator.hpp" />
-    <ClInclude Include="Math\Interpolation\LinearInterpolator.hpp" />
-    <ClInclude Include="Math\RingAverage.hpp" />
-    <ClInclude Include="Math\RingAverageImpl.hpp" />
-    <ClInclude Include="Math\Vector4.hpp" />
-    <ClInclude Include="System\FS.hpp" />
-    <ClInclude Include="System\Info.hpp" />
-    <ClInclude Include="System\KeyCodes.hpp" />
-    <ClInclude Include="System\Library.hpp" />
-    <ClInclude Include="System\Window.hpp" />
-    <ClInclude Include="Utils\Image.hpp" />
-    <ClInclude Include="Utils\Logger.hpp" />
-    <ClInclude Include="Utils\Pixel.hpp" />
-    <ClInclude Include="Utils\Sort.hpp" />
-    <ClInclude Include="Utils\SortImpl.hpp" />
-    <ClInclude Include="Utils\ThreadPool.hpp" />
-    <ClInclude Include="Utils\Timer.hpp" />
-    <ClInclude Include="Utils\StringConv.hpp" />
+    <ClCompile Include="source\Math\CubicInterpolator.cpp" />
+    <ClCompile Include="source\Math\Interpolator.cpp" />
+    <ClCompile Include="source\Math\LinearInterpolator.cpp" />
+    <ClCompile Include="source\Math\Vector4.cpp" />
+    <ClCompile Include="source\System\Win\FS.cpp" />
+    <ClCompile Include="source\System\Win\Info.cpp" />
+    <ClCompile Include="source\System\Win\Library.cpp" />
+    <ClCompile Include="source\System\Win\Window.cpp" />
+    <ClCompile Include="source\Utils\Image.cpp" />
+    <ClCompile Include="source\Utils\ThreadPool.cpp" />
+    <ClCompile Include="source\Utils\Win\ImageWin.cpp" />
+    <ClCompile Include="source\Utils\Win\Logger.cpp" />
+    <ClCompile Include="source\Utils\Win\StringConv.cpp" />
+    <ClCompile Include="source\Utils\Win\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Math\Interpolation\CubicInterpolator.cpp" />
-    <ClCompile Include="Math\Interpolation\Interpolator.cpp" />
-    <ClCompile Include="Math\Interpolation\LinearInterpolator.cpp" />
-    <ClCompile Include="Math\Vector4.cpp" />
-    <ClCompile Include="System\Win\Info.cpp" />
-    <ClCompile Include="System\Win\FS.cpp" />
-    <ClCompile Include="System\Win\Library.cpp" />
-    <ClCompile Include="System\Win\Window.cpp" />
-    <ClCompile Include="Utils\Image.cpp" />
-    <ClInclude Include="Utils\PixelImpl.hpp" />
-    <ClCompile Include="Utils\ThreadPool.cpp" />
-    <ClCompile Include="Utils\Win\ImageWin.cpp" />
-    <ClCompile Include="Utils\Win\Logger.cpp" />
-    <ClCompile Include="Utils\Win\Timer.cpp" />
-    <ClCompile Include="Utils\Win\StringConv.cpp" />
+    <ClInclude Include="include\lkCommon\lkCommon.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Constants.hpp" />
+    <ClInclude Include="include\lkCommon\Math\CubicInterpolator.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Interpolator.hpp" />
+    <ClInclude Include="include\lkCommon\Math\LinearInterpolator.hpp" />
+    <ClInclude Include="include\lkCommon\Math\RingAverage.hpp" />
+    <ClInclude Include="include\lkCommon\Math\RingAverageImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Vector4.hpp" />
+    <ClInclude Include="include\lkCommon\System\FS.hpp" />
+    <ClInclude Include="include\lkCommon\System\Info.hpp" />
+    <ClInclude Include="include\lkCommon\System\KeyCodes.hpp" />
+    <ClInclude Include="include\lkCommon\System\Library.hpp" />
+    <ClInclude Include="include\lkCommon\System\Window.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Image.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Logger.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Pixel.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Sort.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\SortImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\StringConv.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Timer.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -131,7 +131,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -146,7 +146,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -160,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -168,7 +168,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\;$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

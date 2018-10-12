@@ -11,8 +11,9 @@ Makefile
 # Visual Studio precompiled headers
 /ipch
 
-# Visual Studio intermediate projects' directories
+# intermediate/build directories
 /Obj
+/build
 
 # Output dir and files
 /Bin
