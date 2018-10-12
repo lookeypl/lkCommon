@@ -29,7 +29,7 @@ public:
 
     const float* Data() const;
     float Length() const;
-    void Normalize();
+    Vector4 Normalize() const;
 
     // Access operator
     float operator[](int index) const;
@@ -59,8 +59,8 @@ public:
     const Vector4 operator/(const float value) const;
 
     // Products
-    float Dot(const Vector4& other);
-    Vector4& Cross(const Vector4& other);
+    float Dot(const Vector4& other) const;
+    Vector4 Cross(const Vector4& other) const;
 
     // Comparison
     bool operator==(const Vector4& other) const;

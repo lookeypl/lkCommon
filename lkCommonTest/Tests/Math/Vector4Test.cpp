@@ -151,9 +151,8 @@ TEST(Vector4, Length)
 TEST(Vector4, Normalize)
 {
     Vector4 a(2.0f, 0.0f, 0.0f, 0.0f);
-    a.Normalize();
 
-    ASSERT_EQ(resultNorm, a);
+    ASSERT_EQ(resultNorm, a.Normalize());
 }
 
 TEST(Vector4, Equal)

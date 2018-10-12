@@ -68,10 +68,10 @@ float Vector4::Length() const
     return sqrt(value.f[0] * value.f[0] + value.f[1] * value.f[1] + value.f[2] * value.f[2] + value.f[3] * value.f[3]);
 }
 
-void Vector4::Normalize()
+Vector4 Vector4::Normalize() const
 {
     float coeff = 1.0f / Length();
-    *this *= coeff;
+    return Vector4(*this * coeff);
 }
 
 // Access operator
@@ -177,14 +177,14 @@ const Vector4 Vector4::operator/(const float value) const
 }
 
 // Products
-float Vector4::Dot(const Vector4& other)
+float Vector4::Dot(const Vector4& other) const
 {
     Vector4f result;
     result.m = _mm_dp_ps(value.m, other.value.m, 0xF1);
     return result.f[0];
 }
 
-Vector4& Vector4::Cross(const Vector4& other)
+Vector4 Vector4::Cross(const Vector4& other) const
 {
     __m128 test = _mm_set_ps(1.0f, 2.0f, 3.0f, 4.0f);
     __m128 test2 = _mm_shuffle_ps(test, test, _MM_SHUFFLE(3, 1, 0, 2));
@@ -196,8 +196,7 @@ Vector4& Vector4::Cross(const Vector4& other)
 
     __m128 mul1 = _mm_mul_ps(shufa1, shufb1);
     __m128 mul2 = _mm_mul_ps(shufa2, shufb2);
-    value.m = _mm_sub_ps(mul1, mul2);
-    return *this;
+    return Vector4(_mm_sub_ps(mul1, mul2));
 }
 
 // Comparison
