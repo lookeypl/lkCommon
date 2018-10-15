@@ -13,19 +13,27 @@ class LKCOMMON_ALIGN(16) Vector4 final
     {
         __m128 m;
         float f[4];
-    } value;
+
+        LKCOMMON_INLINE Vector4f()
+            : m(_mm_setzero_ps())
+        {}
+
+        LKCOMMON_INLINE Vector4f(const __m128& m)
+            : m(m)
+        {}
+    } mValue;
 
 public:
     Vector4();
     Vector4(const float x);
     Vector4(const float x, const float y, const float z, const float w);
     Vector4(const float* v);
-    Vector4(const __m128 v);
+    Vector4(const __m128& v);
     Vector4(const Vector4& other);
     Vector4(Vector4&& other);
     Vector4& operator=(const Vector4& other);
     Vector4& operator=(Vector4&& other);
-    ~Vector4();
+    ~Vector4() = default;
 
     const float* Data() const;
     float Length() const;
@@ -37,26 +45,26 @@ public:
     // Addition
     Vector4& operator+=(const Vector4& other);
     Vector4& operator+=(const float value);
-    const Vector4 operator+(const Vector4& other) const;
-    const Vector4 operator+(const float value) const;
+    Vector4 operator+(const Vector4& other) const;
+    Vector4 operator+(const float value) const;
 
     // Subtraction
     Vector4& operator-=(const Vector4& other);
     Vector4& operator-=(const float value);
-    const Vector4 operator-(const Vector4& other) const;
-    const Vector4 operator-(const float value) const;
+    Vector4 operator-(const Vector4& other) const;
+    Vector4 operator-(const float value) const;
 
     // Multiplication
     Vector4& operator*=(const Vector4& other);
     Vector4& operator*=(const float value);
-    const Vector4 operator*(const Vector4& other) const;
-    const Vector4 operator*(const float value) const;
+    Vector4 operator*(const Vector4& other) const;
+    Vector4 operator*(const float value) const;
 
     // Division
     Vector4& operator/=(const Vector4& other);
     Vector4& operator/=(const float value);
-    const Vector4 operator/(const Vector4& other) const;
-    const Vector4 operator/(const float value) const;
+    Vector4 operator/(const Vector4& other) const;
+    Vector4 operator/(const float value) const;
 
     // Products
     float Dot(const Vector4& other) const;
