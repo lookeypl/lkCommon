@@ -151,13 +151,7 @@ TEST(Vector4, Length)
 TEST(Vector4, Normalize)
 {
     Vector4 a(2.0f, 0.0f, 0.0f, 0.0f);
-    Vector4 norm = a.Normalize();
-    const double EPSILON = 0.001;
-
-    EXPECT_NEAR(resultNorm[0], norm[0], EPSILON);
-    EXPECT_NEAR(resultNorm[1], norm[1], EPSILON);
-    EXPECT_NEAR(resultNorm[2], norm[2], EPSILON);
-    EXPECT_NEAR(resultNorm[3], norm[3], EPSILON);
+    ASSERT_EQ(resultNorm, a.Normalize());
 }
 
 TEST(Vector4, Equal)

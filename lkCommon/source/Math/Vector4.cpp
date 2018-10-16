@@ -66,7 +66,7 @@ float Vector4::Length() const
 
 Vector4 Vector4::Normalize() const
 {
-    return Vector4(_mm_mul_ps(mValue.m, _mm_rsqrt_ps(_mm_dp_ps(mValue.m, mValue.m, 0x7F))));
+    return _mm_div_ps(mValue.m, _mm_sqrt_ps(_mm_dp_ps(mValue.m, mValue.m, 0x7F)));
 }
 
 // Access operator
