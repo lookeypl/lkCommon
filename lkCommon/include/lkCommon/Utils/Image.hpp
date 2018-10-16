@@ -47,9 +47,6 @@ class Image final
 #ifdef WIN32
     // empty, Windows implementation does not require platform-specific code
 #elif defined(__linux__) | defined(__LINUX__)
-    xcb_connection_t* mConnection; // TODO globalize
-    xcb_screen_t* mScreen;
-    int mConnScreen;
     xcb_image_t* mXcbImage;
 #else
 #error "Platform not supported"

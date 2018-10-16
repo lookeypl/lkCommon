@@ -2,6 +2,8 @@
 #include "lkCommon/lkCommon.hpp"
 #include "lkCommon/Utils/Logger.hpp"
 
+#include "Linux/XConnection.hpp"
+
 #include <xcb/xcb_image.h>
 
 
@@ -34,12 +36,6 @@ const char* TranslateErrorCodeToStr(int err)
     }
 }
 
-bool ReportUnsupportedUTF16()
-{
-    LOGE("Setting a widechar title on Linux is unsupported");
-    return false;
-}
-
 } // namespace
 
 
@@ -56,12 +52,9 @@ Window::Window()
     , mInvisible(false)
     , mKeys{false}
     , mMouseButtons{false}
-    , mConnection(nullptr)
     , mWindow(0)
-    , mScreen(nullptr)
     , mDeleteReply(nullptr)
     , mGraphicsContext(0)
-    , mConnScreen(0)
 {
 }
 
@@ -69,34 +62,24 @@ Window::~Window()
 {
     Close();
 
-    if (mConnection)
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection != nullptr)
     {
-        xcb_set_screen_saver(mConnection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-
-        xcb_flush(mConnection);
-        xcb_disconnect(mConnection);
+        xcb_set_screen_saver(connection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
     }
 }
 
 bool Window::Init(const std::string& className)
 {
-    mConnection = xcb_connect(nullptr, &mConnScreen);
-    if (xcb_connection_has_error(mConnection))
+    if (Internal::XConnection::Instance().GetConnection() == nullptr ||
+        Internal::XConnection::Instance().GetScreen() == nullptr )
     {
-        LOGE("Failed to connect to X server through XCB");
+        LOGE("Connection with X server not initialized");
         return false;
     }
 
-    xcb_set_screen_saver(mConnection, 0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-
-    const xcb_setup_t* xcbSetup;
-    xcb_screen_iterator_t xcbScreenIt;
-
-    xcbSetup = xcb_get_setup(mConnection);
-    xcbScreenIt = xcb_setup_roots_iterator(xcbSetup);
-    while (mConnScreen-- > 0)
-        xcb_screen_next(&xcbScreenIt);
-    mScreen = xcbScreenIt.data;
+    xcb_set_screen_saver(Internal::XConnection::Instance().GetConnection(),
+                         0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
     OnInit();
     return true;
@@ -107,13 +90,15 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     mWidth = width;
     mHeight = height;
 
-    if (mConnection == nullptr)
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    xcb_screen_t* screen = Internal::XConnection::Instance().GetScreen();
+    if (connection == nullptr || screen == nullptr)
     {
-        LOGE("Window not initialized - cannot open");
+        LOGE("Connection with X server not initialized");
         return false;
     }
 
-    mWindow = xcb_generate_id(mConnection);
+    mWindow = xcb_generate_id(connection);
 
     uint32_t winValueMask = XCB_CW_EVENT_MASK | XCB_CW_COLORMAP;
     uint32_t winValueList[] = {
@@ -121,14 +106,13 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_FOCUS_CHANGE |
         XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE | XCB_EVENT_MASK_POINTER_MOTION |
         XCB_EVENT_MASK_STRUCTURE_NOTIFY,
-        mScreen->default_colormap
+        screen->default_colormap
     };
 
-    xcb_void_cookie_t cookie = xcb_create_window_checked(mConnection, XCB_COPY_FROM_PARENT, mWindow,
-                                       mScreen->root, x, y, mWidth, mHeight, 3,
-                                       XCB_WINDOW_CLASS_INPUT_OUTPUT,
-                                       mScreen->root_visual, winValueMask, winValueList);
-    xcb_generic_error_t* err = xcb_request_check(mConnection, cookie);
+    xcb_void_cookie_t cookie = xcb_create_window_checked(connection, XCB_COPY_FROM_PARENT, mWindow,
+                                       screen->root, x, y, mWidth, mHeight, 3, XCB_WINDOW_CLASS_INPUT_OUTPUT,
+                                       screen->root_visual, winValueMask, winValueList);
+    xcb_generic_error_t* err = xcb_request_check(connection, cookie);
     if (err)
     {
         LOGE("Failed to create a window: X11 protocol error " << err->error_code << " ("
@@ -137,30 +121,30 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         return false;
     }
 
-    xcb_flush(mConnection);
+    xcb_flush(connection);
 
     SetTitle(title);
 
-    xcb_intern_atom_cookie_t deleteCookie = xcb_intern_atom(mConnection, 1, 16, "WM_DELETE_WINDOW");
-    mDeleteReply = xcb_intern_atom_reply(mConnection, deleteCookie, nullptr);
+    xcb_intern_atom_cookie_t deleteCookie = xcb_intern_atom(connection, 1, 16, "WM_DELETE_WINDOW");
+    mDeleteReply = xcb_intern_atom_reply(connection, deleteCookie, nullptr);
 
-    xcb_intern_atom_cookie_t wmProtCookie = xcb_intern_atom(mConnection, 1, 12, "WM_PROTOCOLS");
-    xcb_intern_atom_reply_t* wmProtReply = xcb_intern_atom_reply(mConnection, wmProtCookie, nullptr);
+    xcb_intern_atom_cookie_t wmProtCookie = xcb_intern_atom(connection, 1, 12, "WM_PROTOCOLS");
+    xcb_intern_atom_reply_t* wmProtReply = xcb_intern_atom_reply(connection, wmProtCookie, nullptr);
 
-    xcb_change_property(mConnection, XCB_PROP_MODE_REPLACE, mWindow, wmProtReply->atom, 4, 32, 1, &mDeleteReply->atom);
+    xcb_change_property(connection, XCB_PROP_MODE_REPLACE, mWindow, wmProtReply->atom, 4, 32, 1, &mDeleteReply->atom);
     free(wmProtReply);
 
     if (!mInvisible)
     {
-        xcb_map_window(mConnection, mWindow);
+        xcb_map_window(connection, mWindow);
     }
 
     uint32_t gcValueMask = XCB_GC_BACKGROUND | XCB_GC_FOREGROUND | XCB_GC_GRAPHICS_EXPOSURES;
-    uint32_t gcValue[] = { mScreen->white_pixel, mScreen->black_pixel, 0 };
+    uint32_t gcValue[] = { screen->white_pixel, screen->black_pixel, 0 };
 
-    mGraphicsContext = xcb_generate_id(mConnection);
-    cookie = xcb_create_gc(mConnection, mGraphicsContext, mWindow, gcValueMask, gcValue);
-    err = xcb_request_check(mConnection, cookie);
+    mGraphicsContext = xcb_generate_id(connection);
+    cookie = xcb_create_gc(connection, mGraphicsContext, mWindow, gcValueMask, gcValue);
+    err = xcb_request_check(connection, cookie);
     if (err)
     {
         LOGE("Failed to create graphics context: X11 protocol error " << err->error_code << " ("
@@ -169,7 +153,7 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         return false;
     }
 
-    xcb_flush(mConnection);
+    xcb_flush(connection);
 
     OnOpen();
     mOpened = true;
@@ -180,7 +164,14 @@ bool Window::SetTitle(const std::string& title)
 {
     if (mOpened)
     {
-        xcb_change_property(mConnection, XCB_PROP_MODE_REPLACE, mWindow, XCB_ATOM_WM_NAME,
+        xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+        if (connection == nullptr)
+        {
+            LOGE("Connection with X server not initialized");
+            return false;
+        }
+
+        xcb_change_property(connection, XCB_PROP_MODE_REPLACE, mWindow, XCB_ATOM_WM_NAME,
                             XCB_ATOM_STRING, 8, title.size(), title.c_str());
     }
 
@@ -193,10 +184,17 @@ void Window::SetInvisible(bool invisible)
 
     if (mOpened && mWindow)
     {
+        xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+        if (connection == nullptr)
+        {
+            LOGE("Connection with X server not initialized");
+            return;
+        }
+
         if (mInvisible)
-            xcb_unmap_window(mConnection, mWindow);
+            xcb_unmap_window(connection, mWindow);
         else
-            xcb_map_window(mConnection, mWindow);
+            xcb_map_window(connection, mWindow);
     }
 }
 
@@ -207,23 +205,17 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         LOGE("Displayed Image extens beyond Window borders");
         return false;
     }
-/*
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(image.GetDataPtr());
-    xcb_image_t* img = xcb_image_create_native(mConnection,
-                                               image.GetWidth(), image.GetHeight(),
-                                               XCB_IMAGE_FORMAT_Z_PIXMAP,
-                                               mScreen->root_depth, nullptr,
-                                               image.GetWidth() * image.GetHeight() * sizeof(Utils::Pixel<uint8_t, 4>),
-                                               const_cast<uint8_t*>(data));
-    if (img == nullptr)
+
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection == nullptr)
     {
-        LOGE("Failed to create temporary image");
+        LOGE("Connection with X server not initialized");
         return false;
-    }*/
+    }
 
     xcb_image_t* img = reinterpret_cast<xcb_image_t*>(image.GetPlatformImageHandle());
-    xcb_void_cookie_t c = xcb_image_put(mConnection, mWindow, mGraphicsContext, img, x, y, 0);
-    xcb_generic_error_t* err = xcb_request_check(mConnection, c);
+    xcb_void_cookie_t c = xcb_image_put(connection, mWindow, mGraphicsContext, img, x, y, 0);
+    xcb_generic_error_t* err = xcb_request_check(connection, c);
     if (err)
     {
         LOGE("Failed to put image on window: X11 protocol error " << err->error_code << " ("
@@ -232,16 +224,23 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         return false;
     }
 
-    xcb_flush(mConnection);
+    xcb_flush(connection);
 
     return true;
 }
 
 void Window::MouseButtonDown(int button, int x, int y)
 {
-    xcb_grab_pointer_cookie_t grab = xcb_grab_pointer(mConnection, 1, mWindow, 0, XCB_GRAB_MODE_ASYNC,
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection == nullptr)
+    {
+        LOGE("Connection with X server not initialized");
+        return;
+    }
+
+    xcb_grab_pointer_cookie_t grab = xcb_grab_pointer(connection, 1, mWindow, 0, XCB_GRAB_MODE_ASYNC,
                                                       XCB_GRAB_MODE_ASYNC, mWindow, XCB_NONE, XCB_CURRENT_TIME);
-    xcb_grab_pointer_reply_t* grabReply = xcb_grab_pointer_reply(mConnection, grab, nullptr);
+    xcb_grab_pointer_reply_t* grabReply = xcb_grab_pointer_reply(connection, grab, nullptr);
     free(grabReply);
 
     mMouseButtons[button] = true;
@@ -252,7 +251,13 @@ void Window::MouseButtonDown(int button, int x, int y)
 
 void Window::MouseButtonUp(int button)
 {
-    xcb_ungrab_pointer(mConnection, XCB_CURRENT_TIME);
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection == nullptr)
+    {
+        LOGE("Connection with X server not initialized");
+        return;
+    }
+    xcb_ungrab_pointer(connection, XCB_CURRENT_TIME);
 
     mMouseButtons[button] = false;
     OnMouseUp(button);
@@ -267,10 +272,17 @@ void Window::MouseMove(int x, int y)
 
 void Window::ProcessMessages()
 {
-    xcb_flush(mConnection);
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection == nullptr)
+    {
+        LOGE("Connection with X server not initialized");
+        return;
+    }
+
+    xcb_flush(connection);
 
     xcb_generic_event_t* event;
-    while ((event = xcb_poll_for_event(mConnection)))
+    while ((event = xcb_poll_for_event(connection)))
     {
         switch (event->response_type & ~0x80)
         {
@@ -340,8 +352,15 @@ void Window::Close()
     if (!mOpened)
         return;
 
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection == nullptr)
+    {
+        LOGE("Connection with X server not initialized");
+        return;
+    }
+
     if (!mInvisible)
-        xcb_unmap_window(mConnection, mWindow);
+        xcb_unmap_window(connection, mWindow);
 
     if (mDeleteReply)
     {
@@ -351,13 +370,13 @@ void Window::Close()
 
     if (mGraphicsContext)
     {
-        xcb_free_gc(mConnection, mGraphicsContext);
+        xcb_free_gc(connection, mGraphicsContext);
         mGraphicsContext = 0;
     }
 
     if (mWindow)
     {
-        xcb_destroy_window(mConnection, mWindow);
+        xcb_destroy_window(connection, mWindow);
         mWindow = 0;
     }
 

@@ -4,6 +4,7 @@ PKG_CHECK_MODULES(LKCOMMON_TEST_PKG_DEPS REQUIRED
                   )
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
+                       Tests/Internal/Linux/XConnectionTest.cpp
                        Tests/Math/RingAverageTest.cpp
                        Tests/Math/Vector4Test.cpp
                        Tests/System/WindowTest.cpp
@@ -23,6 +24,7 @@ ADD_DEPENDENCIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET} gtest)
 
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TEST_TARGET}
                            PUBLIC ${LKCOMMON_DIRECTORY}/include
+                           PUBLIC ${LKCOMMON_DIRECTORY}/source/Internal
                            )
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET}

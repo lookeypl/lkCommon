@@ -34,12 +34,9 @@ class Window
 
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #elif defined(__linux__) || defined(__LINUX__)
-    xcb_connection_t* mConnection; // TODO globalize the connection to XCB
     xcb_window_t mWindow;
-    xcb_screen_t* mScreen;
     xcb_intern_atom_reply_t* mDeleteReply;
     xcb_gcontext_t mGraphicsContext; // used for setting single pixels on screen
-    int mConnScreen;
 
     void ProcessMessages();
 #else
@@ -94,11 +91,6 @@ public:
         return mHWND;
     }
 #elif defined(__linux__) || defined(__LINUX__)
-    LKCOMMON_INLINE xcb_connection_t* GetConnection() const
-    {
-        return mConnection;
-    }
-
     LKCOMMON_INLINE xcb_window_t GetWindow() const
     {
         return mWindow;

@@ -31,9 +31,6 @@ Image::Image()
 #ifdef WIN32
     // empty
 #elif defined(__linux__) | defined(__LINUX__)
-    , mConnection(nullptr)
-    , mScreen(nullptr)
-    , mConnScreen(0)
     , mXcbImage(nullptr)
 #else
 #error "Platform not supported"
@@ -49,9 +46,6 @@ Image::Image(uint32_t width, uint32_t height)
 #ifdef WIN32
     // empty
 #elif defined(__linux__) | defined(__LINUX__)
-    , mConnection(nullptr)
-    , mScreen(nullptr)
-    , mConnScreen(0)
     , mXcbImage(nullptr)
 #else
 #error "Platform not supported"

@@ -48,6 +48,7 @@ ELSEIF(UNIX)
                                source/Utils/Linux/Logger.cpp
                                source/Utils/Linux/Timer.cpp
                                source/Utils/Linux/StringConv.cpp
+                               source/Internal/Linux/XConnection.cpp
                                )
 ELSE()
     MESSAGE(FATAL_ERROR "Platform unsupported")
@@ -62,6 +63,7 @@ ADD_LIBRARY(${LKCOMMON_TARGET}
 
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DIRECTORY}/include/
+                           PRIVATE ${LKCOMMON_DIRECTORY}/source/Internal
                            )
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} pthread)
