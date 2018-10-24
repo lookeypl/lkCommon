@@ -57,6 +57,7 @@ protected:
     // callbacks
     virtual void OnInit();
     virtual void OnOpen();
+    virtual void OnResize(int width, int height);
     virtual void OnClose();
     virtual void OnKeyDown(KeyCode key);
     virtual void OnKeyUp(KeyCode key);

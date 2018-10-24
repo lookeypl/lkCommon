@@ -332,7 +332,10 @@ void Window::ProcessMessages()
         }
         case XCB_CONFIGURE_NOTIFY:
         {
-            // TODO resize support goes here
+            xcb_configure_notify_event_t* cne = reinterpret_cast<xcb_configure_notify_event_t*>(event);
+            mWidth = cne->width;
+            mHeight = cne->height;
+            OnResize(mWidth, mHeight);
             break;
         }
         }
@@ -393,6 +396,12 @@ void Window::OnInit()
 
 void Window::OnOpen()
 {
+}
+
+void Window::OnResize(int width, int height)
+{
+    LKCOMMON_UNUSED(width);
+    LKCOMMON_UNUSED(height);
 }
 
 void Window::OnClose()

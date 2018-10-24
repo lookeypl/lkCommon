@@ -51,6 +51,12 @@ LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         wnd->Close();
         break;
 
+    case WM_SIZE:
+        wnd->mWidth = LOWORD(lParam);
+        wnd->mHeight = HIWORD(lParam);
+        wnd->OnResize(wnd->mWidth, wnd->mHeight);
+        break;
+
     case WM_KEYDOWN:
         wnd->mKeys[wParam] = true;
         wnd->OnKeyDown(static_cast<KeyCode>(wParam));
@@ -338,6 +344,12 @@ void Window::OnInit()
 
 void Window::OnOpen()
 {
+}
+
+void Window::OnResize(int width, int height)
+{
+    LKCOMMON_UNUSED(width);
+    LKCOMMON_UNUSED(height);
 }
 
 void Window::OnClose()
