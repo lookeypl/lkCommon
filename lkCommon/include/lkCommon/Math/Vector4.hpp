@@ -80,3 +80,5 @@ public:
 
 } // namespace Math
 } // namespace lkCommon
+
+#include "Vector4Impl.hpp"

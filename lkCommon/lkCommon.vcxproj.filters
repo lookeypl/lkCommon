@@ -146,5 +146,8 @@
     <ClInclude Include="include\lkCommon\Utils\Timer.hpp">
       <Filter>include\lkCommon\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector4Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
