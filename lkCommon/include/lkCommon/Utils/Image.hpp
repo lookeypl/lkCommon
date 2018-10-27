@@ -76,6 +76,25 @@ public:
     Image(uint32_t width, uint32_t height);
 
     /**
+     * Constructs an image with dimensions @p width x @p height and fills it
+     * with data coming from @p data.
+     *
+     * Image data in @p data will be copied to the object. If there's less data
+     * than @p width x @p height, rest will be filled with zeros. If there's more
+     * data, it will be omitted. Data is assumed to be delivered in row order.
+     *
+     * @p[in] width        Width of image
+     * @p[in] height       Height of image
+     * @p[in] pixelsPerRow Amount of pixels in one row of @p data. Can be 0 - then
+                           constructor assumes row width equal to @p width.
+     * @p[in] data         Data for image to be filled with
+     *
+     * @note In case of error (ex. not enough memory) constructor may throw.
+     * Possible thrown exceptions match std::vector::resize() exceptions.
+     */
+    Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const std::vector<PixelUint4>& data);
+
+    /**
      * Destroys Image object, freeing all allocated memory.
      */
     ~Image();

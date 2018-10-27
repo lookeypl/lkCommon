@@ -7,8 +7,37 @@ const uint32_t TEST_HEIGHT = 20;
 const uint8_t TEST_PIXEL_RAW[] = {10, 30, 20, 15};
 const uint8_t TEST_PIXEL_RAW_2[] = {20, 10, 18, 99};
 
-const lkCommon::Utils::Pixel<uint8_t, 4> TEST_PIXEL(TEST_PIXEL_RAW);
-const lkCommon::Utils::Pixel<uint8_t, 4> TEST_PIXEL_2(TEST_PIXEL_RAW_2);
+const lkCommon::Utils::PixelUint4 TEST_PIXEL_ZERO;
+const lkCommon::Utils::PixelUint4 TEST_PIXEL(TEST_PIXEL_RAW);
+const lkCommon::Utils::PixelUint4 TEST_PIXEL_2(TEST_PIXEL_RAW_2);
+
+const uint32_t TEST_IMPORT_IMAGE_WIDTH = 5;
+const uint32_t TEST_IMPORT_IMAGE_HEIGHT = 5;
+const uint32_t TEST_IMPORT_IMAGE_SMALL_WIDTH = 3;
+const uint32_t TEST_IMPORT_IMAGE_SMALL_HEIGHT = 3;
+
+const std::vector<lkCommon::Utils::PixelUint4> TEST_IMPORT_IMAGE_5X5 {
+    TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,
+    TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2,
+    TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,
+    TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2,
+    TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,
+};
+
+const std::vector<lkCommon::Utils::PixelUint4> TEST_IMPORT_IMAGE_3X3 {
+    TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,
+    TEST_PIXEL_2, TEST_PIXEL,   TEST_PIXEL_2,
+    TEST_PIXEL,   TEST_PIXEL_2, TEST_PIXEL,
+};
+
+const std::vector<lkCommon::Utils::PixelUint4> TEST_IMPORT_IMAGE_3X3_AS_5X5 {
+    TEST_PIXEL,      TEST_PIXEL_2,    TEST_PIXEL,      TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
+    TEST_PIXEL_2,    TEST_PIXEL,      TEST_PIXEL_2,    TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
+    TEST_PIXEL,      TEST_PIXEL_2,    TEST_PIXEL,      TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
+    TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
+    TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
+};
+
 
 bool CompareRawPixels(const uint8_t p1[4], const uint8_t p2[4], bool withAlpha)
 {
@@ -30,6 +59,60 @@ TEST(Image, ConstructorSize)
     EXPECT_EQ(TEST_WIDTH, i.GetWidth());
     EXPECT_EQ(TEST_HEIGHT, i.GetHeight());
     EXPECT_NE(nullptr, i.GetDataPtr());
+}
+
+TEST(Image, ConstructorDataSameAsImage)
+{
+    lkCommon::Utils::Image i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p;
+
+    ASSERT_EQ(TEST_IMPORT_IMAGE_WIDTH, i.GetWidth());
+    ASSERT_EQ(TEST_IMPORT_IMAGE_HEIGHT, i.GetHeight());
+
+    for (uint32_t y = 0; y < TEST_IMPORT_IMAGE_HEIGHT; ++y)
+    {
+        for (uint32_t x = 0; x < TEST_IMPORT_IMAGE_WIDTH; ++x)
+        {
+            i.GetPixel(x, y, p);
+            EXPECT_EQ(TEST_IMPORT_IMAGE_5X5[x + (y * TEST_IMPORT_IMAGE_WIDTH)], p);
+        }
+    }
+}
+
+TEST(Image, ConstructorDataBiggerThanImage)
+{
+    lkCommon::Utils::Image i(TEST_IMPORT_IMAGE_SMALL_WIDTH, TEST_IMPORT_IMAGE_SMALL_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p;
+
+    ASSERT_EQ(TEST_IMPORT_IMAGE_SMALL_WIDTH, i.GetWidth());
+    ASSERT_EQ(TEST_IMPORT_IMAGE_SMALL_HEIGHT, i.GetHeight());
+
+    for (uint32_t y = 0; y < TEST_IMPORT_IMAGE_SMALL_HEIGHT; ++y)
+    {
+        for (uint32_t x = 0; x < TEST_IMPORT_IMAGE_SMALL_WIDTH; ++x)
+        {
+            i.GetPixel(x, y, p);
+            EXPECT_EQ(TEST_IMPORT_IMAGE_3X3[x + (y * TEST_IMPORT_IMAGE_SMALL_WIDTH)], p);
+        }
+    }
+}
+
+TEST(Image, ConstructorDataSmallerThanImage)
+{
+    lkCommon::Utils::Image i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 3, TEST_IMPORT_IMAGE_3X3);
+    lkCommon::Utils::PixelUint4 p;
+
+    ASSERT_EQ(TEST_IMPORT_IMAGE_WIDTH, i.GetWidth());
+    ASSERT_EQ(TEST_IMPORT_IMAGE_HEIGHT, i.GetHeight());
+
+    for (uint32_t y = 0; y < TEST_IMPORT_IMAGE_HEIGHT; ++y)
+    {
+        for (uint32_t x = 0; x < TEST_IMPORT_IMAGE_WIDTH; ++x)
+        {
+            i.GetPixel(x, y, p);
+            EXPECT_EQ(TEST_IMPORT_IMAGE_3X3_AS_5X5[x + (y * TEST_IMPORT_IMAGE_WIDTH)], p);
+        }
+    }
 }
 
 TEST(Image, ResizeTest)

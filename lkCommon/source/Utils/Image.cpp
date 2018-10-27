@@ -54,6 +54,40 @@ Image::Image(uint32_t width, uint32_t height)
     InitPlatformSpecific();
 }
 
+Image::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const std::vector<PixelUint4>& data)
+    : mWidth(width)
+    , mHeight(height)
+    , mPixels(mWidth * mHeight)
+#ifdef WIN32
+    // empty
+#elif defined(__linux__) | defined(__LINUX__)
+    , mXcbImage(nullptr)
+#else
+#error "Platform not supported"
+#endif
+{
+    size_t srcRows = data.size() / pixelsPerRow;
+    size_t rowsToCopy = srcRows < height ? srcRows : height;
+    size_t pixelsToCopy = pixelsPerRow < width ? pixelsPerRow : width;
+    size_t srcIndex = 0;
+    size_t dstIndex = 0;
+    for (size_t y = 0; y < rowsToCopy; ++y)
+    {
+        srcIndex = y * pixelsPerRow;
+        dstIndex = y * width;
+
+        for (size_t x = 0; x < pixelsToCopy; ++x)
+        {
+            mPixels[dstIndex] = FixColorComponents(data[srcIndex]);
+
+            ++srcIndex;
+            ++dstIndex;
+        }
+    }
+
+    InitPlatformSpecific();
+}
+
 Image::~Image()
 {
     ReleasePlatformSpecific();
