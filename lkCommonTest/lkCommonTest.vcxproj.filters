@@ -29,6 +29,9 @@
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

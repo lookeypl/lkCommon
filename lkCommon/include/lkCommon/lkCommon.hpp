@@ -36,42 +36,15 @@
  * Aligns given class/struct to @p x bytes in memory.
  */
 
-/**
- * @def LKCOMMON_RETURN_ALIGNED_MALLOC
- *
- * Calls aligned malloc and returns its value. Useful for new operator overloading.
- *
- * @todo this must be done differently (maybe new module Memutils.hpp?)
- */
-
-/**
- * @def LKCOMMON_ALIGNED_FREE
- *
- * Calls aligned free in pair with aligned malloc above.
- * TODO this must be done differently (Memutils.hpp?)
- */
 #ifdef WIN32
 
 #define LKCOMMON_INLINE __forceinline
 #define LKCOMMON_ALIGN(x) __declspec(align(x))
-#define LKCOMMON_RETURN_ALIGNED_MALLOC(x, o) do { \
-    return _aligned_malloc(x, o); \
-} while(0)
-#define LKCOMMON_ALIGNED_FREE(x) _aligned_free(x);
 
 #elif defined(__linux__) || defined(__LINUX__)
 
 #define LKCOMMON_INLINE inline __attribute__((always_inline))
 #define LKCOMMON_ALIGN(x) __attribute__((aligned(x)))
-#define LKCOMMON_RETURN_ALIGNED_MALLOC(x, o) do { \
-    o = std::max(o, sizeof(void*)); \
-    void* ptr = nullptr; \
-    int ret = posix_memalign(&ptr, o, x); \
-    if (ret != 0) \
-        return nullptr; \
-    return ptr; \
-} while(0)
-#define LKCOMMON_ALIGNED_FREE(x) free(x)
 
 #else
 #error "Target platform not supported"

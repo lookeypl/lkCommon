@@ -158,6 +158,7 @@
     <ClCompile Include="Tests\Math\Vector4Test.cpp" />
     <ClCompile Include="Tests\System\InfoTest.cpp" />
     <ClCompile Include="Tests\System\WindowTest.cpp" />
+    <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp" />
     <ClCompile Include="Tests\Utils\ImageTest.cpp" />
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />
     <ClCompile Include="Tests\Utils\PixelTest.cpp" />

@@ -26,7 +26,9 @@
     <ClCompile Include="source\System\Win\FS.cpp" />
     <ClCompile Include="source\System\Win\Info.cpp" />
     <ClCompile Include="source\System\Win\Library.cpp" />
+    <ClCompile Include="source\System\Win\Memory.cpp" />
     <ClCompile Include="source\System\Win\Window.cpp" />
+    <ClCompile Include="source\Utils\ArenaAllocator.cpp" />
     <ClCompile Include="source\Utils\Image.cpp" />
     <ClCompile Include="source\Utils\ThreadPool.cpp" />
     <ClCompile Include="source\Utils\Win\ImageWin.cpp" />
@@ -48,7 +50,9 @@
     <ClInclude Include="include\lkCommon\System\Info.hpp" />
     <ClInclude Include="include\lkCommon\System\KeyCodes.hpp" />
     <ClInclude Include="include\lkCommon\System\Library.hpp" />
+    <ClInclude Include="include\lkCommon\System\Memory.hpp" />
     <ClInclude Include="include\lkCommon\System\Window.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\ArenaAllocator.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Image.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Logger.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Pixel.hpp" />

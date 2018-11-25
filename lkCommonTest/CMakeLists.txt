@@ -8,6 +8,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Math/RingAverageTest.cpp
                        Tests/Math/Vector4Test.cpp
                        Tests/System/WindowTest.cpp
+                       Tests/Utils/ArenaAllocatorTest.cpp
                        Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp
                        Tests/Utils/PixelTest.cpp
@@ -21,6 +22,8 @@ ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}
                )
 
 ADD_DEPENDENCIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET} gtest)
+
+ADD_DEFINITIONS(-msse4.1 -fPIC)
 
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TEST_TARGET}
                            PUBLIC ${LKCOMMON_DIRECTORY}/include

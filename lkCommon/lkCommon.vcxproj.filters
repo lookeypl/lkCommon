@@ -78,6 +78,12 @@
     <ClCompile Include="source\Utils\ThreadPool.cpp">
       <Filter>source\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="source\Utils\ArenaAllocator.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Memory.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp">
@@ -148,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Math\Vector4Impl.hpp">
       <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ArenaAllocator.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Memory.hpp">
+      <Filter>include\lkCommon\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

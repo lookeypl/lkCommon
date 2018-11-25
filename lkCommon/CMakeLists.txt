@@ -2,6 +2,7 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   source/Math/Interpolator.cpp
                   source/Math/LinearInterpolator.cpp
                   source/Math/CubicInterpolator.cpp
+                  source/Utils/ArenaAllocator.cpp
                   source/Utils/Image.cpp
                   source/Utils/ThreadPool.cpp
                   )
@@ -18,7 +19,9 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/System/Info.hpp
                   include/lkCommon/System/KeyCodes.hpp
                   include/lkCommon/System/Library.hpp
+                  include/lkCommon/System/Memory.hpp
                   include/lkCommon/System/Window.hpp
+                  include/lkCommon/Utils/ArenaAllocator.hpp
                   include/lkCommon/Utils/Image.hpp
                   include/lkCommon/Utils/Logger.hpp
                   include/lkCommon/Utils/Sort.hpp
@@ -32,7 +35,9 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
 
 IF(WIN32)
     SET(LKCOMMON_PLATFORM_SRCS source/System/Win/FS.cpp
+                               source/System/Win/Info.cpp
                                source/System/Win/Library.cpp
+                               source/System/Win/Memory.cpp
                                source/System/Win/Window.cpp
                                source/Utils/Win/ImageWin.cpp
                                source/Utils/Win/Logger.cpp
@@ -43,6 +48,7 @@ ELSEIF(UNIX)
     SET(LKCOMMON_PLATFORM_SRCS source/System/Linux/FS.cpp
                                source/System/Linux/Info.cpp
                                source/System/Linux/Library.cpp
+                               source/System/Linux/Memory.cpp
                                source/System/Linux/Window.cpp
                                source/Utils/Linux/ImageLinux.cpp
                                source/Utils/Linux/Logger.cpp
