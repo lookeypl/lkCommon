@@ -161,5 +161,8 @@
     <ClInclude Include="include\lkCommon\System\Memory.hpp">
       <Filter>include\lkCommon\System</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ArenaObject.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

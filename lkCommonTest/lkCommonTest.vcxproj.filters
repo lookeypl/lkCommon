@@ -32,6 +32,9 @@
     <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\ArenaObjectTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

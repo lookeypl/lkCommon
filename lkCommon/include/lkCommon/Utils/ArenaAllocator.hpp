@@ -10,14 +10,18 @@
 namespace lkCommon {
 namespace Utils {
 
-struct MemoryChunk
+struct Arena
 {
     uint8_t* ptr;
+    size_t size;
     size_t sizeLeft;
+    size_t referenceCount;
 
-    MemoryChunk()
+    Arena()
         : ptr(nullptr)
+        , size(0)
         , sizeLeft(0)
+        , referenceCount(0)
     {
     }
 };
@@ -33,38 +37,31 @@ struct MemoryChunk
  * after numerous Allocate() calls there's not enough space, mChunkSize is increased by single page
  * size and new chunk is added to collection.
  *
- * For speed it is assumed that objects in ArenaAllocator cannot be singularly freed. The only way
+ * It is assumed that objects in ArenaAllocator can be singularly freed, however this will only
+ * decrease reference counter for given chunk. Such memory won't be possible to reclaim,
+ *
+ * If need occurs, all used memory can be freed by
  * to empty used memory is to free all the chunks, which will invalidate all allocated data.
  *
- * @note Allocated chunks are aligned to system's page size.
+ * @note Allocated arenas are aligned to system's page size.
  */
 class ArenaAllocator
 {
+    using ArenaCollection = std::list<Arena>;
+
     size_t mPageSize;
-    size_t mChunkSize;
-    std::list<MemoryChunk> mChunks;
+    size_t mArenaSize;
+    ArenaCollection mArenas;
     std::mutex mAllocatorMutex;
 
-    bool AddChunk();
+    ArenaCollection::iterator AddChunk();
+    ArenaCollection::iterator FindFreeArena(size_t size);
+    ArenaCollection::iterator FindArenaByPointer(void* ptr);
 
-public:
     /**
      * Create an ArenaAllocator with default chunk size equal to system's page size.
      */
     ArenaAllocator();
-
-    /**
-     * Create an ArenaAllocator with custom base chunk size @p baseChunkSize.
-     *
-     * @p[in] baseChunkSize Size of first chunk in bytes.
-     *
-     * @remarks Because memory is aligned to single page size, use @p baseChunkSize equal to, or
-     *          multiple of system's chunk size. If other size is used, baseChunkSize is
-     *          automatically padded to next chunk size fitting baseChunkSize bytes of memory.
-     *
-     * @sa lkCommon::System::Info::GetPageSize
-     */
-    ArenaAllocator(size_t baseChunkSize);
 
     /**
      * Destroy an ArenaAllocator. All chunks will be freed, which also frees all allocated memory.
@@ -73,6 +70,23 @@ public:
      * accessing them will result in undefined behavior.
      */
     ~ArenaAllocator();
+
+    ArenaAllocator(const ArenaAllocator&) = delete;
+    ArenaAllocator(ArenaAllocator&&) = delete;
+    ArenaAllocator operator=(const ArenaAllocator&) = delete;
+    ArenaAllocator& operator=(ArenaAllocator&&) = delete;
+
+public:
+    /**
+     * Allocator instance acquisitor.
+     *
+     * @return Instance of current ArenaAllocator.
+     */
+    static ArenaAllocator& Instance()
+    {
+        static ArenaAllocator instance;
+        return instance;
+    }
 
     /**
      * Allocate data of size @p size and return pointer to it.
@@ -95,6 +109,16 @@ public:
     void* Allocate(size_t size);
 
     /**
+     * Free pointer from Arena.
+     *
+     * @p ptr Pointer to object to free.
+     *
+     * This function will find chunk to which pointer belongs and decrease allocated object count
+     * at that chunk. If chunk has zero allocations, it will be marked for reuse.
+     */
+    void Free(void* ptr);
+
+    /**
      * Frees all chunks. After this call all allocated data will be invalid.
      *
      * It is caller's duty to ensure that all data will not be used after this point.
@@ -113,10 +137,10 @@ public:
      */
     LKCOMMON_INLINE size_t GetFreeChunkSpace() const
     {
-        if (mChunks.empty())
-            return mChunkSize;
+        if (mArenas.empty())
+            return mArenaSize;
         else
-            return mChunks.back().sizeLeft;
+            return mArenas.back().sizeLeft;
     }
 };
 
