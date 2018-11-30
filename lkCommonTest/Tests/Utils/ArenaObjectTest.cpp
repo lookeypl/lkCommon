@@ -33,25 +33,15 @@ const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
 
 TEST(ArenaObject, CreateObject)
 {
-    ArenaAllocator::Instance().FreeChunks();
+    ArenaAllocator allocator;
 
-    Object* a = new Object(VALUE_A, VALUE_B);
+    Object* a = new (allocator) Object(VALUE_A, VALUE_B);
 
     ASSERT_NE(nullptr, a);
     EXPECT_EQ(VALUE_A, a->mA);
     EXPECT_EQ(VALUE_B, a->mB);
 
-    Object* bPtr = nullptr;
+    allocator.Free(a);
 
-    {
-        std::unique_ptr<Object> b = std::make_unique<Object>(VALUE_A, VALUE_B);
-        bPtr = b.get();
-
-        ASSERT_NE(nullptr, b);
-        EXPECT_EQ(VALUE_A, b->mA);
-        EXPECT_EQ(VALUE_B, b->mB);
-    }
-
-    EXPECT_NE(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
-    EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(bPtr)));
+    EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
 }

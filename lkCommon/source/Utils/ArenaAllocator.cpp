@@ -39,43 +39,32 @@ ArenaAllocator::~ArenaAllocator()
     FreeChunks();
 }
 
-ArenaAllocator::ArenaCollection::iterator ArenaAllocator::AddChunk()
+Arena* ArenaAllocator::AddChunk()
 {
     uint8_t* memory = reinterpret_cast<uint8_t*>(System::Memory::AlignedAlloc(mArenaSize, mPageSize));
     if (memory == nullptr)
     {
         LOGE("Failed to allocate aligned block of memory of size " << mArenaSize);
-        return mArenas.end();
+        return nullptr;
     }
 
     mArenas.emplace_back();
-    ArenaCollection::iterator arena = --mArenas.end();
+    Arena* arena = &mArenas.back();
 
     arena->ptr = memory;
     arena->size = arena->sizeLeft = mArenaSize;
     return arena;
 }
 
-ArenaAllocator::ArenaCollection::iterator ArenaAllocator::FindFreeArena(size_t size)
+Arena* ArenaAllocator::FindArenaByPointer(void* ptr)
 {
-    for (ArenaCollection::iterator it = mArenas.begin(); it != mArenas.end(); ++it)
+    for (auto& a: mArenas)
     {
-        if (it->sizeLeft >= size)
-            return it;
+        if (a.ptr <= ptr && ptr < (a.ptr + a.size))
+            return &a;
     }
 
-    return mArenas.end();
-}
-
-ArenaAllocator::ArenaCollection::iterator ArenaAllocator::FindArenaByPointer(void* ptr)
-{
-    for (ArenaCollection::iterator it = mArenas.begin(); it != mArenas.end(); ++it)
-    {
-        if (it->ptr <= ptr && ptr < (it->ptr + it->size))
-            return it;
-    }
-
-    return mArenas.end();
+    return nullptr;
 }
 
 void* ArenaAllocator::Allocate(size_t size)
@@ -83,27 +72,27 @@ void* ArenaAllocator::Allocate(size_t size)
     std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
 
     size = std::max(size, sizeof(uint32_t)); // to ensure we'll be able to fit magic
-    ArenaCollection::iterator arena;
+    Arena* arena;
 
     if (mArenas.empty())
     {
         // increase the size only if we won't fit size bytes of data
         mArenaSize = EnsureArenaFitsSize(mArenaSize, size);
         arena = AddChunk();
-        if (arena == mArenas.end())
+        if (arena == nullptr)
         {
             return nullptr;
         }
     }
     else
     {
-        arena = FindFreeArena(size);
-        if (arena == mArenas.end())
+        arena = &mArenas.back();
+        if (arena->sizeLeft < size)
         {
             mArenaSize *= 2; // double size
             mArenaSize = EnsureArenaFitsSize(mArenaSize, size);
             arena = AddChunk();
-            if (arena == mArenas.end())
+            if (arena == nullptr)
             {
                 return nullptr;
             }
@@ -120,8 +109,8 @@ void ArenaAllocator::Free(void* ptr)
 {
     std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
 
-    ArenaCollection::iterator arena = FindArenaByPointer(ptr);
-    LKCOMMON_ASSERT(arena != mArenas.end(), "Invalid pointer provided to free");
+    Arena* arena = FindArenaByPointer(ptr);
+    LKCOMMON_ASSERT(arena != nullptr, "Invalid pointer provided to free");
 
     uint32_t* u32ptr = reinterpret_cast<uint32_t*>(ptr);
     LKCOMMON_ASSERT(*u32ptr != DEAD_AREA_MAGIC, "Attempted double-free");
@@ -130,8 +119,8 @@ void ArenaAllocator::Free(void* ptr)
     --arena->referenceCount;
     if (arena->referenceCount == 0)
     {
-        System::Memory::AlignedFree(arena->ptr);
-        mArenas.erase(arena);
+        // mark arena as free to use again
+        arena->sizeLeft = arena->size;
     }
 }
 
@@ -144,9 +133,27 @@ void ArenaAllocator::FreeChunks()
         for (auto& c: mArenas)
         {
             System::Memory::AlignedFree(c.ptr);
+            c.ptr = nullptr;
         }
 
         mArenas.clear();
+    }
+}
+
+void ArenaAllocator::ClearUnusedChunks()
+{
+    if (mArenas.size() <= 1)
+        return;
+
+    ArenaCollection::iterator lastIt = std::prev(mArenas.end());
+    ArenaCollection::iterator it = mArenas.begin();
+
+    while(it != lastIt)
+    {
+        if (it->referenceCount == 0)
+            it = mArenas.erase(it);
+        else
+            ++it;
     }
 }
 

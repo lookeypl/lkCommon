@@ -2,6 +2,7 @@
 
 #include "lkCommon/Utils/ArenaAllocator.hpp"
 #include <cstring>
+#include <memory>
 
 
 namespace lkCommon {
@@ -9,15 +10,18 @@ namespace Utils {
 
 class ArenaObject
 {
+    static void* operator new(size_t size);
+    static void operator delete(void* p);
+
 public:
-    void* operator new(size_t size)
+    static void* operator new(size_t size, ArenaAllocator& allocator)
     {
-        return ArenaAllocator::Instance().Allocate(size);
+        return allocator.Allocate(size);
     }
 
-    void operator delete(void* p)
+    static void operator delete(void* p, ArenaAllocator& allocator)
     {
-        return ArenaAllocator::Instance().Free(p);
+        allocator.Free(p);
     }
 };
 

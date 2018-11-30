@@ -40,10 +40,14 @@ struct Arena
  * It is assumed that objects in ArenaAllocator can be singularly freed, however this will only
  * decrease reference counter for given chunk. Such memory won't be possible to reclaim,
  *
- * If need occurs, all used memory can be freed by
- * to empty used memory is to free all the chunks, which will invalidate all allocated data.
+ * If need occurs, all used memory can be freed by FreeChunks function. This will automatically
+ * invalidate all existing objects, so handle with care.
  *
  * @note Allocated arenas are aligned to system's page size.
+ *
+ * @note To easily make an object Arena-allocable, use ArenaObject helper class.
+ *
+ * @sa lkCommon::Utils::ArenaObject
  */
 class ArenaAllocator
 {
@@ -54,10 +58,11 @@ class ArenaAllocator
     ArenaCollection mArenas;
     std::mutex mAllocatorMutex;
 
-    ArenaCollection::iterator AddChunk();
-    ArenaCollection::iterator FindFreeArena(size_t size);
-    ArenaCollection::iterator FindArenaByPointer(void* ptr);
+    Arena* AddChunk();
+    Arena* FindFreeArena(size_t size);
+    Arena* FindArenaByPointer(void* ptr);
 
+public:
     /**
      * Create an ArenaAllocator with default chunk size equal to system's page size.
      */
@@ -76,17 +81,6 @@ class ArenaAllocator
     ArenaAllocator operator=(const ArenaAllocator&) = delete;
     ArenaAllocator& operator=(ArenaAllocator&&) = delete;
 
-public:
-    /**
-     * Allocator instance acquisitor.
-     *
-     * @return Instance of current ArenaAllocator.
-     */
-    static ArenaAllocator& Instance()
-    {
-        static ArenaAllocator instance;
-        return instance;
-    }
 
     /**
      * Allocate data of size @p size and return pointer to it.
@@ -129,6 +123,14 @@ public:
     void FreeChunks();
 
     /**
+     * Goes through all allocated chunks and clears chunks whose reference count is equal to zero
+     * (not counting last chunk, aka. currently active chunk).
+     *
+     * If there's only one chunk, function does nothing.
+     */
+    void ClearUnusedChunks();
+
+    /**
      * Returns free space in currently active chunk of data.
      *
      * @warning This function is for test purposes only. In real life scenarios, ArenaAllocator
@@ -141,6 +143,18 @@ public:
             return mArenaSize;
         else
             return mArenas.back().sizeLeft;
+    }
+
+    /**
+     * Returns currently allocated chunk count.
+     *
+     * @warning This function is for test purposes only. In real life scenarios, ArenaAllocator
+     *          will add new chunks when needed. As a result, this function does NOT reflect total
+     *          free space available for use.
+     */
+    LKCOMMON_INLINE size_t GetChunkCount() const
+    {
+        return mArenas.size();
     }
 };
 
