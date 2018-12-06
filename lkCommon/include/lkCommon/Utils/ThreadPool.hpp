@@ -20,7 +20,28 @@
 namespace lkCommon {
 namespace Utils {
 
-using TaskCallback = std::function<void()>;
+/**
+ * Collection of per-thread data.
+ *
+ * User can provide own data to userData pointer using
+ * ThreadPool::SetUserThreadData() function.
+ */
+struct ThreadPayload
+{
+    uint16_t tid;
+    void* userData;
+
+    ThreadPayload()
+        : tid(std::numeric_limits<uint16_t>::max())
+        , userData(nullptr)
+    {
+    }
+};
+
+/**
+ * Typedef for task called by ThreadPool
+ */
+using TaskCallback = std::function<void(ThreadPayload&)>;
 
 /**
  * Structure representing a task to be executed on a separate thread.
@@ -48,7 +69,7 @@ struct Thread
 {
     std::thread thread;
     Task assignedTask;
-    uint16_t tid;
+    ThreadPayload payload;
     bool taskReady;
     std::mutex stateMutex;
     std::condition_variable taskReadyCV;
@@ -123,11 +144,26 @@ public:
     ~ThreadPool();
 
     /**
+     * Sets custom data to be provided per thread.
+     *
+     * @p[in] tid        ID of thread to attach payload to.
+     * @p[in] payloadPtr Pointer to custom user data to attach.
+     *
+     * After this call, each time thread @p tid starts a task, it's going to
+     * have @p payloadPtr attached to its ThreadPayload structure.
+     */
+    void SetUserPayloadForThread(uint16_t tid, void* payloadPtr);
+
+    /**
      * Adds new task to Task queue which will execute @p callback callback.
      *
      * @p[in] callback Callback for task to be called by Thread Pool. Callback
      *                 is moved by this function, so after completing it
      *                 the parameter is left in unspecified state.
+     *
+     * @note ThreadPool will provide a ThreadPayload object as a parameter for
+     *       callback. Thus it is required, that user's callback contains a
+     *       ThreadPayload reference argument.
      *
      * @note This function is thread-safe and can be called by multiple threads.
      */

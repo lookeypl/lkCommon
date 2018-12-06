@@ -26,7 +26,7 @@ Task::Task(TaskCallback&& callback)
 Thread::Thread()
     : thread()
     , assignedTask()
-    , tid(std::numeric_limits<uint16_t>::max())
+    , payload()
     , taskReady(false)
     , stateMutex()
     , taskReadyCV()
@@ -97,7 +97,7 @@ void ThreadPool::SpawnThreads()
     uint16_t tidCounter = 0;
     for (auto& t: mWorkerThreads)
     {
-        t.tid = tidCounter;
+        t.payload.tid = tidCounter;
         t.thread = std::thread(&ThreadPool::WorkerThreadFunction, this, std::ref(t));
         tidCounter++;
     }
@@ -174,7 +174,7 @@ void ThreadPool::DispatchThreadFunction()
 
 void ThreadPool::WorkerThreadFunction(Thread& self)
 {
-    LOGD(self.tid << ": Worker thread started");
+    LOGD(self.payload.tid << ": Worker thread started");
 
     {
         LockGuard lock(mPoolStateMutex);
@@ -197,7 +197,7 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
         }
 
         // do the thing we are meant to do
-        self.assignedTask.function();
+        self.assignedTask.function(self.payload);
 
         // mark the thread as free to do other tasks
         {
@@ -217,7 +217,14 @@ void ThreadPool::WorkerThreadFunction(Thread& self)
         mDispatchThreadCV.notify_all();
     }
 
-    LOGD(self.tid << ": Worker thread stopped");
+    LOGD(self.payload.tid << ": Worker thread stopped");
+}
+
+void ThreadPool::SetUserPayloadForThread(uint16_t pid, void* payloadPtr)
+{
+    LKCOMMON_ASSERT(pid < mWorkerThreads.size(), "Provided PID is too high - thread does not exist");
+
+    mWorkerThreads[pid].payload.userData = payloadPtr;
 }
 
 void ThreadPool::AddTask(TaskCallback&& callback)
