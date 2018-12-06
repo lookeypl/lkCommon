@@ -10,8 +10,8 @@ namespace Utils {
 
 class ArenaObject
 {
-    static void* operator new(size_t size);
-    static void operator delete(void* p);
+    static void* operator new(size_t size) {};
+    static void operator delete(void* p) {};
 
 public:
     static void* operator new(size_t size, ArenaAllocator& allocator)
