@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef WIN32
+#define NOMINMAX
 #include <Windows.h>
 #elif defined(__linux__) | defined(__LINUX__)
 #include <time.h>

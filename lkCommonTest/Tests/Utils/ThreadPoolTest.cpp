@@ -186,6 +186,9 @@ TEST(ThreadPool, PayloadTest)
 
     auto task = [](ThreadPayload& payload)
     {
+        // ensure all tasks are assigned to threads by artificially waiting
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
         uint32_t* data = reinterpret_cast<uint32_t*>(payload.userData);
 
         EXPECT_NE(nullptr, data);

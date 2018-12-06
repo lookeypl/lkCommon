@@ -5,6 +5,7 @@
 #include "lkCommon/Utils/Image.hpp"
 
 #ifdef WIN32
+#define NOMINMAX
 #include <Windows.h>
 #include <windowsx.h>
 #elif defined(__linux__) || defined(__LINUX__)
