@@ -84,6 +84,9 @@
     <ClCompile Include="source\System\Win\Memory.cpp">
       <Filter>source\System\Win</Filter>
     </ClCompile>
+    <ClCompile Include="source\Math\Utilities.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp">
@@ -163,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Utils\ArenaObject.hpp">
       <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Random.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Utilities.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RandomImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

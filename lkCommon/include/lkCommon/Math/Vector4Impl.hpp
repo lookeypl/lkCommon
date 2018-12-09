@@ -1,7 +1,9 @@
 #pragma once
 
+#include "lkCommon/Math/Random.hpp"
 #include <smmintrin.h>
 #include <cmath>
+
 
 namespace lkCommon {
 namespace Math {
