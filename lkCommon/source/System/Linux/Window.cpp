@@ -198,7 +198,7 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, const WindowImage& image)
 {
     if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
@@ -213,7 +213,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         return false;
     }
 
-    xcb_image_t* img = reinterpret_cast<xcb_image_t*>(image.GetPlatformImageHandle());
+    xcb_image_t* img = reinterpret_cast<xcb_image_t*>(image.GetHandle());
     xcb_void_cookie_t c = xcb_image_put(connection, mWindow, mGraphicsContext, img, x, y, 0);
     xcb_generic_error_t* err = xcb_request_check(connection, c);
     if (err)

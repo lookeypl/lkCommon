@@ -2,7 +2,7 @@
 
 #include "lkCommon/lkCommon.hpp"
 #include "lkCommon/System/KeyCodes.hpp"
-#include "lkCommon/Utils/Image.hpp"
+#include "lkCommon/System/WindowImage.hpp"
 
 #ifdef WIN32
 #define NOMINMAX
@@ -75,7 +75,7 @@ public:
     bool Open(int x, int y, int width, int height, const std::string& title);
     bool SetTitle(const std::string& title);
     void SetInvisible(bool invisible);
-    bool DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image);
+    bool DisplayImage(uint32_t x, uint32_t y, const WindowImage& image);
     void Update(float deltaTime);
     void MouseButtonDown(int button, int x, int y);
     void MouseButtonUp(int button);

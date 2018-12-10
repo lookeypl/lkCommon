@@ -4,9 +4,12 @@
 
 
 namespace lkCommon {
-namespace Utils {
+namespace System {
 
-void Image::InitPlatformSpecific()
+WindowImage::WindowImage(uint32_t width, uint32_t height, void* data)
+    : mWidth(width)
+    , mHeight(height)
+    , mXcbImage(nullptr)
 {
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     xcb_screen_t* screen = Internal::XConnection::Instance().GetScreen();
@@ -16,20 +19,27 @@ void Image::InitPlatformSpecific()
         return;
     }
 
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(mPixels.data());
     mXcbImage = xcb_image_create_native(connection,
                                         mWidth, mHeight,
                                         XCB_IMAGE_FORMAT_Z_PIXMAP,
                                         screen->root_depth, nullptr,
                                         mWidth * mHeight * sizeof(Utils::Pixel<uint8_t, 4>),
-                                        const_cast<uint8_t*>(data));
+                                        reinterpret_cast<uint8_t*>(data));
     if (mXcbImage == nullptr)
     {
         LOGE("Failed to create XCB image");
     }
 }
 
-bool Image::ResizePlatformSpecific()
+WindowImage::~WindowImage()
+{
+    if (mXcbImage != nullptr)
+    {
+        xcb_image_destroy(mXcbImage);
+    }
+}
+
+bool WindowImage::Recreate(uint32_t width, uint32_t height, void* data)
 {
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     xcb_screen_t* screen = Internal::XConnection::Instance().GetScreen();
@@ -44,13 +54,14 @@ bool Image::ResizePlatformSpecific()
         xcb_image_destroy(mXcbImage);
     }
 
-    const uint8_t* data = reinterpret_cast<const uint8_t*>(mPixels.data());
+    mWidth = width;
+    mHeight = height;
     mXcbImage = xcb_image_create_native(connection,
                                         mWidth, mHeight,
                                         XCB_IMAGE_FORMAT_Z_PIXMAP,
                                         screen->root_depth, nullptr,
                                         mWidth * mHeight * sizeof(Utils::Pixel<uint8_t, 4>),
-                                        const_cast<uint8_t*>(data));
+                                        reinterpret_cast<uint8_t*>(data));
     if (mXcbImage == nullptr)
     {
         LOGE("Failed to create XCB image");
@@ -60,18 +71,10 @@ bool Image::ResizePlatformSpecific()
     return true;
 }
 
-void Image::ReleasePlatformSpecific()
-{
-    if (mXcbImage != nullptr)
-    {
-        xcb_image_destroy(mXcbImage);
-    }
-}
-
-void* Image::GetPlatformImageHandle() const
+void* WindowImage::GetHandle() const
 {
     return reinterpret_cast<void*>(mXcbImage);
 }
 
-} // namespace Utils
+} // namespace System
 } // namespace lkCommon

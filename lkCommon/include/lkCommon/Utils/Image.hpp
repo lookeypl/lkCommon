@@ -1,7 +1,7 @@
 /**
  * @file
  * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Image module implementation
+ * @brief  Image template class declaration
  */
 
 #pragma once
@@ -10,17 +10,8 @@
 #include <vector>
 
 #include <lkCommon/lkCommon.hpp>
+#include <lkCommon/System/WindowImage.hpp>
 #include <lkCommon/Utils/Pixel.hpp>
-
-#ifdef WIN32
-#define NOMINMAX
-#include <Windows.h>
-#elif defined(__linux__) | defined(__LINUX__)
-#include <xcb/xcb.h>
-#include <xcb/xcb_image.h>
-#else
-#error "Platform not supported"
-#endif
 
 
 namespace lkCommon {
@@ -32,30 +23,20 @@ namespace Utils {
  * Image class is made as an utility allowing user to draw any contents on it
  * and display it on Window type object. Data is stored in one-dimensional
  * array using std::vector as a container.
- *
- * @remarks List of ideas / TODOs:
- *  - Image should be converted into a template with arguments passed to Pixel
- *  - Image could have ex. a specialization <uint8_t, 4> used specifically with
- *    Window to keep data in an appropriate format for Window class
  */
+template <typename PixelType>
 class Image final
 {
+public:
+    using PixelContainer = std::vector<PixelType>;
+
+private:
     uint32_t mWidth;
     uint32_t mHeight;
-    std::vector<PixelUint4> mPixels;
-
-#ifdef WIN32
-    // empty, Windows implementation does not require platform-specific code
-#elif defined(__linux__) | defined(__LINUX__)
-    xcb_image_t* mXcbImage;
-#else
-#error "Platform not supported"
-#endif
+    PixelContainer mPixels;
+    System::WindowImage mWindowImage;
 
     size_t GetPixelCoord(uint32_t x, uint32_t y);
-    void InitPlatformSpecific();
-    bool ResizePlatformSpecific();
-    void ReleasePlatformSpecific();
 
 public:
     /**
@@ -83,16 +64,22 @@ public:
      * than @p width x @p height, rest will be filled with zeros. If there's more
      * data, it will be omitted. Data is assumed to be delivered in row order.
      *
-     * @p[in] width        Width of image
-     * @p[in] height       Height of image
-     * @p[in] pixelsPerRow Amount of pixels in one row of @p data. Can be 0 - then
-                           constructor assumes row width equal to @p width.
-     * @p[in] data         Data for image to be filled with
+     * @p[in] width         Width of image
+     * @p[in] height        Height of image
+     * @p[in] pixelsPerRow  Amount of pixels in one row of @p data. Can be 0 - then
+                            constructor assumes row width equal to @p width.
+     * @p[in] data          Data for image to be filled with.
+     * @p[in] isBGR         True if provided pixel data is in RGB format.
      *
      * @note In case of error (ex. not enough memory) constructor may throw.
      * Possible thrown exceptions match std::vector::resize() exceptions.
      */
-    Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const std::vector<PixelUint4>& data);
+    Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const PixelContainer& data, bool isBGR = false);
+
+    Image(const Image<PixelType>& other);
+    Image(Image<PixelType>&& other);
+    Image& operator=(const Image<PixelType>& other);
+    Image& operator=(Image<PixelType>&& other);
 
     /**
      * Destroys Image object, freeing all allocated memory.
@@ -116,7 +103,7 @@ public:
      * @p[in] pixel Pixel value to set on coordinates @p x and @p y.
      * @result True if succeeds, false when x or y are out of bounds.
      */
-    bool SetPixel(uint32_t x, uint32_t y, const Pixel<uint8_t, 4>& pixel);
+    bool SetPixel(uint32_t x, uint32_t y, const PixelType& pixel);
 
     /**
      * Gets pixel at position @p x and @p y and stores its value in @p pixel.
@@ -126,17 +113,20 @@ public:
      * @p[out] pixel Pixel value on coordinates @p x and @p y.
      * @result True if succeeds, false when x or y are out of bounds.
      */
-    bool GetPixel(uint32_t x, uint32_t y, Pixel<uint8_t, 4>& pixel);
+    bool GetPixel(uint32_t x, uint32_t y, PixelType& pixel);
 
     /**
-     * Acquires platform-specific bitmap handle.
-     *
-     * @note This function should be used ONLY by platform-specific modules.
-     * Result can be easily casted there to:
-     *   - HBITMAP on Windows
-     *   - xcb_image* on Linux
+     * Sets all pixels into one color
      */
-    void* GetPlatformImageHandle() const;
+    void SetAllPixels(const PixelType& color);
+
+    /**
+     * Cast operator between Pixel types.
+     *
+     * @note Casting requires PixelType -> ConvType static conversion to be possible.
+     */
+    template <typename ConvType>
+    operator Image<ConvType>() const;
 
     /**
      * Returns width of Image.
@@ -157,11 +147,21 @@ public:
     /**
      * Returns pointer to data array used by Pixel.
      */
-    LKCOMMON_INLINE const Pixel<uint8_t, 4>* GetDataPtr() const
+    LKCOMMON_INLINE const PixelType* GetDataPtr() const
     {
         return mPixels.data();
+    }
+
+    /**
+     * Returns WindowImage to use for displaying
+     */
+    LKCOMMON_INLINE const System::WindowImage& GetWindowImage() const
+    {
+        return mWindowImage;
     }
 };
 
 } // namespace Utils
 } // namespace lkCommon
+
+#include "ImageImpl.hpp"

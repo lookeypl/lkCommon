@@ -246,7 +246,7 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
+bool Window::DisplayImage(uint32_t x, uint32_t y, const WindowImage& image)
 {
     if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
@@ -254,7 +254,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
         return false;
     }
 
-    // Utils::Image holds the image from top to bottom, hence -height
+    // WindowImage assumes holding the image from top to bottom, hence -height
     BITMAPINFO bitmapInfo = {0,};
     bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bitmapInfo.bmiHeader.biWidth = static_cast<LONG>(image.GetWidth());
@@ -265,7 +265,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const Utils::Image& image)
     int res = StretchDIBits(mHDC,
                             x, y, image.GetWidth(), image.GetHeight(),
                             0, 0, image.GetWidth(), image.GetHeight(),
-                            image.GetDataPtr(), &bitmapInfo, DIB_RGB_COLORS,
+                            image.GetHandle(), &bitmapInfo, DIB_RGB_COLORS,
                             SRCCOPY);
     if (res == 0)
     {

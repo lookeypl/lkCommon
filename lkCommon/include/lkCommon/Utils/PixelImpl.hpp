@@ -75,7 +75,6 @@ Pixel<T, ComponentCount>::Pixel()
 template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount>::Pixel(T color)
 {
-    color = Clamp(color);
     for (size_t i = 0; i < ComponentCount; ++i)
         mColors[i] = color;
 }
@@ -84,7 +83,7 @@ template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount>::Pixel(const T colors[ComponentCount])
 {
     for (size_t i = 0; i < ComponentCount; ++i)
-        mColors[i] = Clamp(colors[i]);
+        mColors[i] = colors[i];
 }
 
 template <typename T, size_t ComponentCount>

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <lkCommon/System/Window.hpp>
+#include <lkCommon/Utils/Image.hpp>
 
 #include <thread>
 #include <chrono>
@@ -193,7 +194,7 @@ TEST(Window, DisplayImageTest)
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Utils::Image i;
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
 
     for (uint32_t x = 0; x < TEST_WINDOW_WIDTH; ++x)
@@ -210,7 +211,8 @@ TEST(Window, DisplayImageTest)
         }
     }
 
-    EXPECT_TRUE(w.DisplayImage(0, 0, i));
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> iUint = i;
+    EXPECT_TRUE(w.DisplayImage(0, 0, iUint.GetWindowImage()));
 }
 
 TEST(Window, DisplayImageTooBigTest)
@@ -222,11 +224,11 @@ TEST(Window, DisplayImageTooBigTest)
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Utils::Image i;
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH + 1, TEST_WINDOW_HEIGHT + 1));
 
     // contents don't matter, the function should fail even before displaying anything
-    EXPECT_FALSE(w.DisplayImage(0, 0, i));
+    EXPECT_FALSE(w.DisplayImage(0, 0, i.GetWindowImage()));
 }
 
 TEST(Window, DisplayImageOutsideBoundsTest)
@@ -238,9 +240,9 @@ TEST(Window, DisplayImageOutsideBoundsTest)
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(100, 100, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
 
-    lkCommon::Utils::Image i;
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i;
     EXPECT_TRUE(i.Resize(TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT));
 
     // contents don't matter, the function should fail even before displaying anything
-    EXPECT_FALSE(w.DisplayImage(1, 1, i));
+    EXPECT_FALSE(w.DisplayImage(1, 1, i.GetWindowImage()));
 }

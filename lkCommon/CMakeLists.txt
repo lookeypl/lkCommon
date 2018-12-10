@@ -3,7 +3,6 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   source/Math/LinearInterpolator.cpp
                   source/Math/CubicInterpolator.cpp
                   source/Utils/ArenaAllocator.cpp
-                  source/Utils/Image.cpp
                   source/Utils/ThreadPool.cpp
                   )
 
@@ -39,7 +38,7 @@ IF(WIN32)
                                source/System/Win/Library.cpp
                                source/System/Win/Memory.cpp
                                source/System/Win/Window.cpp
-                               source/Utils/Win/ImageWin.cpp
+                               source/System/Win/WindowImage.cpp
                                source/Utils/Win/Logger.cpp
                                source/Utils/Win/Timer.cpp
                                source/Utils/Win/StringConv.cpp
@@ -50,7 +49,7 @@ ELSEIF(UNIX)
                                source/System/Linux/Library.cpp
                                source/System/Linux/Memory.cpp
                                source/System/Linux/Window.cpp
-                               source/Utils/Linux/ImageLinux.cpp
+                               source/System/Linux/WindowImage.cpp
                                source/Utils/Linux/Logger.cpp
                                source/Utils/Linux/Timer.cpp
                                source/Utils/Linux/StringConv.cpp

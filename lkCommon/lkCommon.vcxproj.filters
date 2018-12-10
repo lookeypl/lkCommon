@@ -60,9 +60,6 @@
     <ClCompile Include="source\System\Win\Window.cpp">
       <Filter>source\System\Win</Filter>
     </ClCompile>
-    <ClCompile Include="source\Utils\Win\ImageWin.cpp">
-      <Filter>source\Utils\Win</Filter>
-    </ClCompile>
     <ClCompile Include="source\Utils\Win\Logger.cpp">
       <Filter>source\Utils\Win</Filter>
     </ClCompile>
@@ -71,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="source\Utils\Win\Timer.cpp">
       <Filter>source\Utils\Win</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Utils\Image.cpp">
-      <Filter>source\Utils</Filter>
     </ClCompile>
     <ClCompile Include="source\Utils\ThreadPool.cpp">
       <Filter>source\Utils</Filter>
@@ -86,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="source\Math\Utilities.cpp">
       <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\WindowImage.cpp">
+      <Filter>source\System\Win</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Math\RandomImpl.hpp">
       <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ImageImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\WindowImage.hpp">
+      <Filter>include\lkCommon\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

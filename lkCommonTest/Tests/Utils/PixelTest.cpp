@@ -93,18 +93,6 @@ TEST(Pixel, ConstructorInitializerList)
     EXPECT_EQ(TEST_PIXEL_FLOAT, pixelFloat);
 }
 
-TEST(Pixel, ConstructorFloatOverMax)
-{
-    PixelFloat4 pixelFloat(2.0f);
-    EXPECT_EQ(TEST_PIXEL_FLOAT_MAX, pixelFloat);
-}
-
-TEST(Pixel, ConstructorFloatBelowZero)
-{
-    PixelFloat4 pixelFloat(-1.0f);
-    EXPECT_EQ(TEST_PIXEL_FLOAT_ZEROS, pixelFloat);
-}
-
 TEST(Pixel, CastUintToFloat)
 {
     PixelFloat4 PIXEL_FLOAT = TEST_PIXEL_UINT;
