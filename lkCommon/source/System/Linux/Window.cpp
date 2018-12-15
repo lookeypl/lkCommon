@@ -48,6 +48,7 @@ Window::Window()
     , mHeight(0)
     , mMouseDownX(0)
     , mMouseDownY(0)
+    , mInitialized(false)
     , mOpened(false)
     , mInvisible(false)
     , mKeys{false}
@@ -71,6 +72,9 @@ Window::~Window()
 
 bool Window::Init(const std::string& className)
 {
+    if (mInitialized)
+        return true;
+
     if (Internal::XConnection::Instance().GetConnection() == nullptr ||
         Internal::XConnection::Instance().GetScreen() == nullptr )
     {
@@ -82,11 +86,21 @@ bool Window::Init(const std::string& className)
                          0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
     OnInit();
+    mInitialized = true;
     return true;
 }
 
 bool Window::Open(int x, int y, int width, int height, const std::string& title)
 {
+    if (mOpened)
+        return false;
+
+    if (!mInitialized)
+    {
+        LOGE("Window must be initialized first");
+        return false;
+    }
+
     mWidth = width;
     mHeight = height;
 

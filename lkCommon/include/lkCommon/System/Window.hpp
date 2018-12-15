@@ -22,6 +22,7 @@ class Window
     uint32_t mHeight;
     uint32_t mMouseDownX;
     uint32_t mMouseDownY;
+    bool mInitialized;
     bool mOpened;
     bool mInvisible;
     bool mKeys[255];

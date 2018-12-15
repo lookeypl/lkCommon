@@ -15,6 +15,7 @@ Window::Window()
     , mHeight(0)
     , mMouseDownX(0)
     , mMouseDownY(0)
+    , mInitialized(false)
     , mOpened(false)
     , mInvisible(false)
     , mKeys{false, }
@@ -147,6 +148,7 @@ bool Window::Init(const std::string& className)
 
     OnInit();
 
+    mInitialized = true;
     return true;
 }
 
@@ -154,6 +156,12 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 {
     if (mOpened)
         return false; // we cannot open a new window - we are already opened
+
+    if (!mInitialized)
+    {
+        LOGE("Window must be initialized first");
+        return false;
+    }
 
     if (mInstance == 0)
     {
