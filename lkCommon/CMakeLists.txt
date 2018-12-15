@@ -2,6 +2,7 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   source/Math/Interpolator.cpp
                   source/Math/LinearInterpolator.cpp
                   source/Math/CubicInterpolator.cpp
+                  source/Math/Utilities.cpp
                   source/Utils/ArenaAllocator.cpp
                   source/Utils/ThreadPool.cpp
                   )
@@ -14,6 +15,9 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Math/Interpolator.hpp
                   include/lkCommon/Math/LinearInterpolator.hpp
                   include/lkCommon/Math/CubicInterpolator.hpp
+                  include/lkCommon/Math/Random.hpp
+                  include/lkCommon/Math/RandomImpl.hpp
+                  include/lkCommon/Math/Utilities.hpp
                   include/lkCommon/System/FS.hpp
                   include/lkCommon/System/Info.hpp
                   include/lkCommon/System/KeyCodes.hpp
