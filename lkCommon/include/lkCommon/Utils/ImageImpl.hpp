@@ -9,19 +9,6 @@
 #include "lkCommon/Utils/Logger.hpp"
 
 
-namespace {
-
-// swaps B and R components to adjust them for destination media
-template <typename T>
-lkCommon::Utils::Pixel<T, 4> FixColorComponents(const lkCommon::Utils::Pixel<T, 4>& p)
-{
-    T pixelRaw[4] = { p.mColors[2], p.mColors[1], p.mColors[0], p.mColors[3] };
-    return lkCommon::Utils::Pixel<T, 4>(pixelRaw);
-}
-
-} // namespace
-
-
 namespace lkCommon {
 namespace Utils {
 
@@ -67,7 +54,9 @@ Image<PixelType>::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, 
 
         for (size_t x = 0; x < pixelsToCopy; ++x)
         {
-            mPixels[dstIndex] = isBGR ? data[srcIndex] : FixColorComponents(data[srcIndex]);
+            mPixels[dstIndex] = data[srcIndex];
+            if (!isBGR)
+                mPixels[dstIndex].Swap(0, 2);
 
             ++srcIndex;
             ++dstIndex;
@@ -156,7 +145,8 @@ bool Image<PixelType>::SetPixel(uint32_t x, uint32_t y, const PixelType& pixel)
         return false;
     }
 
-    mPixels[coord] = FixColorComponents(pixel);
+    mPixels[coord] = pixel;
+    mPixels[coord].Swap(0, 2);
     return true;
 }
 
@@ -169,7 +159,8 @@ bool Image<PixelType>::GetPixel(uint32_t x, uint32_t y, PixelType& pixel)
         return false;
     }
 
-    pixel = FixColorComponents(mPixels[coord]);
+    pixel = mPixels[coord];
+    pixel.Swap(0, 2);
     return true;
 }
 

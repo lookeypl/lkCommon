@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <type_traits>
 #include <initializer_list>
+#include <xmmintrin.h>
 #include <lkCommon/lkCommon.hpp>
 
 
@@ -40,6 +41,19 @@ Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const T& rhs);
 template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const T& rhs);
 
+/**
+ * Declaration of operator specializations for 4-component float specialization
+ */
+std::ostream& operator<< (std::ostream& o, const Pixel<float, 4>& p);
+Pixel<float, 4> operator+ (const Pixel<float, 4>& lhs, const Pixel<float, 4>& rhs);
+Pixel<float, 4> operator- (const Pixel<float, 4>& lhs, const Pixel<float, 4>& rhs);
+Pixel<float, 4> operator* (const Pixel<float, 4>& lhs, const Pixel<float, 4>& rhs);
+Pixel<float, 4> operator/ (const Pixel<float, 4>& lhs, const Pixel<float, 4>& rhs);
+Pixel<float, 4> operator+ (const Pixel<float, 4>& lhs, const float& rhs);
+Pixel<float, 4> operator- (const Pixel<float, 4>& lhs, const float& rhs);
+Pixel<float, 4> operator* (const Pixel<float, 4>& lhs, const float& rhs);
+Pixel<float, 4> operator/ (const Pixel<float, 4>& lhs, const float& rhs);
+
 
 /**
  * Template structure containing a single Pixel of given type @p T with
@@ -56,15 +70,15 @@ struct Pixel
                   std::is_same<float, typename std::remove_cv<T>::type>::value,
                   "Unsupported template type. Only supported types are: uint8_t, float");
 
-    // container for the colors
+    // container for colors
     T mColors[ComponentCount];
 
     // Constructors and assignment from initializer list
     Pixel();
-    Pixel(T color);
+    Pixel(const T& color);
     Pixel(const T colors[ComponentCount]);
-    Pixel(std::initializer_list<T> l);
-    Pixel& operator=(std::initializer_list<T> l);
+    Pixel(const std::initializer_list<T>& l);
+    Pixel& operator=(const std::initializer_list<T>& l);
 
     // Copy/move constructors
     Pixel(const Pixel& other);
@@ -98,6 +112,13 @@ struct Pixel
     template <typename ConvType>
     operator Pixel<ConvType, ComponentCount>() const;
 
+    // cast to 4-component float specialization, separate because Pixel<float, 4> uses different data container
+    operator Pixel<float, 4>() const;
+
+    // internally swaps components together
+    // NOTE do NOT confuse with std::swap
+    void Swap(size_t i, size_t j);
+
     // friendships
     friend std::ostream& operator<< <T, ComponentCount>(std::ostream& o, const Pixel<T, ComponentCount>& p);
     friend Pixel<T, ComponentCount> operator+ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const Pixel<T, ComponentCount>& rhs);
@@ -108,6 +129,83 @@ struct Pixel
     friend Pixel<T, ComponentCount> operator- <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator* <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator/ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
+};
+
+/**
+ * Pixel template specialization for 4 float components, implemented using SSE for speedup.
+ */
+template <>
+struct Pixel<float, 4>
+{
+    // container for colors
+    union Pixel4f
+    {
+        float f[4];
+        __m128 m;
+
+        LKCOMMON_INLINE Pixel4f()
+            : m(_mm_setzero_ps())
+        {}
+
+        LKCOMMON_INLINE Pixel4f(const __m128& m)
+            : m(m)
+        {}
+    } mColors;
+
+    // Constructors and assignment from initializer list
+    Pixel();
+    Pixel(const float& color);
+    Pixel(const float colors[4]);
+    Pixel(const __m128& m);
+    Pixel(const std::initializer_list<float>& l);
+    Pixel& operator=(const std::initializer_list<float>& l);
+
+    // Copy/move constructors
+    Pixel(const Pixel<float, 4>& other);
+    Pixel(Pixel<float, 4>&& other);
+    Pixel& operator=(const Pixel<float, 4>& other);
+    Pixel& operator=(Pixel<float, 4>&& other);
+
+    // comparison operators
+    bool operator==(const Pixel<float, 4>& other) const;
+    bool operator!=(const Pixel<float, 4>& other) const;
+
+    // arithmetic operators vs other Pixel
+    // NOTE these do *not* check for overflows
+    Pixel<float, 4>& operator+=(const Pixel<float, 4>& other);
+    Pixel<float, 4>& operator-=(const Pixel<float, 4>& other);
+    Pixel<float, 4>& operator*=(const Pixel<float, 4>& other);
+    Pixel<float, 4>& operator/=(const Pixel<float, 4>& other);
+
+    // arithmetic operators vs a single component type
+    // NOTE these do *not* check for overflows
+    Pixel<float, 4>& operator+=(const float& other);
+    Pixel<float, 4>& operator-=(const float& other);
+    Pixel<float, 4>& operator*=(const float& other);
+    Pixel<float, 4>& operator/=(const float& other);
+
+    // array subscript operator for easy access to components
+    float operator[](size_t i) const;
+
+    // cast operator
+    // NOTE casting from higher precision type to lower (ex. float -> uint8_t) MIGHT clamp the result
+    template <typename ConvType>
+    operator Pixel<ConvType, 4>() const;
+
+    // internally swaps components together
+    // NOTE do NOT confuse with std::swap
+    void Swap(size_t i, size_t j);
+
+    // friendships
+    friend std::ostream& operator<< <float, 4>(std::ostream& o, const Pixel<float, 4>& p);
+    friend Pixel<float, 4> operator+ <float, 4>(Pixel<float, 4> lhs, const Pixel<float, 4>& rhs);
+    friend Pixel<float, 4> operator- <float, 4>(Pixel<float, 4> lhs, const Pixel<float, 4>& rhs);
+    friend Pixel<float, 4> operator* <float, 4>(Pixel<float, 4> lhs, const Pixel<float, 4>& rhs);
+    friend Pixel<float, 4> operator/ <float, 4>(Pixel<float, 4> lhs, const Pixel<float, 4>& rhs);
+    friend Pixel<float, 4> operator+ <float, 4>(Pixel<float, 4> lhs, const float& rhs);
+    friend Pixel<float, 4> operator- <float, 4>(Pixel<float, 4> lhs, const float& rhs);
+    friend Pixel<float, 4> operator* <float, 4>(Pixel<float, 4> lhs, const float& rhs);
+    friend Pixel<float, 4> operator/ <float, 4>(Pixel<float, 4> lhs, const float& rhs);
 };
 
 using PixelFloat4 = lkCommon::Utils::Pixel<float, 4>;
