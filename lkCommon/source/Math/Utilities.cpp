@@ -12,8 +12,7 @@ Vector4 RotateFromToVector(const Vector4& v, const Vector4& from, const Vector4&
     // form rotation info based on from-to vectors
     const Vector4 rotAxis = from.Cross(to);
     const float cosAngle = from.Dot(to);
-    const float angle = acosf(cosAngle);
-    const float sinAngle = sinf(angle);
+    const float sinAngle = sqrtf(1.0f - (cosAngle * cosAngle));
 
     // use Rodrigues' rotation formula to rotate v to new position
     return (v * cosAngle) + (rotAxis.Cross(v) * sinAngle) + (rotAxis * (rotAxis.Dot(v)) * (1.0f - cosAngle));
