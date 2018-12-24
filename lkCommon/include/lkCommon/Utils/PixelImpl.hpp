@@ -358,6 +358,11 @@ LKCOMMON_INLINE Pixel<float, 4>::Pixel(const float colors[4])
 {
 }
 
+LKCOMMON_INLINE Pixel<float, 4>::Pixel(const float r, const float g, const float b, const float a)
+    : mColors(r, g, b, a)
+{
+}
+
 LKCOMMON_INLINE Pixel<float, 4>::Pixel(const __m128& m)
     : mColors(m)
 {

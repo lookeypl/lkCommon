@@ -150,12 +150,17 @@ struct Pixel<float, 4>
         LKCOMMON_INLINE Pixel4f(const __m128& m)
             : m(m)
         {}
+
+        LKCOMMON_INLINE Pixel4f(const float f0, const float f1, const float f2, const float f3)
+            : f{f0, f1, f2, f3}
+        {}
     } mColors;
 
     // Constructors and assignment from initializer list
     Pixel();
     Pixel(const float& color);
     Pixel(const float colors[4]);
+    Pixel(const float r, const float g, const float b, const float a);
     Pixel(const __m128& m);
     Pixel(const std::initializer_list<float>& l);
     Pixel& operator=(const std::initializer_list<float>& l);
