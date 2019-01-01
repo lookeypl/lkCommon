@@ -9,8 +9,16 @@ namespace Util {
 
 Vector4 RotateFromToVector(const Vector4& v, const Vector4& from, const Vector4& to)
 {
+    // early exit to not cross two of the same vectors
+    if (from == to)
+        return v;
+
+    // early exit to not cross vectors lying on opposite sides (180 degree rotation, aka mirroring direction)
+    if (from == (to * -1.0f))
+        return (v * -1.0f);
+
     // form rotation info based on from-to vectors
-    const Vector4 rotAxis = from.Cross(to);
+    const Vector4 rotAxis = from.Cross(to).Normalize();
     const float cosAngle = from.Dot(to);
     const float sinAngle = sqrtf(1.0f - (cosAngle * cosAngle));
 
