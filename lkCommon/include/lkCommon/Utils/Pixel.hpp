@@ -40,6 +40,8 @@ template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount> operator* (Pixel<T, ComponentCount> lhs, const T& rhs);
 template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const T& rhs);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator^ (Pixel<T, ComponentCount> lhs, const T& exp);
 
 /**
  * Declaration of operator specializations for 4-component float specialization
@@ -53,6 +55,7 @@ Pixel<float, 4> operator+ (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator- (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator* (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator/ (const Pixel<float, 4>& lhs, const float& rhs);
+Pixel<float, 4> operator^ (const Pixel<float, 4>& lhs, const float& exp);
 
 
 /**
@@ -103,6 +106,7 @@ struct Pixel
     Pixel<T, ComponentCount>& operator-=(const T& other);
     Pixel<T, ComponentCount>& operator*=(const T& other);
     Pixel<T, ComponentCount>& operator/=(const T& other);
+    Pixel<T, ComponentCount>& operator^=(const T& exp);
 
     // array subscript operator for easy access to components
     T operator[](size_t i) const;
@@ -129,6 +133,7 @@ struct Pixel
     friend Pixel<T, ComponentCount> operator- <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator* <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator/ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
+    friend Pixel<T, ComponentCount> operator^ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& exp);
 };
 
 /**
@@ -188,6 +193,7 @@ struct Pixel<float, 4>
     Pixel<float, 4>& operator-=(const float& other);
     Pixel<float, 4>& operator*=(const float& other);
     Pixel<float, 4>& operator/=(const float& other);
+    Pixel<float, 4>& operator^=(const float& exp);
 
     // array subscript operator for easy access to components
     float operator[](size_t i) const;
@@ -211,6 +217,7 @@ struct Pixel<float, 4>
     friend Pixel<float, 4> operator- <float, 4>(Pixel<float, 4> lhs, const float& rhs);
     friend Pixel<float, 4> operator* <float, 4>(Pixel<float, 4> lhs, const float& rhs);
     friend Pixel<float, 4> operator/ <float, 4>(Pixel<float, 4> lhs, const float& rhs);
+    friend Pixel<float, 4> operator^ <float, 4>(Pixel<float, 4> lhs, const float& exp);
 };
 
 using PixelFloat4 = lkCommon::Utils::Pixel<float, 4>;

@@ -50,7 +50,7 @@ namespace Utils {
 
 template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount>::Pixel()
-    : mColors{static_cast<T>(0)}
+    : mColors{ static_cast<T>(0) }
 {
 }
 
@@ -70,11 +70,11 @@ Pixel<T, ComponentCount>::Pixel(const T colors[ComponentCount])
 
 template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount>::Pixel(const std::initializer_list<T>& l)
-    : mColors{static_cast<T>(0)}
+    : mColors{ static_cast<T>(0) }
 {
     size_t limit = ComponentCount < l.size() ? ComponentCount : l.size();
     size_t ctr = 0;
-    for (const auto& item: l)
+    for (const auto& item : l)
     {
         if (ctr == limit)
         {
@@ -93,7 +93,7 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator=(const std::initial
 
     size_t limit = ComponentCount < l.size() ? ComponentCount : l.size();
     size_t ctr = 0;
-    for (const auto& item: l)
+    for (const auto& item : l)
     {
         if (ctr == limit)
         {
@@ -228,6 +228,21 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator/=(const T& other)
 }
 
 template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator^=(const T& exp)
+{
+    if (exp == static_cast<T>(0))
+    {
+        for (uint32_t i = 0; i < ComponentCount; ++i)
+            mColors[i] = static_cast<T>(1);
+        return *this;
+    }
+
+    for (uint32_t i = 0; i < ComponentCount; ++i)
+        mColors[i] = static_cast<T>(pow(static_cast<float>(mColors[i]), static_cast<float>(exp)));
+    return *this;
+}
+
+template <typename T, size_t ComponentCount>
 T Pixel<T, ComponentCount>::operator[](size_t i) const
 {
     LKCOMMON_ASSERT(i < ComponentCount, "Too big index provided");
@@ -340,6 +355,13 @@ Pixel<T, ComponentCount> operator/ (Pixel<T, ComponentCount> lhs, const T& rhs)
     return lhs;
 }
 
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> operator^ (Pixel<T, ComponentCount> lhs, const T& exp)
+{
+    lhs ^= exp;
+    return lhs;
+}
+
 
 // 4 float component specialization
 
@@ -373,7 +395,7 @@ LKCOMMON_INLINE Pixel<float, 4>::Pixel(const std::initializer_list<float>& l)
 {
     size_t limit = 4 < l.size() ? 4 : l.size();
     size_t ctr = 0;
-    for (const auto& item: l)
+    for (const auto& item : l)
     {
         if (ctr == limit)
         {
@@ -391,7 +413,7 @@ LKCOMMON_INLINE Pixel<float, 4>& Pixel<float, 4>::operator=(const std::initializ
 
     size_t limit = 4 < l.size() ? 4 : l.size();
     size_t ctr = 0;
-    for (const auto& item: l)
+    for (const auto& item : l)
     {
         if (ctr == limit)
         {
@@ -486,6 +508,19 @@ LKCOMMON_INLINE Pixel<float, 4>& Pixel<float, 4>::operator/=(const float& other)
     return *this;
 }
 
+LKCOMMON_INLINE Pixel<float, 4>& Pixel<float, 4>::operator^=(const float& exp)
+{
+    if (exp == 0.0f)
+    {
+        mColors.m = _mm_set_ps1(1.0f);
+        return *this;
+    }
+
+    for (uint32_t i = 0; i < 4; ++i)
+        mColors.f[i] = pow(mColors.f[i], exp);
+    return *this;
+}
+
 LKCOMMON_INLINE float Pixel<float, 4>::operator[](size_t i) const
 {
     LKCOMMON_ASSERT(i < 4, "Too big index provided");
@@ -556,6 +591,18 @@ LKCOMMON_INLINE Pixel<float, 4> operator* (const Pixel<float, 4>& lhs, const flo
 LKCOMMON_INLINE Pixel<float, 4> operator/ (const Pixel<float, 4>& lhs, const float& rhs)
 {
     return Pixel<float, 4>(_mm_div_ps(lhs.mColors.m, _mm_set_ps1(rhs)));
+}
+
+LKCOMMON_INLINE Pixel<float, 4> operator^ (const Pixel<float, 4>& lhs, const float& exp)
+{
+    if (exp == 0)
+        return Pixel<float, 4>(1.0f);
+
+    Pixel<float, 4> result(lhs);
+    for (uint32_t i = 0; i < 4; ++i)
+        result.mColors.f[i] = pow(lhs.mColors.f[i], exp);
+
+    return result;
 }
 
 } // namespace Utils

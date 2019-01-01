@@ -25,6 +25,7 @@ const PixelFloat4 TEST_PIXEL_FLOAT_2(TEST_PIXEL_RAW_FLOAT_2);
 const uint8_t TEST_CONSTANT_UINT = 2;
 const PixelUint4 TEST_PIXEL_UINT_3              ({  20,  30,  40,  24 });
 const PixelUint4 TEST_PIXEL_UINT_4              ({  10,   5,   4,   2 });
+const PixelUint4 TEST_PIXEL_UINT_5              ({   1,   2,   3,   4 });
 const PixelUint4 TEST_PIXEL_UINT_ADD_3_4        ({  30,  35,  44,  26 });
 const PixelUint4 TEST_PIXEL_UINT_SUB_3_4        ({  10,  25,  36,  22 });
 const PixelUint4 TEST_PIXEL_UINT_MUL_3_4        ({ 200, 150, 160,  48 });
@@ -33,11 +34,13 @@ const PixelUint4 TEST_PIXEL_UINT_ADD_3_CONSTANT ({  22,  32,  42,  26 });
 const PixelUint4 TEST_PIXEL_UINT_SUB_3_CONSTANT ({  18,  28,  38,  22 });
 const PixelUint4 TEST_PIXEL_UINT_MUL_3_CONSTANT ({  40,  60,  80,  48 });
 const PixelUint4 TEST_PIXEL_UINT_DIV_3_CONSTANT ({  10,  15,  20,  12 });
+const PixelUint4 TEST_PIXEL_UINT_POW_5          ({   1,   8,  27,  64 });
 
 const float TEST_ABS_ERROR = 0.000001f;
 const float TEST_CONSTANT_FLOAT = 2.0f;
 const PixelFloat4 TEST_PIXEL_FLOAT_3                ({  20.0f,  30.0f,  40.0f,  24.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_4                ({  10.0f,   5.0f,   4.0f,   2.0f });
+const PixelFloat4 TEST_PIXEL_FLOAT_5                ({   1.0f,   2.0f,   3.0f,   0.5f });
 const PixelFloat4 TEST_PIXEL_FLOAT_ADD_3_4          ({  30.0f,  35.0f,  44.0f,  26.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_SUB_3_4          ({  10.0f,  25.0f,  36.0f,  22.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_MUL_3_4          ({ 200.0f, 150.0f, 160.0f,  48.0f });
@@ -46,11 +49,15 @@ const PixelFloat4 TEST_PIXEL_FLOAT_ADD_3_CONSTANT   ({  22.0f,  32.0f,  42.0f,  
 const PixelFloat4 TEST_PIXEL_FLOAT_SUB_3_CONSTANT   ({  18.0f,  28.0f,  38.0f,  22.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_MUL_3_CONSTANT   ({  40.0f,  60.0f,  80.0f,  48.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_DIV_3_CONSTANT   ({  10.0f,  15.0f,  20.0f,  12.0f });
+const PixelFloat4 TEST_PIXEL_FLOAT_POW_5            ({   1.0f,   8.0f,  27.0f,   0.125f });
 
 
 const float TEST_CONSTANT_CLAMP_FLOAT_POSITIVE = 2.0f;
 const float TEST_CONSTANT_CLAMP_FLOAT_NEGATIVE = -0.5f;
 const uint8_t TEST_CONSTANT_CLAMP_UINT = 255;
+const uint8_t TEST_CONSTANT_POWER_UINT_1 = 3;
+const float TEST_CONSTANT_POWER_FLOAT_1 = 3.0f;
+
 
 
 TEST(Pixel, DefaultConstructor)
@@ -169,6 +176,13 @@ TEST(Pixel, DivConstantUint8)
     EXPECT_EQ(TEST_PIXEL_UINT_DIV_3_CONSTANT, val1 / val2);
 }
 
+TEST(Pixel, PowUint8)
+{
+    PixelUint4 val = TEST_PIXEL_UINT_5;
+    uint8_t exp = TEST_CONSTANT_POWER_UINT_1;
+    EXPECT_EQ(TEST_PIXEL_UINT_POW_5, val ^ exp);
+}
+
 TEST(Pixel, AddPixelFloat)
 {
     PixelFloat4 val1 = TEST_PIXEL_FLOAT_3;
@@ -257,4 +271,11 @@ TEST(Pixel, UintToFloatCastClampTest)
     PixelUint4 val1(TEST_CONSTANT_CLAMP_UINT);
     PixelFloat4 val2 = static_cast<PixelFloat4>(val1);
     EXPECT_EQ(TEST_PIXEL_FLOAT_MAX, val2);
+}
+
+TEST(Pixel, PowFloat)
+{
+    PixelFloat4 val = TEST_PIXEL_FLOAT_5;
+    float exp = TEST_CONSTANT_POWER_FLOAT_1;
+    EXPECT_EQ(TEST_PIXEL_FLOAT_POW_5, val ^ exp);
 }
