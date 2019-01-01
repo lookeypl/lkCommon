@@ -16,7 +16,7 @@
 namespace lkCommon {
 namespace Utils {
 
-// predeclarations for Pixel class definition, needed for ostream operator overload
+// predeclarations for Pixel class, needed for operator overload declarations
 template <typename T, size_t ComponentCount> struct Pixel;
 
 /**
@@ -44,6 +44,15 @@ template <typename T, size_t ComponentCount>
 Pixel<T, ComponentCount> operator^ (Pixel<T, ComponentCount> lhs, const T& exp);
 
 /**
+ * Declarations for additional out-of-class operations
+ */
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> MinPixel(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b);
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> MaxPixel(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b);
+
+
+/**
  * Declaration of operator specializations for 4-component float specialization
  */
 std::ostream& operator<< (std::ostream& o, const Pixel<float, 4>& p);
@@ -56,6 +65,14 @@ Pixel<float, 4> operator- (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator* (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator/ (const Pixel<float, 4>& lhs, const float& rhs);
 Pixel<float, 4> operator^ (const Pixel<float, 4>& lhs, const float& exp);
+
+/**
+ * Declarations for additional out-of-class operations for 4-component float specialization
+ */
+template<>
+Pixel<float, 4> MinPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b);
+template<>
+Pixel<float, 4> MaxPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b);
 
 
 /**
@@ -90,8 +107,14 @@ struct Pixel
     Pixel& operator=(Pixel&& other);
 
     // comparison operators
+    // lesser/greater operators work on per-component basis and
+    // return true only when all components fulfill the comparison
     bool operator==(const Pixel<T, ComponentCount>& other) const;
     bool operator!=(const Pixel<T, ComponentCount>& other) const;
+    bool operator<(const Pixel<T, ComponentCount>& other) const;
+    bool operator>(const Pixel<T, ComponentCount>& other) const;
+    bool operator<=(const Pixel<T, ComponentCount>& other) const;
+    bool operator>=(const Pixel<T, ComponentCount>& other) const;
 
     // arithmetic operators vs other Pixel
     // NOTE these do *not* check for overflows
@@ -134,6 +157,8 @@ struct Pixel
     friend Pixel<T, ComponentCount> operator* <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator/ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& rhs);
     friend Pixel<T, ComponentCount> operator^ <T, ComponentCount>(Pixel<T, ComponentCount> lhs, const T& exp);
+    friend Pixel<T, ComponentCount> MinPixel<T, ComponentCount>(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b);
+    friend Pixel<T, ComponentCount> MaxPixel<T, ComponentCount>(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b);
 };
 
 /**
@@ -179,6 +204,10 @@ struct Pixel<float, 4>
     // comparison operators
     bool operator==(const Pixel<float, 4>& other) const;
     bool operator!=(const Pixel<float, 4>& other) const;
+    bool operator<(const Pixel<float, 4>& other) const;
+    bool operator>(const Pixel<float, 4>& other) const;
+    bool operator<=(const Pixel<float, 4>& other) const;
+    bool operator>=(const Pixel<float, 4>& other) const;
 
     // arithmetic operators vs other Pixel
     // NOTE these do *not* check for overflows
@@ -218,6 +247,8 @@ struct Pixel<float, 4>
     friend Pixel<float, 4> operator* <float, 4>(Pixel<float, 4> lhs, const float& rhs);
     friend Pixel<float, 4> operator/ <float, 4>(Pixel<float, 4> lhs, const float& rhs);
     friend Pixel<float, 4> operator^ <float, 4>(Pixel<float, 4> lhs, const float& exp);
+    friend Pixel<float, 4> MinPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b);
+    friend Pixel<float, 4> MaxPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b);
 };
 
 using PixelFloat4 = lkCommon::Utils::Pixel<float, 4>;

@@ -8,6 +8,8 @@
 
 #include "Pixel.hpp"
 
+#include <cmath>
+
 
 namespace {
 
@@ -160,6 +162,54 @@ bool Pixel<T, ComponentCount>::operator!=(const Pixel<T, ComponentCount>& other)
     }
 
     return false;
+}
+
+template <typename T, size_t ComponentCount>
+bool Pixel<T, ComponentCount>::operator<(const Pixel<T, ComponentCount>& other) const
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        if (mColors[i] >= other.mColors[i])
+            return false;
+    }
+
+    return true;
+}
+
+template <typename T, size_t ComponentCount>
+bool Pixel<T, ComponentCount>::operator>(const Pixel<T, ComponentCount>& other) const
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        if (mColors[i] <= other.mColors[i])
+            return false;
+    }
+
+    return true;
+}
+
+template <typename T, size_t ComponentCount>
+bool Pixel<T, ComponentCount>::operator<=(const Pixel<T, ComponentCount>& other) const
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        if (mColors[i] > other.mColors[i])
+            return false;
+    }
+
+    return true;
+}
+
+template <typename T, size_t ComponentCount>
+bool Pixel<T, ComponentCount>::operator>=(const Pixel<T, ComponentCount>& other) const
+{
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        if (mColors[i] < other.mColors[i])
+            return false;
+    }
+
+    return true;
 }
 
 template <typename T, size_t ComponentCount>
@@ -360,6 +410,30 @@ Pixel<T, ComponentCount> operator^ (Pixel<T, ComponentCount> lhs, const T& exp)
 {
     lhs ^= exp;
     return lhs;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> MinPixel(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b)
+{
+    Pixel<T, ComponentCount> result;
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        result.mColors[i] = a.mColors[i] < b.mColors[i] ? a.mColors[i] : b.mColors[i];
+    }
+
+    return result;
+}
+
+template <typename T, size_t ComponentCount>
+Pixel<T, ComponentCount> MaxPixel(const Pixel<T, ComponentCount>& a, const Pixel<T, ComponentCount>& b)
+{
+    Pixel<T, ComponentCount> result;
+    for (size_t i = 0; i < ComponentCount; ++i)
+    {
+        result.mColors[i] = a.mColors[i] > b.mColors[i] ? a.mColors[i] : b.mColors[i];
+    }
+
+    return result;
 }
 
 
@@ -603,6 +677,16 @@ LKCOMMON_INLINE Pixel<float, 4> operator^ (const Pixel<float, 4>& lhs, const flo
         result.mColors.f[i] = pow(lhs.mColors.f[i], exp);
 
     return result;
+}
+
+LKCOMMON_INLINE Pixel<float, 4> MinPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b)
+{
+    return Pixel<float, 4>(_mm_min_ps(a.mColors.m, b.mColors.m));
+}
+
+LKCOMMON_INLINE Pixel<float, 4> MaxPixel(const Pixel<float, 4>& a, const Pixel<float, 4>& b)
+{
+    return Pixel<float, 4>(_mm_max_ps(a.mColors.m, b.mColors.m));
 }
 
 } // namespace Utils
