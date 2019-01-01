@@ -38,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Average.hpp" />
+    <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Constants.hpp" />
     <ClInclude Include="include\lkCommon\Math\CubicInterpolator.hpp" />
     <ClInclude Include="include\lkCommon\Math\Interpolator.hpp" />

@@ -179,5 +179,11 @@
     <ClInclude Include="include\lkCommon\System\WindowImage.hpp">
       <Filter>include\lkCommon\System</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Average.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -35,6 +35,9 @@
     <ClCompile Include="Tests\Utils\ArenaObjectTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Math\AverageTest.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">
