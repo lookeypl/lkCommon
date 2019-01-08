@@ -132,7 +132,8 @@ struct Pixel
     Pixel<T, ComponentCount>& operator^=(const T& exp);
 
     // array subscript operator for easy access to components
-    T operator[](size_t i) const;
+    T& operator[](const size_t i);
+    T operator[](const size_t i) const;
 
     // cast operator
     // NOTE casting from higher precision type to lower (ex. float -> uint8_t) MIGHT clamp the result
@@ -225,7 +226,8 @@ struct Pixel<float, 4>
     Pixel<float, 4>& operator^=(const float& exp);
 
     // array subscript operator for easy access to components
-    float operator[](size_t i) const;
+    float& operator[](const size_t i);
+    float operator[](const size_t i) const;
 
     // cast operator
     // NOTE casting from higher precision type to lower (ex. float -> uint8_t) MIGHT clamp the result

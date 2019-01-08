@@ -26,6 +26,7 @@ const uint8_t TEST_CONSTANT_UINT = 2;
 const PixelUint4 TEST_PIXEL_UINT_3              ({  20,  30,  40,  24 });
 const PixelUint4 TEST_PIXEL_UINT_4              ({  10,   5,   4,   2 });
 const PixelUint4 TEST_PIXEL_UINT_5              ({   1,   2,   3,   4 });
+const PixelUint4 TEST_PIXEL_UINT_6              ({   1,   2,   3,   2 });
 const PixelUint4 TEST_PIXEL_UINT_ADD_3_4        ({  30,  35,  44,  26 });
 const PixelUint4 TEST_PIXEL_UINT_SUB_3_4        ({  10,  25,  36,  22 });
 const PixelUint4 TEST_PIXEL_UINT_MUL_3_4        ({ 200, 150, 160,  48 });
@@ -43,6 +44,7 @@ const float TEST_CONSTANT_FLOAT = 2.0f;
 const PixelFloat4 TEST_PIXEL_FLOAT_3                ({  20.0f,  30.0f,  40.0f,  24.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_4                ({  10.0f,   5.0f,   4.0f,   2.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_5                ({   1.0f,   2.0f,   3.0f,   0.5f });
+const PixelFloat4 TEST_PIXEL_FLOAT_6                ({   1.0f,   2.0f,   3.0f,   2.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_ADD_3_4          ({  30.0f,  35.0f,  44.0f,  26.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_SUB_3_4          ({  10.0f,  25.0f,  36.0f,  22.0f });
 const PixelFloat4 TEST_PIXEL_FLOAT_MUL_3_4          ({ 200.0f, 150.0f, 160.0f,  48.0f });
@@ -203,6 +205,13 @@ TEST(Pixel, MaxUint8)
     EXPECT_EQ(TEST_PIXEL_UINT_MAX_4_5, result);
 }
 
+TEST(Pixel, AccessOperatorUint)
+{
+    PixelUint4 val = TEST_PIXEL_UINT_5;
+    val[3] = val[1];
+    EXPECT_EQ(TEST_PIXEL_UINT_6, val);
+}
+
 TEST(Pixel, AddPixelFloat)
 {
     PixelFloat4 val1 = TEST_PIXEL_FLOAT_3;
@@ -312,4 +321,11 @@ TEST(Pixel, MaxFloat)
     PixelFloat4 val1 = TEST_PIXEL_FLOAT_4;
     PixelFloat4 val2 = TEST_PIXEL_FLOAT_5;
     EXPECT_EQ(TEST_PIXEL_FLOAT_MAX_4_5, MaxPixel(val1, val2));
+}
+
+TEST(Pixel, AccessOperatorFloat)
+{
+    PixelFloat4 val = TEST_PIXEL_FLOAT_5;
+    val[3] = val[1];
+    EXPECT_EQ(TEST_PIXEL_FLOAT_6, val);
 }

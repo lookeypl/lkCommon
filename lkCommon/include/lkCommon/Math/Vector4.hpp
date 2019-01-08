@@ -40,7 +40,8 @@ public:
     Vector4 Normalize() const;
 
     // Access operator
-    float operator[](int index) const;
+    float& operator[](const size_t index);
+    float operator[](const size_t index) const;
 
     // Addition
     Vector4& operator+=(const Vector4& other);

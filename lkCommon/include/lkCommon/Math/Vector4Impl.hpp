@@ -71,7 +71,12 @@ LKCOMMON_INLINE Vector4 Vector4::Normalize() const
 }
 
 // Access operator
-LKCOMMON_INLINE float Vector4::operator[](int index) const
+LKCOMMON_INLINE float& Vector4::operator[](const size_t index)
+{
+    return mValue.f[index];
+}
+
+LKCOMMON_INLINE float Vector4::operator[](const size_t index) const
 {
     return mValue.f[index];
 }

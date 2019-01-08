@@ -293,7 +293,14 @@ Pixel<T, ComponentCount>& Pixel<T, ComponentCount>::operator^=(const T& exp)
 }
 
 template <typename T, size_t ComponentCount>
-T Pixel<T, ComponentCount>::operator[](size_t i) const
+T& Pixel<T, ComponentCount>::operator[](const size_t i)
+{
+    LKCOMMON_ASSERT(i < ComponentCount, "Too big index provided");
+    return mColors[i];
+}
+
+template <typename T, size_t ComponentCount>
+T Pixel<T, ComponentCount>::operator[](const size_t i) const
 {
     LKCOMMON_ASSERT(i < ComponentCount, "Too big index provided");
     return mColors[i];
@@ -595,7 +602,13 @@ LKCOMMON_INLINE Pixel<float, 4>& Pixel<float, 4>::operator^=(const float& exp)
     return *this;
 }
 
-LKCOMMON_INLINE float Pixel<float, 4>::operator[](size_t i) const
+LKCOMMON_INLINE float& Pixel<float, 4>::operator[](const size_t i)
+{
+    LKCOMMON_ASSERT(i < 4, "Too big index provided");
+    return mColors.f[i];
+}
+
+LKCOMMON_INLINE float Pixel<float, 4>::operator[](const size_t i) const
 {
     LKCOMMON_ASSERT(i < 4, "Too big index provided");
     return mColors.f[i];
