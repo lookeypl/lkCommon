@@ -63,6 +63,7 @@ Window::~Window()
 {
     Close();
 
+    // TODO window deinitialization needs some refactoring...
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     if (connection != nullptr)
     {
@@ -85,7 +86,14 @@ bool Window::Init(const std::string& className)
     xcb_set_screen_saver(Internal::XConnection::Instance().GetConnection(),
                          0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
-    OnInit();
+    if (!OnInit())
+    {
+        LOGE("Window initialization failed - OnInit callback returned an error");
+        // TODO should call Deinit or something similar
+        xcb_set_screen_saver(connection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
+        return false;
+    }
+
     mInitialized = true;
     return true;
 }
@@ -169,7 +177,13 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
     xcb_flush(connection);
 
-    OnOpen();
+    if (!OnOpen())
+    {
+        LOGE("Window initialization failed - OnOpen callback returned an error");
+        Close();
+        return false;
+    }
+
     mOpened = true;
     return true;
 }

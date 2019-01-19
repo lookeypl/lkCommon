@@ -8,25 +8,31 @@
 
 const uint32_t TEST_WINDOW_WIDTH = 200;
 const uint32_t TEST_WINDOW_HEIGHT = 200;
+const std::string TEST_WINDOW_CLASS_NAME = "lkCommonTestClass_12345678";
 const std::string TEST_WINDOW_NAME = "lkCommonTest window";
 const float TEST_WINDOW_UPDATE_DELTA_TIME = 1.0f;
 
 class CallbackTestWindow: public lkCommon::System::Window
 {
+    bool mShouldFailInit;
+    bool mShouldFailOpen;
+
     bool mOnInitCalled;
     bool mOnOpenCalled;
     bool mOnCloseCalled;
     bool mOnUpdateCalled;
 
 protected:
-    void OnInit() override
+    bool OnInit() override
     {
         mOnInitCalled = true;
+        return !mShouldFailInit;
     }
 
-    void OnOpen() override
+    bool OnOpen() override
     {
         mOnOpenCalled = true;
+        return !mShouldFailOpen;
     }
 
     void OnClose() override
@@ -66,6 +72,8 @@ protected:
 public:
     CallbackTestWindow()
         : lkCommon::System::Window()
+        , mShouldFailInit(false)
+        , mShouldFailOpen(false)
         , mOnInitCalled(false)
         , mOnOpenCalled(false)
         , mOnCloseCalled(false)
@@ -92,17 +100,51 @@ public:
     {
         return mOnUpdateCalled;
     }
+
+    void ShouldFailInit(bool should)
+    {
+        mShouldFailInit = should;
+    }
+
+    void ShouldFailOpen(bool should)
+    {
+        mShouldFailOpen = should;
+    }
 };
 
 TEST(Window, Constructor)
 {
     lkCommon::System::Window w;
-    EXPECT_FALSE(w.IsOpen());
+    EXPECT_FALSE(w.IsInitialized());
+    EXPECT_FALSE(w.IsOpened());
+}
+
+TEST(Window, ConstructorInit)
+{
+    lkCommon::System::Window w(TEST_WINDOW_CLASS_NAME);
+    EXPECT_TRUE(w.IsInitialized());
+    EXPECT_FALSE(w.IsOpened());
+}
+
+TEST(Window, ConstructorOpen)
+{
+    lkCommon::System::Window w(TEST_WINDOW_CLASS_NAME, 0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME, true);
+    EXPECT_TRUE(w.IsInvisible());
+    EXPECT_TRUE(w.IsInitialized());
+    EXPECT_TRUE(w.IsOpened());
 }
 
 TEST(Window, Init)
 {
     lkCommon::System::Window w;
+    EXPECT_TRUE(w.Init());
+    EXPECT_TRUE(w.IsInitialized());
+}
+
+TEST(Window, InitDouble)
+{
+    lkCommon::System::Window w;
+    EXPECT_TRUE(w.Init());
     EXPECT_TRUE(w.Init());
 }
 
@@ -118,16 +160,43 @@ TEST(Window, Open)
     lkCommon::System::Window w;
     w.SetInvisible(true);
     EXPECT_TRUE(w.Init());
-    EXPECT_FALSE(w.IsOpen());
+    EXPECT_FALSE(w.IsOpened());
     EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
-    EXPECT_TRUE(w.IsOpen());
+    EXPECT_TRUE(w.IsOpened());
+}
+
+TEST(Window, OpenDouble)
+{
+    lkCommon::System::Window w;
+    w.SetInvisible(true);
+
+    EXPECT_TRUE(w.Init());
+    EXPECT_TRUE(w.IsInitialized());
+    EXPECT_FALSE(w.IsOpened());
+
+    EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
+    EXPECT_TRUE(w.IsOpened());
+
+    EXPECT_TRUE(w.Open(10, 10, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
+    EXPECT_TRUE(w.IsOpened());
 }
 
 TEST(Window, OnInitCallback)
 {
     CallbackTestWindow w;
     EXPECT_FALSE(w.OnInitCalled());
-    w.Init();
+
+    EXPECT_TRUE(w.Init());
+    EXPECT_TRUE(w.OnInitCalled());
+}
+
+TEST(Window, OnFailedInitCallback)
+{
+    CallbackTestWindow w;
+    EXPECT_FALSE(w.OnInitCalled());
+    w.ShouldFailInit(true);
+
+    EXPECT_FALSE(w.Init());
     EXPECT_TRUE(w.OnInitCalled());
 }
 
@@ -139,13 +208,34 @@ TEST(Window, OnOpenCallback)
     EXPECT_FALSE(w.OnOpenCalled());
 
     // Init should call OnInit only
-    w.Init();
+    EXPECT_TRUE(w.Init());
     EXPECT_TRUE(w.OnInitCalled());
     EXPECT_FALSE(w.OnOpenCalled());
 
     // Open should call OnOpen
     w.SetInvisible(true);
     EXPECT_TRUE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
+    EXPECT_TRUE(w.OnOpenCalled());
+}
+
+TEST(Window, OnFailedOpenCallback)
+{
+    // just-created window shouldn't call any callbacks
+    CallbackTestWindow w;
+    EXPECT_FALSE(w.OnInitCalled());
+    EXPECT_FALSE(w.OnOpenCalled());
+
+    // opening should fail (but not init)
+    w.ShouldFailOpen(true);
+
+    // Init should call OnInit only
+    EXPECT_TRUE(w.Init());
+    EXPECT_TRUE(w.OnInitCalled());
+    EXPECT_FALSE(w.OnOpenCalled());
+
+    // Open should call OnOpen
+    w.SetInvisible(true);
+    EXPECT_FALSE(w.Open(0, 0, TEST_WINDOW_WIDTH, TEST_WINDOW_HEIGHT, TEST_WINDOW_NAME));
     EXPECT_TRUE(w.OnOpenCalled());
 }
 

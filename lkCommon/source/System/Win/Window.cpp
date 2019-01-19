@@ -10,7 +10,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 const DWORD WINDOWED_EX_STYLE = WS_EX_WINDOWEDGE;
 const DWORD WINDOWED_STYLE = WS_OVERLAPPEDWINDOW;
 
-Window::Window()
+Window::Window() noexcept
     : mWidth(0)
     , mHeight(0)
     , mMouseDownX(0)
@@ -27,17 +27,63 @@ Window::Window()
 {
 }
 
+Window::Window(const std::string& className)
+    : mWidth(0)
+    , mHeight(0)
+    , mMouseDownX(0)
+    , mMouseDownY(0)
+    , mInitialized(false)
+    , mOpened(false)
+    , mInvisible(false)
+    , mKeys{ false, }
+    , mMouseButtons{ false, }
+    , mInstance(NULL)
+    , mHWND(static_cast<HWND>(INVALID_HANDLE_VALUE))
+    , mHDC(static_cast<HDC>(INVALID_HANDLE_VALUE))
+    , mClassName()
+{
+    if (!Init(className))
+    {
+        LOGE("Failed to initialize Window");
+        // TODO THROW exception
+    }
+}
+
+Window::Window(const std::string& className, const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height,
+               const std::string& title, const bool invisible)
+    : mWidth(width)
+    , mHeight(height)
+    , mMouseDownX(0)
+    , mMouseDownY(0)
+    , mInitialized(false)
+    , mOpened(false)
+    , mInvisible(false)
+    , mKeys{ false, }
+    , mMouseButtons{false, }
+    , mInstance(NULL)
+    , mHWND(static_cast<HWND>(INVALID_HANDLE_VALUE))
+    , mHDC(static_cast<HDC>(INVALID_HANDLE_VALUE))
+    , mClassName()
+{
+    if (!Init(className))
+    {
+        LOGE("Failed to initialize Window");
+        // TODO THROW exception
+    }
+
+    SetInvisible(invisible);
+
+    if (!Open(x, y, width, height, title))
+    {
+        LOGE("Failed to open Window");
+        // TODO THROW exception
+    }
+}
+
 Window::~Window()
 {
     Close();
-
-    if (mInstance != 0)
-    {
-        if (!UnregisterClassW(mClassName.c_str(), mInstance))
-        {
-            LOGE("Failed to unregister class on close");
-        }
-    }
+    Deinit();
 }
 
 LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -104,8 +150,11 @@ LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 bool Window::Init(const std::string& className)
 {
-    if (mInstance)
+    if (mInitialized)
+    {
+        LOGD("Window already initialized - ignoring call");
         return true;
+    }
 
     if (className.empty())
     {
@@ -146,16 +195,25 @@ bool Window::Init(const std::string& className)
         return false;
     }
 
-    OnInit();
-
     mInitialized = true;
+
+    if (!OnInit())
+    {
+        LOGE("Window initialization failed - OnInit callback returned an error");
+        Deinit();
+        return false;
+    }
+
     return true;
 }
 
-bool Window::Open(int x, int y, int width, int height, const std::string& title)
+bool Window::Open(const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height, const std::string& title)
 {
     if (mOpened)
-        return false; // we cannot open a new window - we are already opened
+    {
+        LOGD("Window already opened - ignoring call");
+        return true;
+    }
 
     if (!mInitialized)
     {
@@ -178,10 +236,10 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     }
 
     RECT wr;
-    wr.left = (long)x;
-    wr.right = x + width;
-    wr.top = y;
-    wr.bottom = y + height;
+    wr.left = static_cast<LONG>(x);
+    wr.right = static_cast<LONG>(x + width);
+    wr.top = static_cast<LONG>(y);
+    wr.bottom = static_cast<LONG>(y + height);
     AdjustWindowRectEx(&wr, WINDOWED_STYLE, false, WINDOWED_EX_STYLE);
 
     mHWND = CreateWindowEx(WINDOWED_EX_STYLE, mClassName.c_str(), titleWStr.c_str(), WINDOWED_STYLE,
@@ -214,7 +272,12 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     mWidth = width;
     mHeight = height;
 
-    OnOpen();
+    if (!OnOpen())
+    {
+        LOGE("Window initialization failed - OnOpen callback returned an error");
+        Close();
+        return false;
+    }
 
     return true;
 }
@@ -241,7 +304,7 @@ bool Window::SetTitle(const std::string& title)
     return true;
 }
 
-void Window::SetInvisible(bool invisible)
+void Window::SetInvisible(const bool invisible)
 {
     mInvisible = invisible;
 
@@ -254,7 +317,7 @@ void Window::SetInvisible(bool invisible)
     }
 }
 
-bool Window::DisplayImage(uint32_t x, uint32_t y, const WindowImage& image)
+bool Window::DisplayImage(const uint32_t x, const uint32_t y, const WindowImage& image)
 {
     if ((x + image.GetWidth() > mWidth) || (y + image.GetHeight() > mHeight))
     {
@@ -285,7 +348,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const WindowImage& image)
     return true;
 }
 
-void Window::Update(float deltaTime)
+void Window::Update(const float deltaTime)
 {
     MSG msg;
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -302,7 +365,7 @@ void Window::Update(float deltaTime)
     OnUpdate(deltaTime);
 }
 
-void Window::MouseButtonDown(int button, int x, int y)
+void Window::MouseButtonDown(const uint32_t button, const uint32_t x, const uint32_t y)
 {
     SetCapture(mHWND);
     mMouseButtons[button] = true;
@@ -311,16 +374,18 @@ void Window::MouseButtonDown(int button, int x, int y)
     OnMouseDown(button);
 }
 
-void Window::MouseButtonUp(int button)
+void Window::MouseButtonUp(const uint32_t button)
 {
     ReleaseCapture();
     mMouseButtons[button] = false;
     OnMouseUp(button);
 }
 
-void Window::MouseMove(int x, int y)
+void Window::MouseMove(const uint32_t x, const uint32_t y)
 {
-    OnMouseMove(x, y, x - mMouseDownX, y - mMouseDownY);
+    OnMouseMove(x, y,
+                static_cast<int32_t>(x) - static_cast<int32_t>(mMouseDownX),
+                static_cast<int32_t>(y) - static_cast<int32_t>(mMouseDownY));
     mMouseDownX = x;
     mMouseDownY = y;
 }
@@ -328,7 +393,10 @@ void Window::MouseMove(int x, int y)
 void Window::Close()
 {
     if (!mOpened)
+    {
+        LOGD("Window is not opened - ignoring call");
         return;
+    }
 
     OnClose();
 
@@ -343,18 +411,43 @@ void Window::Close()
     mOpened = false;
 }
 
+void Window::Deinit()
+{
+    if (!mInitialized)
+    {
+        LOGD("Window is not initialized - ignoring call");
+        return;
+    }
+
+    if (mOpened)
+    {
+        LOGW("Deinit() called while Window still opened - closing");
+        Close();
+    }
+
+    if (!UnregisterClassW(mClassName.c_str(), mInstance))
+    {
+        LOGE("Failed to unregister class on deinit");
+    }
+
+    mInstance = 0;
+    mClassName.clear();
+}
+
 
 // callbacks
 
-void Window::OnInit()
+bool Window::OnInit()
 {
+    return true;
 }
 
-void Window::OnOpen()
+bool Window::OnOpen()
 {
+    return true;
 }
 
-void Window::OnResize(int width, int height)
+void Window::OnResize(const uint32_t width, const uint32_t height)
 {
     LKCOMMON_UNUSED(width);
     LKCOMMON_UNUSED(height);
@@ -364,27 +457,27 @@ void Window::OnClose()
 {
 }
 
-void Window::OnKeyDown(KeyCode key)
+void Window::OnKeyDown(const KeyCode key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnKeyUp(KeyCode key)
+void Window::OnKeyUp(const KeyCode key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnUpdate(float deltaTime)
+void Window::OnUpdate(const float deltaTime)
 {
     LKCOMMON_UNUSED(deltaTime);
 }
 
-void Window::OnMouseDown(int key)
+void Window::OnMouseDown(const uint32_t key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnMouseMove(int x, int y, int deltaX, int deltaY)
+void Window::OnMouseMove(const uint32_t x, const uint32_t y, const int32_t deltaX, const int32_t deltaY)
 {
     LKCOMMON_UNUSED(x);
     LKCOMMON_UNUSED(y);
@@ -392,7 +485,7 @@ void Window::OnMouseMove(int x, int y, int deltaX, int deltaY)
     LKCOMMON_UNUSED(deltaY);
 }
 
-void Window::OnMouseUp(int key)
+void Window::OnMouseUp(const uint32_t key)
 {
     LKCOMMON_UNUSED(key);
 }
