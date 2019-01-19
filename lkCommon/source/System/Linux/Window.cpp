@@ -43,7 +43,7 @@ namespace lkCommon {
 namespace System {
 
 
-Window::Window()
+Window::Window() noexcept
     : mWidth(0)
     , mHeight(0)
     , mMouseDownX(0)
@@ -59,22 +59,70 @@ Window::Window()
 {
 }
 
+Window::Window(const std::string& className)
+    : mWidth(0)
+    , mHeight(0)
+    , mMouseDownX(0)
+    , mMouseDownY(0)
+    , mInitialized(false)
+    , mOpened(false)
+    , mInvisible(false)
+    , mKeys{false}
+    , mMouseButtons{false}
+    , mWindow(0)
+    , mDeleteReply(nullptr)
+    , mGraphicsContext(0)
+{
+    if (!Init(className))
+    {
+        LOGE("Failed to initialize Window");
+        // TODO THROW exception
+    }
+}
+
+Window::Window(const std::string& className, const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height,
+               const std::string& title, const bool invisible)
+    : mWidth(width)
+    , mHeight(height)
+    , mMouseDownX(0)
+    , mMouseDownY(0)
+    , mInitialized(false)
+    , mOpened(false)
+    , mInvisible(false)
+    , mKeys{false}
+    , mMouseButtons{false}
+    , mWindow(0)
+    , mDeleteReply(nullptr)
+    , mGraphicsContext(0)
+{
+    if (!Init(className))
+    {
+        LOGE("Failed to initialize Window");
+        // TODO THROW exception
+    }
+
+    SetInvisible(invisible);
+
+    if (!Open(x, y, width, height, title))
+    {
+        LOGE("Failed to open Window");
+        // TODO THROW exception
+    }
+}
+
 Window::~Window()
 {
     Close();
-
-    // TODO window deinitialization needs some refactoring...
-    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
-    if (connection != nullptr)
-    {
-        xcb_set_screen_saver(connection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
-    }
+    Deinit();
 }
 
 bool Window::Init(const std::string& className)
 {
     if (mInitialized)
+    {
+        LOGD("Window already initialized - ignoring call");
         return true;
+    }
 
     if (Internal::XConnection::Instance().GetConnection() == nullptr ||
         Internal::XConnection::Instance().GetScreen() == nullptr )
@@ -86,31 +134,31 @@ bool Window::Init(const std::string& className)
     xcb_set_screen_saver(Internal::XConnection::Instance().GetConnection(),
                          0, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
 
+    mInitialized = true;
+
     if (!OnInit())
     {
         LOGE("Window initialization failed - OnInit callback returned an error");
-        // TODO should call Deinit or something similar
-        xcb_set_screen_saver(connection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
+        Deinit();
         return false;
     }
 
-    mInitialized = true;
     return true;
 }
 
-bool Window::Open(int x, int y, int width, int height, const std::string& title)
+bool Window::Open(const uint32_t x, const uint32_t y, const uint32_t width, const uint32_t height, const std::string& title)
 {
     if (mOpened)
-        return false;
+    {
+        LOGD("Window already opened - ignoring call");
+        return true;
+    }
 
     if (!mInitialized)
     {
         LOGE("Window must be initialized first");
         return false;
     }
-
-    mWidth = width;
-    mHeight = height;
 
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     xcb_screen_t* screen = Internal::XConnection::Instance().GetScreen();
@@ -132,7 +180,7 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
     };
 
     xcb_void_cookie_t cookie = xcb_create_window_checked(connection, XCB_COPY_FROM_PARENT, mWindow,
-                                       screen->root, x, y, mWidth, mHeight, 3, XCB_WINDOW_CLASS_INPUT_OUTPUT,
+                                       screen->root, x, y, width, height, 3, XCB_WINDOW_CLASS_INPUT_OUTPUT,
                                        screen->root_visual, winValueMask, winValueList);
     xcb_generic_error_t* err = xcb_request_check(connection, cookie);
     if (err)
@@ -177,6 +225,10 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
 
     xcb_flush(connection);
 
+    mOpened = true;
+    mWidth = width;
+    mHeight = height;
+
     if (!OnOpen())
     {
         LOGE("Window initialization failed - OnOpen callback returned an error");
@@ -184,7 +236,6 @@ bool Window::Open(int x, int y, int width, int height, const std::string& title)
         return false;
     }
 
-    mOpened = true;
     return true;
 }
 
@@ -257,7 +308,7 @@ bool Window::DisplayImage(uint32_t x, uint32_t y, const WindowImage& image)
     return true;
 }
 
-void Window::MouseButtonDown(int button, int x, int y)
+void Window::MouseButtonDown(const uint32_t button, const uint32_t x, const uint32_t y)
 {
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     if (connection == nullptr)
@@ -277,7 +328,7 @@ void Window::MouseButtonDown(int button, int x, int y)
     OnMouseDown(button);
 }
 
-void Window::MouseButtonUp(int button)
+void Window::MouseButtonUp(const uint32_t button)
 {
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     if (connection == nullptr)
@@ -291,9 +342,11 @@ void Window::MouseButtonUp(int button)
     OnMouseUp(button);
 }
 
-void Window::MouseMove(int x, int y)
+void Window::MouseMove(const uint32_t x, const uint32_t y)
 {
-    OnMouseMove(x, y, x - mMouseDownX, y - mMouseDownY);
+    OnMouseMove(x, y,
+                static_cast<int32_t>(x) - static_cast<int32_t>(mMouseDownX),
+                static_cast<int32_t>(y) - static_cast<int32_t>(mMouseDownY));
     mMouseDownX = x;
     mMouseDownY = y;
 }
@@ -381,7 +434,12 @@ void Window::Update(float deltaTime)
 void Window::Close()
 {
     if (!mOpened)
+    {
+        LOGD("Window is not opened - ignoring call");
         return;
+    }
+
+    OnClose();
 
     xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
     if (connection == nullptr)
@@ -411,22 +469,46 @@ void Window::Close()
         mWindow = 0;
     }
 
-    OnClose();
     mOpened = false;
+}
+
+void Window::Deinit()
+{
+    if (!mInitialized)
+    {
+        LOGD("Window is not initialized - ignoring call");
+        return;
+    }
+
+    if (mOpened)
+    {
+        LOGW("Deinit() called while Window still opened - closing");
+        Close();
+    }
+
+    OnDeinit();
+
+    xcb_connection_t* connection = Internal::XConnection::Instance().GetConnection();
+    if (connection != nullptr)
+    {
+        xcb_set_screen_saver(connection, -1, 0, XCB_BLANKING_NOT_PREFERRED, XCB_EXPOSURES_ALLOWED);
+    }
 }
 
 
 // callbacks
 
-void Window::OnInit()
+bool Window::OnInit()
 {
+    return true;
 }
 
-void Window::OnOpen()
+bool Window::OnOpen()
 {
+    return true;
 }
 
-void Window::OnResize(int width, int height)
+void Window::OnResize(const uint32_t width, const uint32_t height)
 {
     LKCOMMON_UNUSED(width);
     LKCOMMON_UNUSED(height);
@@ -436,27 +518,31 @@ void Window::OnClose()
 {
 }
 
-void Window::OnKeyDown(KeyCode key)
+void Window::OnDeinit()
+{
+}
+
+void Window::OnKeyDown(const KeyCode key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnKeyUp(KeyCode key)
+void Window::OnKeyUp(const KeyCode key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnUpdate(float deltaTime)
+void Window::OnUpdate(const float deltaTime)
 {
     LKCOMMON_UNUSED(deltaTime);
 }
 
-void Window::OnMouseDown(int key)
+void Window::OnMouseDown(const uint32_t key)
 {
     LKCOMMON_UNUSED(key);
 }
 
-void Window::OnMouseMove(int x, int y, int deltaX, int deltaY)
+void Window::OnMouseMove(const uint32_t x, const uint32_t y, const int32_t deltaX, const int32_t deltaY)
 {
     LKCOMMON_UNUSED(x);
     LKCOMMON_UNUSED(y);
@@ -464,7 +550,7 @@ void Window::OnMouseMove(int x, int y, int deltaX, int deltaY)
     LKCOMMON_UNUSED(deltaY);
 }
 
-void Window::OnMouseUp(int key)
+void Window::OnMouseUp(const uint32_t key)
 {
     LKCOMMON_UNUSED(key);
 }
