@@ -20,6 +20,7 @@ class CallbackTestWindow: public lkCommon::System::Window
     bool mOnInitCalled;
     bool mOnOpenCalled;
     bool mOnCloseCalled;
+    bool mOnDeinitCalled;
     bool mOnUpdateCalled;
 
 protected:
@@ -40,7 +41,12 @@ protected:
         mOnCloseCalled = true;
     }
 
-    void OnUpdate(float deltaTime) override
+    void OnDeinit() override
+    {
+        mOnDeinitCalled = true;
+    }
+
+    void OnUpdate(const float deltaTime) override
     {
         EXPECT_EQ(deltaTime, TEST_WINDOW_UPDATE_DELTA_TIME);
         mOnUpdateCalled = true;
@@ -77,6 +83,7 @@ public:
         , mOnInitCalled(false)
         , mOnOpenCalled(false)
         , mOnCloseCalled(false)
+        , mOnDeinitCalled(false)
         , mOnUpdateCalled(false)
     {
     }
@@ -94,6 +101,11 @@ public:
     bool OnCloseCalled()
     {
         return mOnCloseCalled;
+    }
+
+    bool OnDeinitCalled()
+    {
+        return mOnDeinitCalled;
     }
 
     bool OnUpdateCalled()
@@ -273,6 +285,21 @@ TEST(Window, OnCloseCallback)
 
     w.Close();
     EXPECT_TRUE(w.OnCloseCalled());
+}
+
+TEST(Window, OnDeinitCallback)
+{
+    CallbackTestWindow w;
+    EXPECT_FALSE(w.OnDeinitCalled());
+
+    w.Deinit();
+    EXPECT_FALSE(w.OnDeinitCalled());
+
+    EXPECT_TRUE(w.Init());
+    EXPECT_FALSE(w.OnDeinitCalled());
+
+    w.Deinit();
+    EXPECT_TRUE(w.OnDeinitCalled());
 }
 
 TEST(Window, DisplayImageTest)

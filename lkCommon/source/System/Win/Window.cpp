@@ -425,6 +425,8 @@ void Window::Deinit()
         Close();
     }
 
+    OnDeinit();
+
     if (!UnregisterClassW(mClassName.c_str(), mInstance))
     {
         LOGE("Failed to unregister class on deinit");
@@ -454,6 +456,10 @@ void Window::OnResize(const uint32_t width, const uint32_t height)
 }
 
 void Window::OnClose()
+{
+}
+
+void Window::OnDeinit()
 {
 }
 

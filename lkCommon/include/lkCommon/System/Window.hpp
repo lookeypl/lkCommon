@@ -106,9 +106,18 @@ protected:
     virtual void OnResize(const uint32_t width, const uint32_t height);
 
     /**
-     * Callback called at the end of Close() function call.
+     * Callback called at the beginning of Close() function call.
+     *
+     * At this point, Window's handle is still valid.
      */
     virtual void OnClose();
+
+    /**
+     * Callback called at the beginning of Deinit() function call.
+     *
+     * At this point, Window's connection to host OS is still valid.
+     */
+    virtual void OnDeinit();
 
     /**
      * Callback called whenever Window receives key down event.
