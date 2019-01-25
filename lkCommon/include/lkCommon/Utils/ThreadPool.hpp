@@ -132,7 +132,9 @@ public:
      * Constructor is left when all worker threads report ready to process
      * tasks.
      *
-     * @p[in] threads Amount of worker threads to spawn.
+     * @p[in] threads Amount of worker threads to spawn. If equal to zero,
+     *                constructor will acquire logical CPU count available
+     *                in the system and spawn as many threads as needed.
      */
     ThreadPool(size_t threads);
 

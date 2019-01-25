@@ -21,6 +21,12 @@ TEST(ThreadPool, ConstructorSingleThread)
     EXPECT_EQ(1, tp.GetWorkerThreadCount());
 }
 
+TEST(ThreadPool, ConstructorZeroThreads)
+{
+    ThreadPool tp(0);
+    EXPECT_EQ(lkCommon::System::Info::GetCPUCount(), tp.GetWorkerThreadCount());
+}
+
 TEST(ThreadPool, AddTasksSimple)
 {
     auto task = [](ThreadPayload&) {
