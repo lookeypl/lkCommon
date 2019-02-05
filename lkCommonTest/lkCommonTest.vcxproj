@@ -161,6 +161,7 @@
     <ClCompile Include="Tests\System\WindowTest.cpp" />
     <ClCompile Include="Tests\Utils\ArenaObjectTest.cpp" />
     <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp" />
+    <ClCompile Include="Tests\Utils\ArgParserTest.cpp" />
     <ClCompile Include="Tests\Utils\ImageTest.cpp" />
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />
     <ClCompile Include="Tests\Utils\PixelTest.cpp" />

@@ -84,6 +84,9 @@
     <ClCompile Include="source\System\Win\WindowImage.cpp">
       <Filter>source\System\Win</Filter>
     </ClCompile>
+    <ClCompile Include="source\Utils\ArgParser.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp">
       <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ArgParser.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

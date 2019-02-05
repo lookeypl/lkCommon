@@ -10,6 +10,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/System/WindowTest.cpp
                        Tests/Utils/ArenaAllocatorTest.cpp
                        Tests/Utils/ArenaObjectTest.cpp
+                       Tests/Utils/ArgParserTest.cpp
                        Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp
                        Tests/Utils/PixelTest.cpp

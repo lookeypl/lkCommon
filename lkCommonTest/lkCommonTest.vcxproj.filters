@@ -38,6 +38,9 @@
     <ClCompile Include="Tests\Math\AverageTest.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\ArgParserTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

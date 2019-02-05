@@ -4,6 +4,7 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   source/Math/CubicInterpolator.cpp
                   source/Math/Utilities.cpp
                   source/Utils/ArenaAllocator.cpp
+                  source/Utils/ArgParser.cpp
                   source/Utils/ThreadPool.cpp
                   )
 
@@ -25,6 +26,7 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/System/Memory.hpp
                   include/lkCommon/System/Window.hpp
                   include/lkCommon/Utils/ArenaAllocator.hpp
+                  include/lkCommon/Utils/ArgParser.hpp
                   include/lkCommon/Utils/Image.hpp
                   include/lkCommon/Utils/Logger.hpp
                   include/lkCommon/Utils/Sort.hpp
