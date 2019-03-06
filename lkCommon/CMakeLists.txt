@@ -31,6 +31,8 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Utils/Logger.hpp
                   include/lkCommon/Utils/Sort.hpp
                   include/lkCommon/Utils/SortImpl.hpp
+                  include/lkCommon/Utils/StaticStack.hpp
+                  include/lkCommon/Utils/StaticStackImpl.hpp
                   include/lkCommon/Utils/ThreadPool.hpp
                   include/lkCommon/Utils/Timer.hpp
                   include/lkCommon/Utils/StringConv.hpp

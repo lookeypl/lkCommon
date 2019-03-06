@@ -166,6 +166,7 @@
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />
     <ClCompile Include="Tests\Utils\PixelTest.cpp" />
     <ClCompile Include="Tests\Utils\SortTest.cpp" />
+    <ClCompile Include="Tests\Utils\StaticStackTest.cpp" />
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

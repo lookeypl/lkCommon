@@ -40,10 +40,12 @@ lkCommon library is split into various categories, each contains a set of module
 * `Utils` - Other various modules useful here and there
   * `ArenaAllocator` - Allocator speeding up allocating multiple small objects by using large memory arenas.
   * `ArenaObject` - Simple template overriding new/delete operators, forcing given object to be allocated using `ArenaAllocator`.
+  * `ArgParser` - Argument parser class designed to easily digest argv's and make them easily reachable.
   * `Image` - Template designed to be an "image" - an MxN array of pixels. Used in tandem with `Pixel` module.
   * `Logger` - Logging module, providing logging macros. Supports logging to stdout, file and Visual Studio output.
   * `Pixel` - Module containing an N-component pixel, to use in tandem with `Image` class, or as an object being a multiple-component color.
   * `Sort` - Implementation of various sorting algorithms.
+  * `StaticStack` - Template with stack implementation using fixed size and zero dynamic allocations.
   * `StringConv` - Converters between String and WideString types. Mostly used by other modules for Windows-Linux compatibility purposes.
   * `ThreadPool` - A basic thread pool object, which assigns tasks from a queue to one of already running worker threads.
   * `Timer` - Timing module, uses high precision clocks available in the system.
@@ -74,4 +76,4 @@ Building for Linux
 
 Fetch submodules and use cmake/make to build.
 
-If you want to build tests for the library, use `LKCOMMON_BUILD_TEST` CMake define.
+If you want to build tests for the library, add `LKCOMMON_BUILD_TEST` CMake define.
