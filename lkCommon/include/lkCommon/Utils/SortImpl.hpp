@@ -1,5 +1,10 @@
 #pragma once
 
+#ifndef _LKCOMMON_UTILS_SORT_HPP_
+#error "Please include main header of Sort, not the implementation header."
+#endif // _LKCOMMON_UTILS_SORT_HPP_
+
+
 namespace lkCommon {
 namespace Utils {
 namespace Impl {

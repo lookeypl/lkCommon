@@ -6,6 +6,10 @@
 
 #pragma once
 
+#ifndef _LKCOMMON_UTILS_PIXEL_HPP_
+#error "Please include main header of Pixel, not the implementation header."
+#endif // _LKCOMMON_UTILS_PIXEL_HPP_
+
 #include "Pixel.hpp"
 
 #include <cmath>

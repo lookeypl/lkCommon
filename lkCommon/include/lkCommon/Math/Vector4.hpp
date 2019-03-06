@@ -1,4 +1,5 @@
 #pragma once
+#define _LKCOMMON_MATH_VECTOR4_HPP_
 
 #include <xmmintrin.h>
 #include "lkCommon/lkCommon.hpp"

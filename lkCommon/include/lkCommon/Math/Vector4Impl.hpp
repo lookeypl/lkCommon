@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef _LKCOMMON_MATH_VECTOR4_HPP_
+#error "Please include main header of Vector4, not the implementation header."
+#endif // _LKCOMMON_MATH_VECTOR4_HPP_
+
 #include "lkCommon/Math/Random.hpp"
 #include <smmintrin.h>
 #include <cmath>

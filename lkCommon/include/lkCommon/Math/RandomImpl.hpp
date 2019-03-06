@@ -1,10 +1,15 @@
 #pragma once
 
+#ifndef _LKCOMMON_MATH_RANDOM_HPP_
+#error "Please include main header of Random, not the implementation header."
+#endif // _LKCOMMON_MATH_RANDOM_HPP_
+
 #include "lkCommon/lkCommon.hpp"
 #include "lkCommon/Math/Constants.hpp"
 #include "lkCommon/Math/Random.hpp"
 #include <cstdint>
 #include <climits>
+
 
 namespace lkCommon {
 namespace Math {

@@ -6,6 +6,10 @@
 
 #pragma once
 
+#ifndef _LKCOMMON_UTILS_IMAGE_HPP_
+#error "Please include main header of Image, not the implementation header."
+#endif // _LKCOMMON_UTILS_IMAGE_HPP_
+
 #include "lkCommon/Utils/Logger.hpp"
 
 

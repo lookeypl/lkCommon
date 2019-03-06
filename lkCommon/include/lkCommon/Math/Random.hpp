@@ -1,4 +1,6 @@
 #pragma once
+#define _LKCOMMON_MATH_RANDOM_HPP_
+
 
 namespace lkCommon {
 namespace Math {

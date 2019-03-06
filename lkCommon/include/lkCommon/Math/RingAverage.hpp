@@ -1,6 +1,8 @@
 #pragma once
+#define _LKCOMMON_MATH_RING_AVERAGE_HPP_
 
 #include <array>
+
 
 namespace lkCommon {
 namespace Math {

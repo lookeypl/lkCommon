@@ -1,5 +1,5 @@
 #pragma once
-#define _LKCOMMON_UTILS_STATIC_STACK_H_
+#define _LKCOMMON_UTILS_STATIC_STACK_HPP_
 
 #include "lkCommon/lkCommon.hpp"
 #include <stddef.h>

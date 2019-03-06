@@ -1,4 +1,5 @@
 #pragma once
+#define _LKCOMMON_UTILS_SORT_HPP_
 
 #include "SortImpl.hpp"
 

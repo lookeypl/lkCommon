@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#define _LKCOMMON_UTILS_PIXEL_HPP_
 
 #include <cstdint>
 #include <type_traits>

@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#define _LKCOMMON_UTILS_IMAGE_HPP_
 
 #include <cstdint>
 #include <vector>

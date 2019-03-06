@@ -1,5 +1,10 @@
 #pragma once
 
+#ifndef _LKCOMMON_MATH_RING_AVERAGE_HPP_
+#error "Please include main header of RingAverage, not the implementation header."
+#endif // _LKCOMMON_MATH_RING_AVERAGE_HPP_
+
+
 namespace lkCommon {
 namespace Math {
 

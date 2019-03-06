@@ -1,4 +1,5 @@
 #pragma once
+#define _LKCOMMON_MATH_AVERAGE_HPP_
 
 #include <mutex>
 

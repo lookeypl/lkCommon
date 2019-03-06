@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef _LKCOMMON_MATH_AVERAGE_HPP_
+#error "Please include main header of Average, not the implementation header."
+#endif // _LKCOMMON_MATH_AVERAGE_HPP_
+
 #include "lkCommon/lkCommon.hpp"
 
 namespace lkCommon {

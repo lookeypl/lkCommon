@@ -1,8 +1,8 @@
 #pragma once
 
-#ifndef _LKCOMMON_UTILS_STATIC_STACK_H_
+#ifndef _LKCOMMON_UTILS_STATIC_STACK_HPP_
 #error "Please include main header of StaticStack, not the implementation header."
-#endif // _LKCOMMON_UTILS_STATIC_STACK_H_
+#endif // _LKCOMMON_UTILS_STATIC_STACK_HPP_
 
 #include "StaticStack.hpp"
 
