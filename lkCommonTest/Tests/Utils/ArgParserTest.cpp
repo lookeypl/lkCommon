@@ -67,7 +67,7 @@ void TestArgCollection(const ArgPair<N>& args, bool aPresent, bool bPresent, boo
     ASSERT_TRUE(a.Add(ARG_B_FULL_NAME, lkCommon::Utils::ArgType::VALUE, !bPresent));
     ASSERT_TRUE(a.Add(ARG_C_FULL_NAME, lkCommon::Utils::ArgType::STRING, !cPresent));
 
-    uint32_t val = 0;
+    int32_t val = 0;
     std::string str;
 
     ASSERT_TRUE(a.Parse(static_cast<int>(args.size()), args.data()));

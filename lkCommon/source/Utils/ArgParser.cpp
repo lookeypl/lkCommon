@@ -387,7 +387,7 @@ bool ArgParser::GetFlag(const char shortName) const
 }
 
 
-bool ArgParser::GetValue(const std::string& name, uint32_t& value) const
+bool ArgParser::GetValue(const std::string& name, int32_t& value) const
 {
     ConstArgIt it;
     if (!GetHelper(name, ArgType::VALUE, it))
@@ -397,7 +397,7 @@ bool ArgParser::GetValue(const std::string& name, uint32_t& value) const
     return true;
 }
 
-bool ArgParser::GetValue(const char shortName, uint32_t& value) const
+bool ArgParser::GetValue(const char shortName, int32_t& value) const
 {
     ConstArgIt it;
     if (!GetHelper(shortName, ArgType::VALUE, it))

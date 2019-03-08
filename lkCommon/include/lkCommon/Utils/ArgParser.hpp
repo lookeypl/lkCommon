@@ -221,32 +221,60 @@ public:
      */
 
     /**
+     * Check if flag according to long name was set.
      *
+     * @p[in] name Long name of argument to query
+     *
+     * @return True if arguments contained flag given by name
      */
     bool GetFlag(const std::string& name) const;
 
     /**
+     * Check if flag according to short name was set.
      *
+     * @p[in] name Short name of argument to query
+     *
+     * @return True if arguments contained flag given by name
      */
     bool GetFlag(const char shortName) const;
 
     /**
+     * Acquire value added to argument given by long name.
      *
+     * @p[in]  name  Long name of argument to query.
+     * @p[out] value Value provided by user in arguments.
+     *
+     * @return True if arguments contained an argument and its value.
      */
-    bool GetValue(const std::string& name, uint32_t& value) const;
+    bool GetValue(const std::string& name, int32_t& value) const;
 
     /**
+     * Acquire value added to argument given by short name.
      *
+     * @p[in]  name  Short name of argument to query.
+     * @p[out] value Value provided by user in arguments.
+     *
+     * @return True if arguments contained an argument and its value.
      */
-    bool GetValue(const char shortName, uint32_t& value) const;
+    bool GetValue(const char shortName, int32_t& value) const;
 
     /**
+     * Acquire value added to argument given by long name.
      *
+     * @p[in]  name   Long name of argument to query.
+     * @p[out] string String provided by user in arguments.
+     *
+     * @return True if arguments contained an argument and its string.
      */
     bool GetString(const std::string& name, std::string& result) const;
 
     /**
+     * Acquire value added to argument given by short name.
      *
+     * @p[in]  name   Short name of argument to query.
+     * @p[out] string String provided by user in arguments.
+     *
+     * @return True if arguments contained an argument and its string.
      */
     bool GetString(const char shortName, std::string& result) const;
 
