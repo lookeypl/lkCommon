@@ -24,8 +24,8 @@ struct StackElement
 
 const int TEST_INT_1 = 10;
 const int TEST_INT_2 = 69;
-const int TEST_FLOAT_1 = 2.31f;
-const int TEST_FLOAT_2 = 4.20f;
+const float TEST_FLOAT_1 = 2.31f;
+const float TEST_FLOAT_2 = 4.20f;
 
 const StackElement TEST_ELEMENT_1(TEST_INT_1, TEST_FLOAT_1);
 const StackElement TEST_ELEMENT_2(TEST_INT_2, TEST_FLOAT_2);
