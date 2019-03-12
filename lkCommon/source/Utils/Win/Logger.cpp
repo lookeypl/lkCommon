@@ -16,13 +16,18 @@
 #undef ERROR
 
 
+namespace {
+
+std::ofstream gLogFile;
+std::string gPathRoot;
+
+} // namespace
+
 namespace lkCommon {
 namespace Utils {
 namespace Logger {
 
-std::ofstream logFile;
-
-void Log(LogLevel level, const std::stringstream& msg)
+void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg)
 {
     const char* levelStr = nullptr;
 
@@ -55,11 +60,30 @@ void Log(LogLevel level, const std::stringstream& msg)
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);
     }
 
+    std::string path;
+    if (!gPathRoot.empty())
+    {
+        // strip as much of the path as possible
+        char* newFilePtr = const_cast<char*>(file);
+
+        uint32_t i = 0;
+        while (newFilePtr[i] && (newFilePtr[i] == gPathRoot[i]))
+            ++i;
+
+        path = &(newFilePtr[i]);
+    }
+    else
+    {
+        path = file;
+    }
+
     std::stringstream fullMsg;
-    fullMsg << "[" << levelStr << "] " << msg.str() << "\n";
+    fullMsg << "[" << levelStr << "] "
+            << path << " @ " << line << ": "
+            << msg.str() << '\n';
     std::cout << fullMsg.str();
-    if (logFile.is_open())
-        logFile << fullMsg.str();
+    if (gLogFile.is_open())
+        gLogFile << fullMsg.str();
 
     SetConsoleTextAttribute(console, conInfo.wAttributes);
 
@@ -68,6 +92,25 @@ void Log(LogLevel level, const std::stringstream& msg)
     {
         OutputDebugStringW(wideMsg.c_str());
     }
+}
+
+void SetRootPathToStrip(const std::string& path)
+{
+    gPathRoot.clear();
+    gPathRoot.reserve(path.size());
+
+    // copy while converting chars to lower case
+    // because __FILE__ produces lowercase output
+    for (uint32_t i = 0; i < path.size(); ++i)
+        gPathRoot.push_back(::tolower(path[i]));
+}
+
+void OpenLogFile(const std::string& path)
+{
+    if (gLogFile.is_open())
+        gLogFile.close();
+
+    gLogFile.open(path);
 }
 
 } // namespace Logger

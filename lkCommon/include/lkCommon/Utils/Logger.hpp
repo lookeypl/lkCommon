@@ -68,7 +68,31 @@ enum class LogLevel: unsigned char
  * @note This function should not be used directly. Instead, one of LOG* macros
  * should be used to print a message using Logger module.
  */
-void Log(LogLevel level, const std::stringstream& msg);
+void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg);
+
+/**
+ * Sets project's root path to strip from log files.
+ *
+ * If below function is not called, all logs will print full path to project's root.
+ *
+ * @warning This function was designed to be called only once at application startup
+ *          - it is NOT thread-safe.
+ *
+ * @p[in] path Project's root path to look for and strip.
+ */
+void SetRootPathToStrip(const std::string& path);
+
+/**
+ * Opens log file to additionally leave log informations there.
+ *
+ * @p[in] path Path to where a log file should be located
+ *
+ * @note If there was a log file previously opened, it will be closed before
+ *       opening.
+ *
+ * @warning If file already exists, its contents are overwritten.
+ */
+void OpenLogFile(const std::string& path);
 
 } // namespace Logger
 } // namespace Utils
@@ -77,7 +101,7 @@ void Log(LogLevel level, const std::stringstream& msg);
 #define LOG(level, msg) do { \
     std::stringstream ss; \
     ss << msg; \
-    lkCommon::Utils::Logger::Log(level, ss); \
+    lkCommon::Utils::Logger::Log(level, __FILE__, __LINE__, ss); \
 } while(0)
 
 /**

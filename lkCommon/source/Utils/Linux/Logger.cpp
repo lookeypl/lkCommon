@@ -14,17 +14,14 @@ namespace lkCommon {
 namespace Utils {
 namespace Logger {
 
-std::ofstream logFile;
+// TODO move to class
+std::ofstream gLogFile;
+std::string gPathRoot;
 
-void Log(LogLevel level, const std::stringstream& msg)
+void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg)
 {
     const char* levelStr = nullptr;
     const char* colorStr = nullptr;
-
-    if (!logFile.is_open())
-    {
-        logFile.open("log.txt");
-    }
 
     switch (level)
     {
@@ -49,11 +46,43 @@ void Log(LogLevel level, const std::stringstream& msg)
         colorStr = "\033[33m"; // Yellow (Red | Green)
     }
 
+    std::string path;
+    if (!gPathRoot.empty())
+    {
+        // strip as much of the path as possible
+        char* newFilePtr = const_cast<char*>(file);
+
+        uint32_t i = 0;
+        while (newFilePtr[i] && (newFilePtr[i] == gPathRoot[i]))
+            ++i;
+
+        path = &(newFilePtr[i]);
+    }
+    else
+    {
+        path = file;
+    }
+
     std::stringstream fullMsg;
-    fullMsg << colorStr << "[" << levelStr << "] " << msg.str() << "\033[39m\n";
+    fullMsg << colorStr << "[" << levelStr << "] "
+            << path << " @ " << line << ": "
+            << msg.str() << "\033[39m\n";
     std::cout << fullMsg.str();
-    if (logFile.is_open())
-        logFile << fullMsg.str();
+    if (gLogFile.is_open())
+        gLogFile << fullMsg.str();
+}
+
+void SetRootPathToStrip(const std::string& path)
+{
+    gPathRoot = path;
+}
+
+void OpenLogFile(const std::string& path)
+{
+    if (gLogFile.is_open())
+        gLogFile.close();
+
+    gLogFile.open(path);
 }
 
 } // namespace Logger
