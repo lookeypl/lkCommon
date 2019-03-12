@@ -414,9 +414,14 @@ void Window::ProcessMessages()
         case XCB_CONFIGURE_NOTIFY:
         {
             xcb_configure_notify_event_t* cne = reinterpret_cast<xcb_configure_notify_event_t*>(event);
-            mWidth = cne->width;
-            mHeight = cne->height;
-            OnResize(mWidth, mHeight);
+
+            if (cne->width != mWidth || cne->height != mHeight)
+            {
+                mWidth = cne->width;
+                mHeight = cne->height;
+                OnResize(mWidth, mHeight);
+            }
+
             break;
         }
         }
