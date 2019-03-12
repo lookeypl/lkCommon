@@ -127,7 +127,7 @@ bool ArgParser::IsLetter(const char c) const
     return ((c >= 'A') && (c <= 'Z')) || ((c >= 'a') && (c <= 'z'));
 }
 
-std::string ArgParser::ParseArgName(const std::string& arg, size_t& equalsPos) const
+std::string ArgParser::ParseArgName(const std::string& arg, size_t& splitPos) const
 {
     // less than 2 chars is not a name - name should have at least '-' and a letter
     if (arg.size() < 2)
@@ -140,6 +140,15 @@ std::string ArgParser::ParseArgName(const std::string& arg, size_t& equalsPos) c
     // second char is not a dash
     if (arg[1] != '-')
     {
+        // determine if we have an = sign or not
+        if (arg[2] == '=')
+            splitPos = 2; // point splitPos as it should be
+        else if (arg[2] == '\0')
+            splitPos = std::string::npos; // end of arg - no reason to split
+        else
+            splitPos = 1; // most probably it's a "tight" arg, point splitPos so
+                          // further call will split it correctly
+
         // if is a letter, return shortname, else return error
         if (IsLetter(arg[1]))
             return arg.substr(1, 1);
@@ -148,10 +157,10 @@ std::string ArgParser::ParseArgName(const std::string& arg, size_t& equalsPos) c
     }
 
     // second char is a dash, parse contents until '='
-    equalsPos = arg.rfind('=');
-    if (equalsPos != std::string::npos)
+    splitPos = arg.rfind('=');
+    if (splitPos != std::string::npos)
     {
-        return arg.substr(2, equalsPos - 2);
+        return arg.substr(2, splitPos - 2);
     }
 
     // no '=' meaning entire arg is argname
@@ -235,9 +244,9 @@ bool ArgParser::Parse(int argc, const char* const argv[])
     for (int i = 1; i < argc; ++i)
     {
         // parse name
-        size_t equalsPos = 0;
+        size_t splitPos = 0;
         std::string argStr(argv[i]);
-        std::string argName = ParseArgName(argStr, equalsPos);
+        std::string argName = ParseArgName(argStr, splitPos);
 
         if (argName.empty())
         {
@@ -262,9 +271,9 @@ bool ArgParser::Parse(int argc, const char* const argv[])
         std::string argValue;
         if (it->type != ArgType::FLAG)
         {
-            if (equalsPos != std::string::npos)
+            if (splitPos != std::string::npos)
             {
-                argValue = argStr.substr(equalsPos + 1);
+                argValue = argStr.substr(splitPos + 1);
             }
             else
             {

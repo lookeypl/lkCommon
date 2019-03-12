@@ -25,6 +25,15 @@ enum class ArgType: unsigned char
  *   - FLAG - Set to true if argument of given name exists. This argument does NOT have a default.
  *   - VALUE - Set to integer value provided by user after argument. Can have default value.
  *   - STRING - Set to string provided by user after argument. Can have default value.
+ *
+ * Following argument formats are considered as valid:
+ * Long args:
+ *   - "--argument 42"
+ *   - "--argument=42"
+ * Short args:
+ *   - "-a42"
+ *   - "-a=42"
+ *   - "-a 42"
  */
 class ArgParser
 {
@@ -114,7 +123,7 @@ class ArgParser
     bool IsLetter(const char c) const;
 
     // Gets argument name. One letter string is considered as a short name, more than that as a long name
-    std::string ParseArgName(const std::string& arg, size_t& equalsPos) const;
+    std::string ParseArgName(const std::string& arg, size_t& splitPos) const;
 
     // Gets amount of characters used by argument in usage text
     uint32_t GetSpaceUsed(const Arg& arg) const;
@@ -132,7 +141,6 @@ public:
      *   - a single char (short arg)
      *   - a string (long arg)
      *   - a combination of both, separated by comma
-     *
      *
      * Below are valid combinations of argument "example" with short name "e":
      *   - "e"
