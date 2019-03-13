@@ -50,6 +50,7 @@
     <ClInclude Include="include\lkCommon\Math\RingAverage.hpp" />
     <ClInclude Include="include\lkCommon\Math\RingAverageImpl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Utilities.hpp" />
+    <ClInclude Include="include\lkCommon\Math\UtilitiesImpl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Vector4.hpp" />
     <ClInclude Include="include\lkCommon\Math\Vector4Impl.hpp" />
     <ClInclude Include="include\lkCommon\System\FS.hpp" />

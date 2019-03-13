@@ -1,4 +1,5 @@
 #pragma once
+#define _LKCOMMON_MATH_UTILITIES_HPP_
 
 #include "lkCommon/Math/Vector4.hpp"
 
@@ -6,6 +7,20 @@
 namespace lkCommon {
 namespace Math {
 namespace Util {
+
+/**
+ * Linearly interpolate between two objects.
+ *
+ * @note For this template to compile, object must have defined arithmetic operators +, - and *
+ *       between two objects of type T and between object T and float.
+ *
+ * @p[in] a      Object of type T to interpolate from
+ * @p[in] b      Object of type T to interpolate to
+ * @p[in] factor Factor of interpolation
+ * @result Interpolated value of type T
+ */
+template <typename T>
+T Lerp(const T& a, const T& b, const float factor);
 
 /**
  * Rotate vector "mimicking" the rotation between two other vectors, using Rodrigues' rotation formula.
@@ -45,3 +60,5 @@ Vector4 CosineSampleHemisphere(const Vector4& normal);
 } // namespace Util
 } // namespace Math
 } // namespace lkCommon
+
+#include "UtilitiesImpl.hpp"

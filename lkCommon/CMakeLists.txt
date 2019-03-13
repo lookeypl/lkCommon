@@ -19,6 +19,7 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Math/Random.hpp
                   include/lkCommon/Math/RandomImpl.hpp
                   include/lkCommon/Math/Utilities.hpp
+                  include/lkCommon/Math/UtilitiesImpl.hpp
                   include/lkCommon/System/FS.hpp
                   include/lkCommon/System/Info.hpp
                   include/lkCommon/System/KeyCodes.hpp

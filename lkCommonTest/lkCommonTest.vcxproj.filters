@@ -44,6 +44,9 @@
     <ClCompile Include="Tests\Utils\StaticStackTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Math\UtilitiesTest.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

@@ -189,13 +189,16 @@
       <Filter>include\lkCommon\Math</Filter>
     </ClInclude>
     <ClInclude Include="include\lkCommon\Utils\ArgParser.hpp">
-        <Filter>include\lkCommon\Utils</Filter>
+      <Filter>include\lkCommon\Utils</Filter>
     </ClInclude>
     <ClInclude Include="include\lkCommon\Utils\StaticStack.hpp">
       <Filter>include\lkCommon\Utils</Filter>
     </ClInclude>
     <ClInclude Include="include\lkCommon\Utils\StaticStackImpl.hpp">
       <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\UtilitiesImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

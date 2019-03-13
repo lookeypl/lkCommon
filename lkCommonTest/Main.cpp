@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
 
     int result = RUN_ALL_TESTS();
 
-    printf("%s\n", root.c_str());
 #if defined(WIN32) && defined(_CRTDBG_MAP_ALLOC)
     _CrtDumpMemoryLeaks();
 #endif // defined(WIN32) && defined(_CRTDBG_MAP_ALLOC)
