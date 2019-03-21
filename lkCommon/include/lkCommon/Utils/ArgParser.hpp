@@ -73,7 +73,7 @@ class ArgParser
             , desc(desc)
             , type(type)
             , optional(optional)
-            , acquired(false)
+            , acquired(true) // defaulted args are treated as already acquired
             , value(value)
             , string()
         {
@@ -86,7 +86,7 @@ class ArgParser
             , desc(desc)
             , type(type)
             , optional(optional)
-            , acquired(false)
+            , acquired(true) // defaulted args are treated as already acquired
             , value(0)
             , string(string)
         {
@@ -180,6 +180,10 @@ public:
      * @p[in] optional      True if argument is optional.
      * @p[in] desc          Description of argument for help printing purposes. Can be omitted.
      * @return True on success, false on error.
+     *
+     * @note This function assumes that argument was already acquired. Thus,
+     *       later GetValue()/GetString() calls will always success for this
+     *       arg's name.
      */
     bool Add(const std::string& name, const int32_t defaultValue, const bool optional, const std::string& desc = std::string());
 
@@ -191,6 +195,10 @@ public:
      * @p[in] optional      True if argument is optional.
      * @p[in] desc          Description of argument for help printing purposes. Can be omitted.
      * @return True on success, false on error.
+     *
+     * @note This function assumes that argument was already acquired. Thus,
+     *       later GetValue()/GetString() calls will always success for this
+     *       arg's name.
      */
     bool Add(const std::string& name, const std::string& defaultString, const bool optional, const std::string& desc = std::string());
 
@@ -232,7 +240,6 @@ public:
      * Check if flag according to long name was set.
      *
      * @p[in] name Long name of argument to query
-     *
      * @return True if arguments contained flag given by name
      */
     bool GetFlag(const std::string& name) const;
@@ -241,7 +248,6 @@ public:
      * Check if flag according to short name was set.
      *
      * @p[in] name Short name of argument to query
-     *
      * @return True if arguments contained flag given by name
      */
     bool GetFlag(const char shortName) const;
@@ -251,8 +257,9 @@ public:
      *
      * @p[in]  name  Long name of argument to query.
      * @p[out] value Value provided by user in arguments.
-     *
      * @return True if arguments contained an argument and its value.
+     *
+     * Contents of @p value are not modified when function fails.
      */
     bool GetValue(const std::string& name, int32_t& value) const;
 
@@ -261,8 +268,9 @@ public:
      *
      * @p[in]  name  Short name of argument to query.
      * @p[out] value Value provided by user in arguments.
-     *
      * @return True if arguments contained an argument and its value.
+     *
+     * Contents of @p value are not modified when function fails.
      */
     bool GetValue(const char shortName, int32_t& value) const;
 
@@ -271,8 +279,9 @@ public:
      *
      * @p[in]  name   Long name of argument to query.
      * @p[out] string String provided by user in arguments.
-     *
      * @return True if arguments contained an argument and its string.
+     *
+     * Contents of @p value are not modified when function fails.
      */
     bool GetString(const std::string& name, std::string& result) const;
 
@@ -281,8 +290,9 @@ public:
      *
      * @p[in]  name   Short name of argument to query.
      * @p[out] string String provided by user in arguments.
-     *
      * @return True if arguments contained an argument and its string.
+     *
+     * Contents of @p value are not modified when function fails.
      */
     bool GetString(const char shortName, std::string& result) const;
 

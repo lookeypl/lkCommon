@@ -395,7 +395,6 @@ bool ArgParser::GetFlag(const char shortName) const
     return GetHelper(shortName, ArgType::FLAG, it);
 }
 
-
 bool ArgParser::GetValue(const std::string& name, int32_t& value) const
 {
     ConstArgIt it;
