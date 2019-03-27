@@ -4,12 +4,14 @@
 const uint32_t TEST_WIDTH = 10;
 const uint32_t TEST_HEIGHT = 20;
 
-const uint8_t TEST_PIXEL_RAW[] = {10, 30, 20, 15};
-const uint8_t TEST_PIXEL_RAW_2[] = {20, 10, 18, 99};
+const uint8_t TEST_PIXEL_RAW[] = {10, 30, 20, 14};
+const uint8_t TEST_PIXEL_RAW_2[] = {20, 10, 18, 90};
+const uint8_t TEST_PIXEL_RAW_BILINEAR_1_2[] = {15, 20, 19, 52};
 
 const lkCommon::Utils::PixelUint4 TEST_PIXEL_ZERO;
 const lkCommon::Utils::PixelUint4 TEST_PIXEL(TEST_PIXEL_RAW);
 const lkCommon::Utils::PixelUint4 TEST_PIXEL_2(TEST_PIXEL_RAW_2);
+const lkCommon::Utils::PixelUint4 TEST_PIXEL_BILINEAR_1_2(TEST_PIXEL_RAW_BILINEAR_1_2);
 
 const uint32_t TEST_IMPORT_IMAGE_WIDTH = 5;
 const uint32_t TEST_IMPORT_IMAGE_HEIGHT = 5;
@@ -182,4 +184,20 @@ TEST(Image, GetPixelOutOfBounds)
 
     lkCommon::Utils::PixelUint4 r1;
     EXPECT_FALSE(i.GetPixel(TEST_WIDTH, TEST_HEIGHT, r1));
+}
+
+TEST(Image, SampleNearestUint4)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(0.5f, 0.5f, lkCommon::Utils::Sampling::NEAREST);
+
+    EXPECT_EQ(TEST_PIXEL, p);
+}
+
+TEST(Image, SampleBilinearUint4)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(0.5f, 0.5f, lkCommon::Utils::Sampling::BILINEAR);
+
+    EXPECT_EQ(TEST_PIXEL_BILINEAR_1_2, p);
 }

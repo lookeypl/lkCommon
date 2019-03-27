@@ -18,6 +18,12 @@
 namespace lkCommon {
 namespace Utils {
 
+enum class Sampling: unsigned char
+{
+    NEAREST = 0,
+    BILINEAR,
+};
+
 /**
  * A basic Image, which can be filled with whatever data is required.
  *
@@ -34,10 +40,14 @@ public:
 private:
     uint32_t mWidth;
     uint32_t mHeight;
+    float mWidthStep;
+    float mHeightStep;
     PixelContainer mPixels;
     System::WindowImage mWindowImage;
 
     size_t GetPixelCoord(uint32_t x, uint32_t y);
+    PixelType SampleNearest(float x, float y);
+    PixelType SampleBilinear(float x, float y);
 
 public:
     /**
@@ -120,6 +130,21 @@ public:
      * Sets all pixels into one color
      */
     void SetAllPixels(const PixelType& color);
+
+    /**
+     * Samples image at coordinates x and y using requested sampling method.
+     *
+     * @p[in] x            X coordinate of image in range [0..1]
+     * @p[in] y            Y coordinate of image in range [0..1]
+     * @p[in] samplingType Type of sampling to use
+     * @result Sampled pixel color at given coordinates.
+     *
+     * @warning Some Pixel types might not return correct sampling results on
+     * some sampling types. Approximation-related methods like Bilinear sampling
+     * can suffer from approximation errors, or overflows. For best results,
+     * do NOT use this function with integer-based types like PixelUint4.
+     */
+    PixelType Sample(float x, float y, Sampling samplingType);
 
     /**
      * Cast operator between Pixel types.

@@ -11,6 +11,7 @@
 #endif // _LKCOMMON_UTILS_IMAGE_HPP_
 
 #include "lkCommon/Utils/Logger.hpp"
+#include "lkCommon/Math/Utilities.hpp"
 
 
 namespace lkCommon {
@@ -20,6 +21,8 @@ template <typename PixelType>
 Image<PixelType>::Image()
     : mWidth(0)
     , mHeight(0)
+    , mWidthStep(0)
+    , mHeightStep(0)
     , mPixels()
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -29,6 +32,8 @@ template <typename PixelType>
 Image<PixelType>::Image(uint32_t width, uint32_t height)
     : mWidth(width)
     , mHeight(height)
+    , mWidthStep(1.0f / static_cast<float>(width))
+    , mHeightStep(1.0f / static_cast<float>(height))
     , mPixels(mWidth * mHeight)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -38,6 +43,8 @@ template <typename PixelType>
 Image<PixelType>::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const Image<PixelType>::PixelContainer& data, bool isBGR)
     : mWidth(width)
     , mHeight(height)
+    , mWidthStep(1.0f / static_cast<float>(width))
+    , mHeightStep(1.0f / static_cast<float>(height))
     , mPixels(mWidth * mHeight)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -72,6 +79,8 @@ template <typename PixelType>
 Image<PixelType>::Image(const Image<PixelType>& other)
     : mWidth(other.mWidth)
     , mHeight(other.mHeight)
+    , mWidthStep(other.mWidthStep)
+    , mHeightStep(other.mHeightStep)
     , mPixels(other.mPixels)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -81,6 +90,8 @@ template <typename PixelType>
 Image<PixelType>::Image(Image<PixelType>&& other)
     : mWidth(std::move(other.mWidth))
     , mHeight(std::move(other.mHeight))
+    , mWidthStep(std::move(other.mWidthStep))
+    , mHeightStep(std::move(other.mHeightStep))
     , mPixels(std::move(other.mPixels))
     , mWindowImage(std::move(other.mWindowImage))
 {
@@ -91,6 +102,8 @@ Image<PixelType>& Image<PixelType>::operator=(const Image<PixelType>& other)
 {
     mWidth = other.mWidth;
     mHeight = other.mHeight;
+    mWidthStep = other.mWidthStep;
+    mHeightStep = other.mHeightStep;
     mPixels = other.mPixels;
     mWindowImage.Recreate(mWidth, mHeight, mPixels.data());
 }
@@ -100,6 +113,8 @@ Image<PixelType>& Image<PixelType>::operator=(Image<PixelType>&& other)
 {
     mWidth = std::move(other.mWidth);
     mHeight = std::move(other.mHeight);
+    mWidthStep = std::move(other.mWidthStep);
+    mHeightStep = std::move(other.mHeightStep);
     mPixels = std::move(other.mPixels);
     mWindowImage = std::move(other.mWindowImage);
 }
@@ -122,6 +137,43 @@ size_t Image<PixelType>::GetPixelCoord(uint32_t x, uint32_t y)
     }
 
     return y * mWidth + x;
+}
+
+template <typename PixelType>
+PixelType Image<PixelType>::SampleNearest(float x, float y)
+{
+    PixelType ret = mPixels[GetPixelCoord(
+        static_cast<uint32_t>(x * mWidth),
+        static_cast<uint32_t>(y * mHeight)
+    )];
+
+    ret.Swap(0, 2);
+    return ret;
+}
+
+template <typename PixelType>
+PixelType Image<PixelType>::SampleBilinear(float x, float y)
+{
+    const float xCoord = x * mWidth;
+    const float yCoord = y * mHeight;
+    const int xIntCoord = static_cast<int>(xCoord);
+    const int yIntCoord = static_cast<int>(yCoord);
+    const float xDecCoord = xCoord - xIntCoord;
+    const float yDecCoord = yCoord - yIntCoord;
+
+    const size_t coords[] {
+        GetPixelCoord(xIntCoord    , yIntCoord),
+        GetPixelCoord(xIntCoord + 1, yIntCoord),
+        GetPixelCoord(xIntCoord    , yIntCoord + 1),
+        GetPixelCoord(xIntCoord + 1, yIntCoord + 1)
+    };
+
+    const PixelType R1 = lkCommon::Math::Util::Lerp(mPixels[coords[0]], mPixels[coords[1]], xDecCoord);
+    const PixelType R2 = lkCommon::Math::Util::Lerp(mPixels[coords[2]], mPixels[coords[3]], xDecCoord);
+    PixelType R = lkCommon::Math::Util::Lerp(R1, R2, yDecCoord);
+
+    R.Swap(0, 2);
+    return R;
 }
 
 template <typename PixelType>
@@ -173,6 +225,16 @@ void Image<PixelType>::SetAllPixels(const PixelType& color)
 {
     for (uint32_t i = 0; i < mPixels.size(); ++i)
         mPixels[i] = color;
+}
+
+template <typename PixelType>
+PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
+{
+    switch (samplingType)
+    {
+    case Sampling::NEAREST: return SampleNearest(x, y);
+    case Sampling::BILINEAR: return SampleBilinear(x, y);
+    }
 }
 
 template <typename PixelType>
