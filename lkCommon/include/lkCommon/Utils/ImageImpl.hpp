@@ -234,7 +234,7 @@ PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
     {
     case Sampling::NEAREST: return SampleNearest(x, y);
     case Sampling::BILINEAR: return SampleBilinear(x, y);
-    default: return PixelType(0)
+    default: return PixelType();
     }
 }
 

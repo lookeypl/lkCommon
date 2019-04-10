@@ -1,12 +1,9 @@
 #pragma once
 
-#ifdef WIN32
-#define NOMINMAX
-#include <Windows.h>
-#elif defined(__linux__) | defined(__LINUX__)
+#if defined(__linux__) | defined(__LINUX__)
 #include <xcb/xcb.h>
 #include <xcb/xcb_image.h>
-#else
+#elif !defined(WIN32)
 #error "Platform not supported"
 #endif
 
