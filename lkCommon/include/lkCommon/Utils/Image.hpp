@@ -45,8 +45,17 @@ private:
     PixelContainer mPixels;
     System::WindowImage mWindowImage;
 
+    // unwrapped version - returns SIZE_MAX when bounds are crossed
     size_t GetPixelCoord(uint32_t x, uint32_t y);
+
+    // wrapped version - crossing the boundaries will subtract width/height
+    // to go back in bounds
+    size_t GetPixelCoordWrapped(uint32_t x, uint32_t y);
+
+    // nearest-neighbor sampler
     PixelType SampleNearest(float x, float y);
+
+    // bilinear sampler
     PixelType SampleBilinear(float x, float y);
 
 public:
@@ -98,11 +107,13 @@ public:
     ~Image();
 
     /**
-     * Resizes an image to fit @p width x @p height pixels.
+     * Resizes an image to fit @p width x @p height pixels. Does nothing if
+     * both new width and new height are equal to current.
      *
      * @p[in] width  New width of Image.
      * @p[in] height New height of Image.
-     * @result True if resizing succeeded, false if there's no memory left.
+     * @result True if resizing succeeded, false if there's no memory left or
+     *         arguments are invalid.
      */
     bool Resize(uint32_t width, uint32_t height);
 
@@ -134,10 +145,13 @@ public:
     /**
      * Samples image at coordinates x and y using requested sampling method.
      *
-     * @p[in] x            X coordinate of image in range [0..1]
-     * @p[in] y            Y coordinate of image in range [0..1]
+     * @p[in] x            X coordinate of image
+     * @p[in] y            Y coordinate of image
      * @p[in] samplingType Type of sampling to use
      * @result Sampled pixel color at given coordinates.
+     *
+     * @note X and Y coordinates wrap around (ex. sampling at X = 1.5f gives the
+     * same result as sampling at X = 0.5, X = 2.5f etc).
      *
      * @warning Some Pixel types might not return correct sampling results on
      * some sampling types. Approximation-related methods like Bilinear sampling

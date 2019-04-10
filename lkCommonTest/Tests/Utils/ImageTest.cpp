@@ -117,10 +117,18 @@ TEST(Image, ConstructorDataSmallerThanImage)
     }
 }
 
-TEST(Image, ResizeTest)
+TEST(Image, Resize)
 {
     lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i;
     EXPECT_TRUE(i.Resize(TEST_WIDTH, TEST_HEIGHT));
+}
+
+TEST(Image, ResizeToZero)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_WIDTH, TEST_HEIGHT);
+    EXPECT_FALSE(i.Resize(0, TEST_HEIGHT));
+    EXPECT_FALSE(i.Resize(TEST_WIDTH, 0));
+    EXPECT_FALSE(i.Resize(0, 0));
 }
 
 TEST(Image, GetDimensions)
@@ -200,4 +208,36 @@ TEST(Image, SampleBilinearUint4)
     lkCommon::Utils::PixelUint4 p = i.Sample(0.5f, 0.5f, lkCommon::Utils::Sampling::BILINEAR);
 
     EXPECT_EQ(TEST_PIXEL_BILINEAR_1_2, p);
+}
+
+TEST(Image, SampleFurthestCornerNearest)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(1.0f, 1.0f, lkCommon::Utils::Sampling::NEAREST);
+
+    EXPECT_EQ(TEST_PIXEL, p);
+}
+
+TEST(Image, SampleFurthestCornerBilinear)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(1.0f, 1.0f, lkCommon::Utils::Sampling::BILINEAR);
+
+    EXPECT_EQ(TEST_PIXEL, p);
+}
+
+TEST(Image, SampleClosestCornerNearest)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(0.0f, 0.0f, lkCommon::Utils::Sampling::NEAREST);
+
+    EXPECT_EQ(TEST_PIXEL, p);
+}
+
+TEST(Image, SampleClosestCornerBilinear)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i(TEST_IMPORT_IMAGE_WIDTH, TEST_IMPORT_IMAGE_HEIGHT, 5, TEST_IMPORT_IMAGE_5X5);
+    lkCommon::Utils::PixelUint4 p = i.Sample(0.0f, 0.0f, lkCommon::Utils::Sampling::BILINEAR);
+
+    EXPECT_EQ(TEST_PIXEL, p);
 }

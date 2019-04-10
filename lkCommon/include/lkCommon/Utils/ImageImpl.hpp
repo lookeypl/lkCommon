@@ -140,9 +140,24 @@ size_t Image<PixelType>::GetPixelCoord(uint32_t x, uint32_t y)
 }
 
 template <typename PixelType>
+size_t Image<PixelType>::GetPixelCoordWrapped(uint32_t x, uint32_t y)
+{
+    if (x >= mWidth)
+    {
+        x -= (mWidth * (x / mWidth));
+    }
+    if (y >= mHeight)
+    {
+        y -= (mHeight * (y / mHeight));
+    }
+
+    return y * mWidth + x;
+}
+
+template <typename PixelType>
 PixelType Image<PixelType>::SampleNearest(float x, float y)
 {
-    PixelType ret = mPixels[GetPixelCoord(
+    PixelType ret = mPixels[GetPixelCoordWrapped(
         static_cast<uint32_t>(x * mWidth),
         static_cast<uint32_t>(y * mHeight)
     )];
@@ -162,10 +177,10 @@ PixelType Image<PixelType>::SampleBilinear(float x, float y)
     const float yDecCoord = yCoord - yIntCoord;
 
     const size_t coords[] {
-        GetPixelCoord(xIntCoord    , yIntCoord),
-        GetPixelCoord(xIntCoord + 1, yIntCoord),
-        GetPixelCoord(xIntCoord    , yIntCoord + 1),
-        GetPixelCoord(xIntCoord + 1, yIntCoord + 1)
+        GetPixelCoordWrapped(xIntCoord    , yIntCoord),
+        GetPixelCoordWrapped(xIntCoord + 1, yIntCoord),
+        GetPixelCoordWrapped(xIntCoord    , yIntCoord + 1),
+        GetPixelCoordWrapped(xIntCoord + 1, yIntCoord + 1)
     };
 
     const PixelType R1 = lkCommon::Math::Util::Lerp(mPixels[coords[0]], mPixels[coords[1]], xDecCoord);
@@ -179,6 +194,15 @@ PixelType Image<PixelType>::SampleBilinear(float x, float y)
 template <typename PixelType>
 bool Image<PixelType>::Resize(uint32_t width, uint32_t height)
 {
+    if (mWidth == width && mHeight == height)
+        return true;
+
+    if (width == 0 || height == 0)
+    {
+        LOGE("Invalid parameters - provided width or height equals to zero");
+        return false;
+    }
+
     mWidth = width;
     mHeight = height;
 
@@ -230,6 +254,10 @@ void Image<PixelType>::SetAllPixels(const PixelType& color)
 template <typename PixelType>
 PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
 {
+    // skip sampling if we have 1x1 dimensions
+    if (mWidth == 1 && mHeight == 1)
+        return mPixels[0];
+
     switch (samplingType)
     {
     case Sampling::NEAREST: return SampleNearest(x, y);
