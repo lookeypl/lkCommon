@@ -12,17 +12,44 @@
 
 #include "lkCommon/Utils/Logger.hpp"
 #include "lkCommon/Math/Utilities.hpp"
+#include "lkCommon/Utils/ImageLoader.hpp"
 
 
 namespace lkCommon {
 namespace Utils {
 
+
+// maps PixelType to common info about it (one that doesn't require specializations)
+template<typename PixelType> struct PixelTypeCommonInfo
+{
+    static constexpr size_t size = sizeof(PixelType);
+};
+
+// helper to create specializations for PixelTypeInfo
+#define _PIXEL_TYPE_INFO_STRUCT_SPEC(x) \
+    template<> struct PixelTypeInfo<x>: public PixelTypeCommonInfo<x>
+
+// maps PixelType to various info related to it
+template<typename PixelType> struct PixelTypeInfo;
+
+// specializations of PixelTypeInfo
+_PIXEL_TYPE_INFO_STRUCT_SPEC(lkCommon::Utils::PixelUint4)
+{
+    static constexpr ImageFormat format = ImageFormat::RGBA_UCHAR;
+};
+
+_PIXEL_TYPE_INFO_STRUCT_SPEC(lkCommon::Utils::PixelFloat4)
+{
+    static constexpr ImageFormat format = ImageFormat::RGBA_FLOAT;
+};
+
+#undef _PIXEL_TYPE_INFO_STRUCT_SPEC
+
+
 template <typename PixelType>
 Image<PixelType>::Image()
     : mWidth(0)
     , mHeight(0)
-    , mWidthStep(0)
-    , mHeightStep(0)
     , mPixels()
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -32,8 +59,6 @@ template <typename PixelType>
 Image<PixelType>::Image(uint32_t width, uint32_t height)
     : mWidth(width)
     , mHeight(height)
-    , mWidthStep(1.0f / static_cast<float>(width))
-    , mHeightStep(1.0f / static_cast<float>(height))
     , mPixels(mWidth * mHeight)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -43,8 +68,6 @@ template <typename PixelType>
 Image<PixelType>::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const Image<PixelType>::PixelContainer& data, bool isBGR)
     : mWidth(width)
     , mHeight(height)
-    , mWidthStep(1.0f / static_cast<float>(width))
-    , mHeightStep(1.0f / static_cast<float>(height))
     , mPixels(mWidth * mHeight)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -76,11 +99,22 @@ Image<PixelType>::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, 
 }
 
 template <typename PixelType>
+Image<PixelType>::Image(const std::string& path)
+    : mWidth(0)
+    , mHeight(0)
+    , mPixels()
+    , mWindowImage()
+{
+    if (!Load(path))
+    {
+        LOGE("Failed to construct Image " << path);
+    }
+}
+
+template <typename PixelType>
 Image<PixelType>::Image(const Image<PixelType>& other)
     : mWidth(other.mWidth)
     , mHeight(other.mHeight)
-    , mWidthStep(other.mWidthStep)
-    , mHeightStep(other.mHeightStep)
     , mPixels(other.mPixels)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
@@ -90,8 +124,6 @@ template <typename PixelType>
 Image<PixelType>::Image(Image<PixelType>&& other)
     : mWidth(std::move(other.mWidth))
     , mHeight(std::move(other.mHeight))
-    , mWidthStep(std::move(other.mWidthStep))
-    , mHeightStep(std::move(other.mHeightStep))
     , mPixels(std::move(other.mPixels))
     , mWindowImage(std::move(other.mWindowImage))
 {
@@ -102,8 +134,6 @@ Image<PixelType>& Image<PixelType>::operator=(const Image<PixelType>& other)
 {
     mWidth = other.mWidth;
     mHeight = other.mHeight;
-    mWidthStep = other.mWidthStep;
-    mHeightStep = other.mHeightStep;
     mPixels = other.mPixels;
     mWindowImage.Recreate(mWidth, mHeight, mPixels.data());
 }
@@ -113,12 +143,9 @@ Image<PixelType>& Image<PixelType>::operator=(Image<PixelType>&& other)
 {
     mWidth = std::move(other.mWidth);
     mHeight = std::move(other.mHeight);
-    mWidthStep = std::move(other.mWidthStep);
-    mHeightStep = std::move(other.mHeightStep);
     mPixels = std::move(other.mPixels);
     mWindowImage = std::move(other.mWindowImage);
 }
-
 
 
 template <typename PixelType>
@@ -189,6 +216,38 @@ PixelType Image<PixelType>::SampleBilinear(float x, float y)
 
     R.Swap(0, 2);
     return R;
+}
+
+template <typename PixelType>
+bool Image<PixelType>::Load(const std::string& path)
+{
+    ImageLoaderPtr loader = ImageLoader::SelectLoader(path);
+    if (!loader)
+    {
+        LOGE("Error while getting loader for image file " << path);
+        return false;
+    }
+
+    if (!loader->Load(path))
+    {
+        LOGE("Failed to load image file " << path);
+        return false;
+    }
+
+    mWidth = loader->GetWidth();
+    mHeight = loader->GetHeight();
+    mPixels.resize(mWidth * mHeight);
+
+    size_t res = loader->FillData(mPixels.data(),
+                                  mPixels.size() * PixelTypeInfo<PixelType>::size,
+                                  PixelTypeInfo<PixelType>::format);
+    if (res == 0)
+    {
+        LOGE("Failed to fill image buffer with data");
+        return false;
+    }
+
+    return true;
 }
 
 template <typename PixelType>

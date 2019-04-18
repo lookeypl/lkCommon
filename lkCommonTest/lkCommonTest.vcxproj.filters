@@ -47,6 +47,12 @@
     <ClCompile Include="Tests\Math\UtilitiesTest.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Internal\ImageLoaderTest.cpp">
+      <Filter>Tests\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\StringConvTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">
@@ -60,6 +66,9 @@
     </Filter>
     <Filter Include="Tests\Utils">
       <UniqueIdentifier>{f09b3d21-8bbc-4c30-86c9-e5db37d71b7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Internal">
+      <UniqueIdentifier>{6504a7b0-6f97-4bbd-b557-9f8006fdb941}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

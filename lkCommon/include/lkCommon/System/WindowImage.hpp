@@ -29,6 +29,12 @@ class WindowImage final
 
 public:
     /**
+     * Creates uninitialized window image. Such object must be initialized with
+     * Recreate() before use.
+     */
+    WindowImage();
+
+    /**
      * Creates window image.
      */
     WindowImage(uint32_t width, uint32_t height, void* data);

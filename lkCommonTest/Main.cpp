@@ -8,6 +8,14 @@
 #include <lkCommon/System/FS.hpp>
 #include <lkCommon/Utils/Logger.hpp>
 
+#ifdef WIN32
+#define LKCOMMON_ROOT_PATH_REL_TO_EXE "../../.."
+#elif defined(__linux__) || defined(__LINUX__)
+#define LKCOMMON_ROOT_PATH_REL_TO_EXE "../.."
+#else
+#error "Platform not supported"
+#endif
+
 int main(int argc, char* argv[])
 {
     std::string root;
@@ -19,7 +27,7 @@ int main(int argc, char* argv[])
     if (!lkCommon::System::FS::SetCWD(
             lkCommon::System::FS::JoinPaths(
                 lkCommon::System::FS::GetParentDir(lkCommon::System::FS::GetExecutablePath()),
-                "../../.."
+                LKCOMMON_ROOT_PATH_REL_TO_EXE
                 )
             )
         )

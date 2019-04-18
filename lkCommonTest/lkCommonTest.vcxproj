@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tests\Internal\ImageLoaderTest.cpp" />
     <ClCompile Include="Tests\Math\AverageTest.cpp" />
     <ClCompile Include="Tests\Math\RingAverageTest.cpp" />
     <ClCompile Include="Tests\Math\UtilitiesTest.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Tests\Utils\PixelTest.cpp" />
     <ClCompile Include="Tests\Utils\SortTest.cpp" />
     <ClCompile Include="Tests\Utils\StaticStackTest.cpp" />
+    <ClCompile Include="Tests\Utils\StringConvTest.cpp" />
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

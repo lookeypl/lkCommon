@@ -5,10 +5,12 @@ PKG_CHECK_MODULES(LKCOMMON_TEST_PKG_DEPS REQUIRED
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Internal/Linux/XConnectionTest.cpp
+                       Tests/Internal/ImageLoaderTest.cpp
                        Tests/Math/AverageTest.cpp
                        Tests/Math/RingAverageTest.cpp
                        Tests/Math/UtilitiesTest.cpp
                        Tests/Math/Vector4Test.cpp
+                       Tests/System/InfoTest.cpp
                        Tests/System/WindowTest.cpp
                        Tests/Utils/ArenaAllocatorTest.cpp
                        Tests/Utils/ArenaObjectTest.cpp

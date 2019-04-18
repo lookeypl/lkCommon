@@ -34,6 +34,12 @@
     <Filter Include="source\Utils\Win">
       <UniqueIdentifier>{5c207b01-67a4-49e0-a9a5-a74b02aac96b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\Internal">
+      <UniqueIdentifier>{338a2d77-0a05-4f2d-aee8-c37914cb1b9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Internal\ImageLoaders">
+      <UniqueIdentifier>{d2a932e2-1b3e-4709-8a37-54769f310482}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Math\CubicInterpolator.cpp">
@@ -86,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="source\Utils\ArgParser.cpp">
       <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\ImageLoader.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Internal\ImageLoaders\PNGImageLoader.cpp">
+      <Filter>source\Internal\ImageLoaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Math\UtilitiesImpl.hpp">
       <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ImageLoader.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp">
+      <Filter>source\Internal\ImageLoaders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

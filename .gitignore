@@ -21,10 +21,11 @@ Makefile
 *.a
 *.so
 
-# Visual Studio Performance Analysis Results
+# Visual Studio and VSCode elated files
 *.vsp
 *.psess
 .vs
+.vscode
 
 # Other useless folders and file patterns
 /Logs

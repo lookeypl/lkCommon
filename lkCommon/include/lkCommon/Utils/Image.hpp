@@ -24,6 +24,7 @@ enum class Sampling: unsigned char
     BILINEAR,
 };
 
+
 /**
  * A basic Image, which can be filled with whatever data is required.
  *
@@ -40,8 +41,6 @@ public:
 private:
     uint32_t mWidth;
     uint32_t mHeight;
-    float mWidthStep;
-    float mHeightStep;
     PixelContainer mPixels;
     System::WindowImage mWindowImage;
 
@@ -96,6 +95,13 @@ public:
      */
     Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, const PixelContainer& data, bool isBGR = false);
 
+    /**
+     * Constructs an image from file provided by @p path.
+     *
+     * @p[in] path Path to file to be loaded.
+     */
+    Image(const std::string& path);
+
     Image(const Image<PixelType>& other);
     Image(Image<PixelType>&& other);
     Image& operator=(const Image<PixelType>& other);
@@ -105,6 +111,14 @@ public:
      * Destroys Image object, freeing all allocated memory.
      */
     ~Image();
+
+    /**
+     * Loads image from file. Image type is determined automatically.
+     *
+     * @p[in] path Path to image to load
+     * @result True if loading succeeded, false on error.
+     */
+    bool Load(const std::string& path);
 
     /**
      * Resizes an image to fit @p width x @p height pixels. Does nothing if

@@ -5,7 +5,9 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   source/Math/Utilities.cpp
                   source/Utils/ArenaAllocator.cpp
                   source/Utils/ArgParser.cpp
+                  source/Utils/ImageLoader.cpp
                   source/Utils/ThreadPool.cpp
+                  source/Internal/ImageLoaders/PNGImageLoader.cpp
                   )
 
 SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
@@ -30,6 +32,7 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Utils/ArgParser.hpp
                   include/lkCommon/Utils/Image.hpp
                   include/lkCommon/Utils/ImageImpl.hpp
+                  include/lkCommon/Utils/ImageLoader.hpp
                   include/lkCommon/Utils/Logger.hpp
                   include/lkCommon/Utils/Sort.hpp
                   include/lkCommon/Utils/SortImpl.hpp
@@ -38,6 +41,7 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Utils/ThreadPool.hpp
                   include/lkCommon/Utils/Timer.hpp
                   include/lkCommon/Utils/StringConv.hpp
+                  source/Internal/ImageLoaders/PNGImageLoader.hpp
                   )
 
 
@@ -79,6 +83,9 @@ ADD_LIBRARY(${LKCOMMON_TARGET}
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DIRECTORY}/include/
                            PRIVATE ${LKCOMMON_DIRECTORY}/source/Internal
+                           PRIVATE ${LKCOMMON_DEPS_DIRECTORY}/libpng
+                           PRIVATE ${LKCOMMON_ROOT_DIRECTORY}/build/Deps/libpng
+                           PRIVATE ${LKCOMMON_DEPS_DIRECTORY}/zlib
                            )
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread)

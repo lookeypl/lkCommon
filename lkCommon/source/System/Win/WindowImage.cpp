@@ -11,6 +11,13 @@
 namespace lkCommon {
 namespace System {
 
+WindowImage::WindowImage()
+    : mWidth(0)
+    , mHeight(0)
+    , mDataPtr(nullptr)
+{
+}
+
 WindowImage::WindowImage(uint32_t width, uint32_t height, void* data)
     : mWidth(width)
     , mHeight(height)

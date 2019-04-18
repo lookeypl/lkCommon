@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Internal\ImageLoaders\PNGImageLoader.cpp" />
     <ClCompile Include="source\Math\CubicInterpolator.cpp" />
     <ClCompile Include="source\Math\Interpolator.cpp" />
     <ClCompile Include="source\Math\LinearInterpolator.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="source\System\Win\WindowImage.cpp" />
     <ClCompile Include="source\Utils\ArenaAllocator.cpp" />
     <ClCompile Include="source\Utils\ArgParser.cpp" />
+    <ClCompile Include="source\Utils\ImageLoader.cpp" />
     <ClCompile Include="source\Utils\ThreadPool.cpp" />
     <ClCompile Include="source\Utils\Win\Logger.cpp" />
     <ClCompile Include="source\Utils\Win\StringConv.cpp" />
@@ -65,6 +67,7 @@
     <ClInclude Include="include\lkCommon\Utils\ArgParser.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Image.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ImageImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\ImageLoader.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Logger.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Pixel.hpp" />
     <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp" />
@@ -75,6 +78,7 @@
     <ClInclude Include="include\lkCommon\Utils\StringConv.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Timer.hpp" />
+    <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -149,7 +153,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -158,13 +162,26 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+    </PreBuildEvent>
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib"
+del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Joining lkCommon.lib with static library dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -175,24 +192,64 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+    </PreBuildEvent>
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib"
+del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Joining lkCommon.lib with static library dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+    </PreBuildEvent>
+    <CustomBuildStep />
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib"
+del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Joining lkCommon.lib with static library dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib"
+del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Joining lkCommon.lib with static library dependencies</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <Target Name="AfterClean">
+    <Exec Command="&quot;$(SolutionDir)Deps\prepare_deps.bat&quot; $(Platform) $(Configuration) Clean" />
+  </Target>
 </Project>

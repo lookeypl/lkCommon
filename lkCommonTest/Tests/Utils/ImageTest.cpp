@@ -40,6 +40,8 @@ const std::vector<lkCommon::Utils::PixelUint4> TEST_IMPORT_IMAGE_3X3_AS_5X5 {
     TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO, TEST_PIXEL_ZERO,
 };
 
+const std::string TEST_IMAGE_PNG_PATH = "Data/PNG/test_image_5x5.png";
+
 
 bool CompareRawPixels(const uint8_t p1[4], const uint8_t p2[4], bool withAlpha)
 {
@@ -113,6 +115,22 @@ TEST(Image, ConstructorDataSmallerThanImage)
         {
             i.GetPixel(x, y, p);
             EXPECT_EQ(TEST_IMPORT_IMAGE_3X3_AS_5X5[x + (y * TEST_IMPORT_IMAGE_WIDTH)], p);
+        }
+    }
+}
+
+TEST(Image, ConstructorPngFile)
+{
+    lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i;
+    EXPECT_TRUE(i.Load(TEST_IMAGE_PNG_PATH));
+
+    lkCommon::Utils::PixelUint4 p;
+    for (uint32_t y = 0; y < TEST_IMPORT_IMAGE_HEIGHT; ++y)
+    {
+        for (uint32_t x = 0; x < TEST_IMPORT_IMAGE_WIDTH; ++x)
+        {
+            i.GetPixel(x, y, p);
+            EXPECT_EQ(TEST_IMPORT_IMAGE_5X5[x + (y * TEST_IMPORT_IMAGE_WIDTH)], p);
         }
     }
 }
