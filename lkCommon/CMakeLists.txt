@@ -29,6 +29,7 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Utils/ArenaAllocator.hpp
                   include/lkCommon/Utils/ArgParser.hpp
                   include/lkCommon/Utils/Image.hpp
+                  include/lkCommon/Utils/ImageImpl.hpp
                   include/lkCommon/Utils/Logger.hpp
                   include/lkCommon/Utils/Sort.hpp
                   include/lkCommon/Utils/SortImpl.hpp
@@ -80,6 +81,6 @@ TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DIRECTORY}/source/Internal
                            )
 
-TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} pthread)
+TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread)
 
 LKCOMMON_COPY_RESULT(${LKCOMMON_TARGET})
