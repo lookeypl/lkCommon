@@ -4,3 +4,6 @@
 [submodule "Deps/libpng"]
 	path = Deps/libpng
 	url = https://github.com/glennrp/libpng
+[submodule "Deps/zlib"]
+	path = Deps/zlib
+	url = https://github.com/madler/zlib
