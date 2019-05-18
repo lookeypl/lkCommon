@@ -315,7 +315,11 @@ PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
 {
     // skip sampling if we have 1x1 dimensions
     if (mWidth == 1 && mHeight == 1)
-        return mPixels[0];
+    {
+        PixelType p = mPixels[0];
+        p.Swap(0, 2);
+        return p;
+    }
 
     switch (samplingType)
     {
