@@ -1,6 +1,6 @@
 [submodule "Deps/googletest"]
 	path = Deps/googletest
-	url = git@github.com:google/googletest
+	url = https://github.com/google/googletest
 [submodule "Deps/libpng"]
 	path = Deps/libpng
 	url = https://github.com/glennrp/libpng
