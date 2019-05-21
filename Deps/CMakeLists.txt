@@ -34,11 +34,18 @@ ADD_SUBDIRECTORY(libpng)
 
 # Workaround to keep Deps/zlib submodule clean after build
 ADD_CUSTOM_TARGET(PostDepsBuild ALL DEPENDS zlibstatic png_static
-    COMMAND ${CMAKE_COMMAND} -E rename
-        ${LKCOMMON_DEPS_DIRECTORY}/zlib/zconf.h.included
-        ${LKCOMMON_DEPS_DIRECTORY}/zlib/zconf.h
-    COMMENT "Moving zconf.h.included back where it belongs, so Git is happy about Deps/zlib being clean"
+    COMMENT "Post build script output:"
 )
+
+IF(WIN32)
+    ADD_CUSTOM_COMMAND(TARGET PostDepsBuild POST_BUILD
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/post_build_deps.bat
+    )
+ELSEIF(UNIX)
+    ADD_CUSTOM_COMMAND(TARGET PostDepsBuild POST_BUILD
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/post_build_deps.sh
+    )
+ENDIF()
 
 
 ### Extra variables to use later on when building lkCommon ###
