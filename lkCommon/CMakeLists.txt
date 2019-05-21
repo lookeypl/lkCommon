@@ -83,9 +83,9 @@ ADD_LIBRARY(${LKCOMMON_TARGET}
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DIRECTORY}/include/
                            PRIVATE ${LKCOMMON_DIRECTORY}/source/Internal
-                           PRIVATE ${LKCOMMON_DEPS_DIRECTORY}/libpng
-                           PRIVATE ${LKCOMMON_ROOT_DIRECTORY}/build/Deps/libpng
                            PRIVATE ${LKCOMMON_DEPS_DIRECTORY}/zlib
+                           PRIVATE ${LKCOMMON_DEPS_DIRECTORY}/libpng
+                           PRIVATE ${LKCOMMON_DEPS_LIBPNG_CONF_INCLUDE_DIR}
                            )
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread)

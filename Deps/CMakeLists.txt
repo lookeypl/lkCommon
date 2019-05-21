@@ -39,3 +39,10 @@ ADD_CUSTOM_TARGET(PostDepsBuild ALL DEPENDS zlibstatic png_static
         ${LKCOMMON_DEPS_DIRECTORY}/zlib/zconf.h
     COMMENT "Moving zconf.h.included back where it belongs, so Git is happy about Deps/zlib being clean"
 )
+
+
+### Extra variables to use later on when building lkCommon ###
+
+# Location of pnglibconf.h
+SET(LKCOMMON_DEPS_LIBPNG_CONF_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libpng
+    CACHE INTERNAL "pnglibconf.h location (required artifact after libpng build)")
