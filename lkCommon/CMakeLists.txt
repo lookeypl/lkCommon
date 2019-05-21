@@ -88,6 +88,12 @@ TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DEPS_LIBPNG_CONF_INCLUDE_DIR}
                            )
 
+TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                       PRIVATE "-std=c++1y"
+                       PRIVATE "-msse4.1"
+                       PRIVATE "-fPIC"
+                       )
+
 TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread)
 
 LKCOMMON_COPY_RESULT(${LKCOMMON_TARGET})
