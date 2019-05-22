@@ -2,14 +2,15 @@
 
 pushd .
 
-cd "%~dp0"
+set script_dir=%~dp0
+cd "%script_dir%"
 echo Current directory is %cd%
 
-if NOT EXIST ./zlib/zconf.h (
-    echo "Moving zconf.h.included -> zconf.h if needed, so Git is happy about Deps/zlib being clean"
-    ren ./zlib/zconf.h.included ./zlib/zconf.h
+if NOT EXIST zlib\zconf.h (
+    echo Moving zconf.h.included to zconf.h so Git is happy about Deps/zlib being clean
+    ren "%script_dir%\zlib\zconf.h.included" zconf.h
 )
 
 popd
 
-echo "Script is done"
+echo Script is done

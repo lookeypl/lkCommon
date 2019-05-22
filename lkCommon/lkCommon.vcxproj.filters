@@ -218,5 +218,11 @@
     <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp">
       <Filter>source\Internal\ImageLoaders</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticQueue.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticQueueImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
