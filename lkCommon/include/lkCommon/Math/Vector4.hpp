@@ -22,6 +22,11 @@ class LKCOMMON_ALIGN(16) Vector4 final
         LKCOMMON_INLINE Vector4f(const __m128& m)
             : m(m)
         {}
+
+        LKCOMMON_INLINE Vector4f(__m128&& m) noexcept
+            : m(std::move(m))
+        {
+        }
     } mValue;
 
 public:
@@ -31,9 +36,9 @@ public:
     Vector4(const float* v);
     Vector4(const __m128& v);
     Vector4(const Vector4& other);
-    Vector4(Vector4&& other);
+    Vector4(Vector4&& other) noexcept;
     Vector4& operator=(const Vector4& other);
-    Vector4& operator=(Vector4&& other);
+    Vector4& operator=(Vector4&& other) noexcept;
     ~Vector4() = default;
 
     const float* Data() const;
@@ -42,7 +47,7 @@ public:
 
     // Access operator
     float& operator[](const size_t index);
-    float operator[](const size_t index) const;
+    const float& operator[](const size_t index) const;
 
     // Addition
     Vector4& operator+=(const Vector4& other);

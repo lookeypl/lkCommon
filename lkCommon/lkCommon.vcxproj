@@ -23,6 +23,7 @@
     <ClCompile Include="source\Math\CubicInterpolator.cpp" />
     <ClCompile Include="source\Math\Interpolator.cpp" />
     <ClCompile Include="source\Math\LinearInterpolator.cpp" />
+    <ClCompile Include="source\Math\Matrix4.cpp" />
     <ClCompile Include="source\Math\Utilities.cpp" />
     <ClCompile Include="source\Math\Vector4.cpp" />
     <ClCompile Include="source\System\Win\FS.cpp" />
@@ -47,6 +48,8 @@
     <ClInclude Include="include\lkCommon\Math\CubicInterpolator.hpp" />
     <ClInclude Include="include\lkCommon\Math\Interpolator.hpp" />
     <ClInclude Include="include\lkCommon\Math\LinearInterpolator.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Matrix4.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Matrix4Impl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Random.hpp" />
     <ClInclude Include="include\lkCommon\Math\RandomImpl.hpp" />
     <ClInclude Include="include\lkCommon\Math\RingAverage.hpp" />
@@ -81,6 +84,9 @@
     <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Timer.hpp" />
     <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

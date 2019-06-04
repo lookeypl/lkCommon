@@ -56,6 +56,9 @@
     <ClCompile Include="Tests\Utils\StaticQueueTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Math\Matrix4Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">
@@ -73,5 +76,8 @@
     <Filter Include="Tests\Internal">
       <UniqueIdentifier>{6504a7b0-6f97-4bbd-b557-9f8006fdb941}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
 </Project>

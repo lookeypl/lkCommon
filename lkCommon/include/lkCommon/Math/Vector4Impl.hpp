@@ -42,8 +42,8 @@ LKCOMMON_INLINE Vector4::Vector4(const Vector4& other)
 {
 }
 
-LKCOMMON_INLINE Vector4::Vector4(Vector4&& other)
-    : mValue(other.mValue.m)
+LKCOMMON_INLINE Vector4::Vector4(Vector4&& other) noexcept
+    : mValue(std::move(other.mValue.m))
 {
 }
 
@@ -53,7 +53,7 @@ LKCOMMON_INLINE Vector4& Vector4::operator=(const Vector4& other)
     return *this;
 }
 
-LKCOMMON_INLINE Vector4& Vector4::operator=(Vector4&& other)
+LKCOMMON_INLINE Vector4& Vector4::operator=(Vector4&& other) noexcept
 {
     mValue.m = other.mValue.m;
     return *this;
@@ -80,7 +80,7 @@ LKCOMMON_INLINE float& Vector4::operator[](const size_t index)
     return mValue.f[index];
 }
 
-LKCOMMON_INLINE float Vector4::operator[](const size_t index) const
+LKCOMMON_INLINE const float& Vector4::operator[](const size_t index) const
 {
     return mValue.f[index];
 }
