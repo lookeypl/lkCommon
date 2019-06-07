@@ -37,25 +37,27 @@ class Image final
 {
 public:
     using PixelContainer = std::vector<PixelType>;
+    using MipmapContainer = std::vector<PixelContainer>;
 
 private:
     uint32_t mWidth;
     uint32_t mHeight;
     PixelContainer mPixels;
+    MipmapContainer mMipmaps;
     System::WindowImage mWindowImage;
 
     // unwrapped version - returns SIZE_MAX when bounds are crossed
-    size_t GetPixelCoord(uint32_t x, uint32_t y);
+    size_t GetPixelCoord(uint32_t x, uint32_t y) const;
 
     // wrapped version - crossing the boundaries will subtract width/height
     // to go back in bounds
-    size_t GetPixelCoordWrapped(uint32_t x, uint32_t y);
+    size_t GetPixelCoordWrapped(uint32_t x, uint32_t y) const;
 
     // nearest-neighbor sampler
-    PixelType SampleNearest(float x, float y);
+    PixelType SampleNearest(float x, float y) const;
 
     // bilinear sampler
-    PixelType SampleBilinear(float x, float y);
+    PixelType SampleBilinear(float x, float y) const;
 
 public:
     /**
@@ -172,7 +174,19 @@ public:
      * can suffer from approximation errors, or overflows. For best results,
      * do NOT use this function with integer-based types like PixelUint4.
      */
-    PixelType Sample(float x, float y, Sampling samplingType);
+    PixelType Sample(float x, float y, Sampling samplingType) const;
+
+    /**
+     * Rescales an image to given width/height.
+     *
+     * This function produces new Image object and leaves contents of current one intact.
+     */
+    Image<PixelType> Rescale(uint32_t width, uint32_t height, Sampling samplingType) const;
+
+    /**
+     * Generate mipmaps for Image.
+     */
+    void GenerateMipmaps(Sampling samplingType);
 
     /**
      * Cast operator between Pixel types.
@@ -212,6 +226,25 @@ public:
     LKCOMMON_INLINE const System::WindowImage& GetWindowImage() const
     {
         return mWindowImage;
+    }
+
+    /**
+     * Returns Pixels (a vector of PixelType objects)
+     */
+    LKCOMMON_INLINE const PixelContainer& GetPixels() const
+    {
+        return mPixels;
+    }
+
+    /**
+     * Returns Mipmaps (a vector of PixelContainers)
+     *
+     * @note Mipmaps returned here do NOT include base image! To get base image
+     *       use @p GetPixels() call.
+     */
+    LKCOMMON_INLINE const MipmapContainer& GetMipmaps() const
+    {
+        return mMipmaps;
     }
 };
 

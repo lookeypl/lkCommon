@@ -51,6 +51,7 @@ Image<PixelType>::Image()
     : mWidth(0)
     , mHeight(0)
     , mPixels()
+    , mMipmaps()
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
 }
@@ -60,6 +61,7 @@ Image<PixelType>::Image(uint32_t width, uint32_t height)
     : mWidth(width)
     , mHeight(height)
     , mPixels(mWidth * mHeight)
+    , mMipmaps()
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
 }
@@ -69,6 +71,7 @@ Image<PixelType>::Image(uint32_t width, uint32_t height, uint32_t pixelsPerRow, 
     : mWidth(width)
     , mHeight(height)
     , mPixels(mWidth * mHeight)
+    , mMipmaps()
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
     if (pixelsPerRow == 0)
@@ -103,6 +106,7 @@ Image<PixelType>::Image(const std::string& path)
     : mWidth(0)
     , mHeight(0)
     , mPixels()
+    , mMipmaps()
     , mWindowImage()
 {
     if (!Load(path))
@@ -116,6 +120,7 @@ Image<PixelType>::Image(const Image<PixelType>& other)
     : mWidth(other.mWidth)
     , mHeight(other.mHeight)
     , mPixels(other.mPixels)
+    , mMipmaps(other.mMipmaps)
     , mWindowImage(mWidth, mHeight, mPixels.data())
 {
 }
@@ -125,6 +130,7 @@ Image<PixelType>::Image(Image<PixelType>&& other)
     : mWidth(std::move(other.mWidth))
     , mHeight(std::move(other.mHeight))
     , mPixels(std::move(other.mPixels))
+    , mMipmaps(std::move(other.mMipmaps))
     , mWindowImage(std::move(other.mWindowImage))
 {
 }
@@ -135,6 +141,7 @@ Image<PixelType>& Image<PixelType>::operator=(const Image<PixelType>& other)
     mWidth = other.mWidth;
     mHeight = other.mHeight;
     mPixels = other.mPixels;
+    mMipmaps = other.mMipmaps;
     mWindowImage.Recreate(mWidth, mHeight, mPixels.data());
 }
 
@@ -144,6 +151,7 @@ Image<PixelType>& Image<PixelType>::operator=(Image<PixelType>&& other)
     mWidth = std::move(other.mWidth);
     mHeight = std::move(other.mHeight);
     mPixels = std::move(other.mPixels);
+    mMipmaps = std::move(other.mMipmaps);
     mWindowImage = std::move(other.mWindowImage);
 }
 
@@ -154,7 +162,7 @@ Image<PixelType>::~Image()
 }
 
 template <typename PixelType>
-size_t Image<PixelType>::GetPixelCoord(uint32_t x, uint32_t y)
+size_t Image<PixelType>::GetPixelCoord(uint32_t x, uint32_t y) const
 {
     if (x >= mWidth || y >= mHeight)
     {
@@ -167,7 +175,7 @@ size_t Image<PixelType>::GetPixelCoord(uint32_t x, uint32_t y)
 }
 
 template <typename PixelType>
-size_t Image<PixelType>::GetPixelCoordWrapped(uint32_t x, uint32_t y)
+size_t Image<PixelType>::GetPixelCoordWrapped(uint32_t x, uint32_t y) const
 {
     if (x >= mWidth)
     {
@@ -182,7 +190,7 @@ size_t Image<PixelType>::GetPixelCoordWrapped(uint32_t x, uint32_t y)
 }
 
 template <typename PixelType>
-PixelType Image<PixelType>::SampleNearest(float x, float y)
+PixelType Image<PixelType>::SampleNearest(float x, float y) const
 {
     PixelType ret = mPixels[GetPixelCoordWrapped(
         static_cast<uint32_t>(x * mWidth),
@@ -194,7 +202,7 @@ PixelType Image<PixelType>::SampleNearest(float x, float y)
 }
 
 template <typename PixelType>
-PixelType Image<PixelType>::SampleBilinear(float x, float y)
+PixelType Image<PixelType>::SampleBilinear(float x, float y) const
 {
     const float xCoord = x * mWidth;
     const float yCoord = y * mHeight;
@@ -311,7 +319,7 @@ void Image<PixelType>::SetAllPixels(const PixelType& color)
 }
 
 template <typename PixelType>
-PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
+PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType) const
 {
     // skip sampling if we have 1x1 dimensions
     if (mWidth == 1 && mHeight == 1)
@@ -326,6 +334,35 @@ PixelType Image<PixelType>::Sample(float x, float y, Sampling samplingType)
     case Sampling::NEAREST: return SampleNearest(x, y);
     case Sampling::BILINEAR: return SampleBilinear(x, y);
     default: return PixelType();
+    }
+}
+
+template <typename PixelType>
+Image<PixelType> Image<PixelType>::Rescale(uint32_t width, uint32_t height, Sampling samplingType) const
+{
+    Image<PixelType> result(width, height);
+
+    for (uint32_t x = 0; x < width; ++x)
+        for (uint32_t y = 0; y < height; ++y)
+            result.SetPixel(x, y, Sample(static_cast<float>(x) / static_cast<float>(width),
+                                         static_cast<float>(y) / static_cast<float>(height),
+                                         samplingType));
+
+    return result;
+}
+
+template <typename PixelType>
+void Image<PixelType>::GenerateMipmaps(Sampling samplingType)
+{
+    uint32_t width = mWidth;
+    uint32_t height = mHeight;
+
+    Image<PixelType> i = *this;
+    while (width > 1 && height > 1)
+    {
+        width >>= 1; height >>= 1;
+        i = i.Rescale(width, height, samplingType);
+        mMipmaps.push_back(i.GetPixels());
     }
 }
 
