@@ -5,11 +5,14 @@
 #include "lkCommon/System/WindowImage.hpp"
 
 #ifdef WIN32
-#define NOMINMAX
-#include <Windows.h>
-#include <windowsx.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif // NOMINMAX
+
+    #include <Windows.h>
+    #include <windowsx.h>
 #elif defined(__linux__) || defined(__LINUX__)
-#include <xcb/xcb.h>
+    #include <xcb/xcb.h>
 #endif
 
 

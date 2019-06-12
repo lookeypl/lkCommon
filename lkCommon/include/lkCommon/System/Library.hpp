@@ -1,8 +1,11 @@
 #pragma once
 
 #ifdef WIN32
-#define NOMINMAX
-#include <Windows.h>
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif // NOMINMAX
+
+    #include <Windows.h>
 #endif // WIN32
 
 #include <string>
