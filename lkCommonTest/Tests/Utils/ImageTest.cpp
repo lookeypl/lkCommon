@@ -135,6 +135,62 @@ TEST(Image, ConstructorPngFile)
     }
 }
 
+TEST(Image, ConstructorCopy)
+{
+    const lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> i(TEST_WIDTH, TEST_HEIGHT);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> copy(i);
+    EXPECT_EQ(i.GetWidth(), copy.GetWidth());
+    EXPECT_EQ(i.GetHeight(), copy.GetHeight());
+    EXPECT_EQ(i.GetPixels().size(), copy.GetPixels().size());
+    EXPECT_NE(i.GetPixels().data(), copy.GetPixels().data());
+    EXPECT_EQ(i.GetMipmaps().size(), copy.GetMipmaps().size());
+    EXPECT_EQ(i.GetWindowImage().GetWidth(), copy.GetWindowImage().GetWidth());
+    EXPECT_EQ(i.GetWindowImage().GetHeight(), copy.GetWindowImage().GetHeight());
+    EXPECT_NE(i.GetWindowImage().GetHandle(), copy.GetWindowImage().GetHandle());
+}
+
+TEST(Image, ConstructorMove)
+{
+    const lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> i(TEST_WIDTH, TEST_HEIGHT);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> copy(i);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> moved(std::move(copy));
+    EXPECT_EQ(i.GetWidth(), moved.GetWidth());
+    EXPECT_EQ(i.GetHeight(), moved.GetHeight());
+    EXPECT_EQ(i.GetPixels().size(), moved.GetPixels().size());
+    EXPECT_EQ(i.GetMipmaps().size(), moved.GetMipmaps().size());
+    EXPECT_EQ(i.GetWindowImage().GetWidth(), moved.GetWindowImage().GetWidth());
+    EXPECT_EQ(i.GetWindowImage().GetHeight(), moved.GetWindowImage().GetHeight());
+}
+
+TEST(Image, AssignmentCopy)
+{
+    const lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> i(TEST_WIDTH, TEST_HEIGHT);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> copy;
+    copy = i;
+    EXPECT_EQ(i.GetWidth(), copy.GetWidth());
+    EXPECT_EQ(i.GetHeight(), copy.GetHeight());
+    EXPECT_EQ(i.GetPixels().size(), copy.GetPixels().size());
+    EXPECT_NE(i.GetPixels().data(), copy.GetPixels().data());
+    EXPECT_EQ(i.GetMipmaps().size(), copy.GetMipmaps().size());
+    EXPECT_EQ(i.GetWindowImage().GetWidth(), copy.GetWindowImage().GetWidth());
+    EXPECT_EQ(i.GetWindowImage().GetHeight(), copy.GetWindowImage().GetHeight());
+    EXPECT_NE(i.GetWindowImage().GetHandle(), copy.GetWindowImage().GetHandle());
+}
+
+TEST(Image, AssignmentMove)
+{
+    const lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> i(TEST_WIDTH, TEST_HEIGHT);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> copy(i);
+    lkCommon::Utils::Image<lkCommon::Utils::PixelFloat4> moved;
+    moved = std::move(copy);
+    EXPECT_EQ(i.GetWidth(), moved.GetWidth());
+    EXPECT_EQ(i.GetHeight(), moved.GetHeight());
+    EXPECT_EQ(i.GetPixels().size(), moved.GetPixels().size());
+    EXPECT_EQ(i.GetMipmaps().size(), moved.GetMipmaps().size());
+    EXPECT_EQ(i.GetWindowImage().GetWidth(), moved.GetWindowImage().GetWidth());
+    EXPECT_EQ(i.GetWindowImage().GetHeight(), moved.GetWindowImage().GetHeight());
+}
+
 TEST(Image, Resize)
 {
     lkCommon::Utils::Image<lkCommon::Utils::PixelUint4> i;

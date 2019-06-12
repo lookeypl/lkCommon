@@ -143,6 +143,8 @@ Image<PixelType>& Image<PixelType>::operator=(const Image<PixelType>& other)
     mPixels = other.mPixels;
     mMipmaps = other.mMipmaps;
     mWindowImage.Recreate(mWidth, mHeight, mPixels.data());
+
+    return *this;
 }
 
 template <typename PixelType>
@@ -153,6 +155,8 @@ Image<PixelType>& Image<PixelType>::operator=(Image<PixelType>&& other)
     mPixels = std::move(other.mPixels);
     mMipmaps = std::move(other.mMipmaps);
     mWindowImage = std::move(other.mWindowImage);
+
+    return *this;
 }
 
 
