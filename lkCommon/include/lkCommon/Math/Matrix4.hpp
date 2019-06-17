@@ -14,7 +14,7 @@ namespace Math {
  *
  * @note Matrix is constructed as row-major
  */
-class LKCOMMON_ALIGN(16) Matrix4 final
+class alignas(16) Matrix4 final
 {
     union Matrix4f
     {

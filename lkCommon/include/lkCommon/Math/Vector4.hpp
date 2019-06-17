@@ -8,7 +8,7 @@
 namespace lkCommon {
 namespace Math {
 
-class LKCOMMON_ALIGN(16) Vector4 final
+class alignas(16) Vector4 final
 {
     union Vector4f
     {

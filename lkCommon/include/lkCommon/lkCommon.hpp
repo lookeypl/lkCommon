@@ -30,21 +30,13 @@
  * compiler.
  */
 
-/**
- * @def LKCOMMON_ALIGN
- *
- * Aligns given class/struct to @p x bytes in memory.
- */
-
 #ifdef WIN32
 
 #define LKCOMMON_INLINE __forceinline
-#define LKCOMMON_ALIGN(x) __declspec(align(x))
 
 #elif defined(__linux__) || defined(__LINUX__)
 
 #define LKCOMMON_INLINE inline __attribute__((always_inline))
-#define LKCOMMON_ALIGN(x) __attribute__((aligned(x)))
 
 #else
 #error "Target platform not supported"
