@@ -42,6 +42,7 @@ class Window
 
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #elif defined(__linux__) || defined(__LINUX__)
+    xcb_connection_t* mConnection;
     xcb_window_t mWindow;
     xcb_intern_atom_reply_t* mDeleteReply;
     xcb_gcontext_t mGraphicsContext; // used for setting single pixels on screen
@@ -345,6 +346,19 @@ public:
         return mHWND;
     }
 #elif defined(__linux__) || defined(__LINUX__)
+    /**
+     * Get XCB connection pointer.
+     *
+     * This function serves as a passthrough to connection obtained by internal
+     * XCBConnection module.
+     *
+     * @return XCB connection pointer.
+     */
+    LKCOMMON_INLINE xcb_connection_t* GetConnection() const
+    {
+        return mConnection;
+    }
+
     /**
      * Get X Window pointer.
      *
