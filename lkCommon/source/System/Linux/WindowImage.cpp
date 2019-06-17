@@ -38,6 +38,24 @@ WindowImage::WindowImage(uint32_t width, uint32_t height, void* data)
     }
 }
 
+WindowImage::WindowImage(WindowImage&& other)
+    : mWidth(std::move(other.mWidth))
+    , mHeight(std::move(other.mHeight))
+    , mXcbImage(other.mXcbImage)
+{
+    other.mXcbImage = nullptr;
+}
+
+WindowImage& WindowImage::operator=(WindowImage&& other)
+{
+    mWidth = std::move(other.mWidth);
+    mHeight = std::move(other.mHeight);
+    mXcbImage = other.mXcbImage;
+    other.mXcbImage = nullptr;
+
+    return *this;
+}
+
 WindowImage::~WindowImage()
 {
     if (mXcbImage != nullptr)

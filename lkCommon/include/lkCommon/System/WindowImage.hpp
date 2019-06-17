@@ -44,10 +44,18 @@ public:
      */
     ~WindowImage();
 
+    /**
+     * Construct WindowImage moving contents from different object.
+     */
+    WindowImage(WindowImage&& other);
+
+    /**
+     * Move ownership of WindowImage to a new object.
+     */
+    WindowImage& operator=(WindowImage&& other);
+
     WindowImage(const WindowImage& other) = delete;
     WindowImage& operator=(const WindowImage& other) = delete;
-    WindowImage(WindowImage&& other) = default;
-    WindowImage& operator=(WindowImage&& other) = default;
 
     /**
      * Recreates window image to have new size.
@@ -60,7 +68,7 @@ public:
      * @note This function should be used ONLY by platform-specific modules.
      * Result depends on used platform:
      *   - void* data pointer on Windows
-     *   - xcb_image* on Linux
+     *   - xcb_image_t* on Linux
      */
     void* GetHandle() const;
 
