@@ -1,8 +1,9 @@
-SET(LKCOMMON_SRCS source/Math/Vector4.cpp
+SET(LKCOMMON_SRCS source/Math/CubicInterpolator.cpp
                   source/Math/Interpolator.cpp
                   source/Math/LinearInterpolator.cpp
-                  source/Math/CubicInterpolator.cpp
+                  source/Math/Matrix4.cpp
                   source/Math/Utilities.cpp
+                  source/Math/Vector4.cpp
                   source/Utils/ArenaAllocator.cpp
                   source/Utils/ArgParser.cpp
                   source/Utils/ImageLoader.cpp
@@ -11,36 +12,47 @@ SET(LKCOMMON_SRCS source/Math/Vector4.cpp
                   )
 
 SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
+                  include/lkCommon/Math/Average.hpp
+                  include/lkCommon/Math/AverageImpl.hpp
                   include/lkCommon/Math/Constants.hpp
-                  include/lkCommon/Math/RingAverage.hpp
-                  include/lkCommon/Math/RingAverageImpl.hpp
-                  include/lkCommon/Math/Vector4.hpp
+                  include/lkCommon/Math/CubicInterpolator.hpp
                   include/lkCommon/Math/Interpolator.hpp
                   include/lkCommon/Math/LinearInterpolator.hpp
-                  include/lkCommon/Math/CubicInterpolator.hpp
+                  include/lkCommon/Math/Matrix4.hpp
+                  include/lkCommon/Math/Matrix4Impl.hpp
                   include/lkCommon/Math/Random.hpp
                   include/lkCommon/Math/RandomImpl.hpp
+                  include/lkCommon/Math/RingAverage.hpp
+                  include/lkCommon/Math/RingAverageImpl.hpp
                   include/lkCommon/Math/Utilities.hpp
                   include/lkCommon/Math/UtilitiesImpl.hpp
+                  include/lkCommon/Math/Vector4.hpp
+                  include/lkCommon/Math/Vector4Impl.hpp
                   include/lkCommon/System/FS.hpp
                   include/lkCommon/System/Info.hpp
                   include/lkCommon/System/KeyCodes.hpp
                   include/lkCommon/System/Library.hpp
                   include/lkCommon/System/Memory.hpp
                   include/lkCommon/System/Window.hpp
+                  include/lkCommon/System/WindowImage.hpp
                   include/lkCommon/Utils/ArenaAllocator.hpp
+                  include/lkCommon/Utils/ArenaObject.hpp
                   include/lkCommon/Utils/ArgParser.hpp
                   include/lkCommon/Utils/Image.hpp
                   include/lkCommon/Utils/ImageImpl.hpp
                   include/lkCommon/Utils/ImageLoader.hpp
                   include/lkCommon/Utils/Logger.hpp
+                  include/lkCommon/Utils/Pixel.hpp
+                  include/lkCommon/Utils/PixelImpl.hpp
                   include/lkCommon/Utils/Sort.hpp
                   include/lkCommon/Utils/SortImpl.hpp
+                  include/lkCommon/Utils/StaticQueue.hpp
+                  include/lkCommon/Utils/StaticQueueImpl.hpp
                   include/lkCommon/Utils/StaticStack.hpp
                   include/lkCommon/Utils/StaticStackImpl.hpp
+                  include/lkCommon/Utils/StringConv.hpp
                   include/lkCommon/Utils/ThreadPool.hpp
                   include/lkCommon/Utils/Timer.hpp
-                  include/lkCommon/Utils/StringConv.hpp
                   source/Internal/ImageLoaders/PNGImageLoader.hpp
                   )
 
@@ -65,8 +77,8 @@ ELSEIF(UNIX)
                                source/System/Linux/Window.cpp
                                source/System/Linux/WindowImage.cpp
                                source/Utils/Linux/Logger.cpp
-                               source/Utils/Linux/Timer.cpp
                                source/Utils/Linux/StringConv.cpp
+                               source/Utils/Linux/Timer.cpp
                                source/Internal/Linux/XConnection.cpp
                                )
 ELSE()

@@ -7,6 +7,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Internal/Linux/XConnectionTest.cpp
                        Tests/Internal/ImageLoaderTest.cpp
                        Tests/Math/AverageTest.cpp
+                       Tests/Math/Matrix4Test.cpp
                        Tests/Math/RingAverageTest.cpp
                        Tests/Math/UtilitiesTest.cpp
                        Tests/Math/Vector4Test.cpp
