@@ -96,13 +96,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::stringstrea
 
 void SetRootPathToStrip(const std::string& path)
 {
-    gPathRoot.clear();
-    gPathRoot.reserve(path.size());
-
-    // copy while converting chars to lower case
-    // because __FILE__ produces lowercase output
-    for (uint32_t i = 0; i < path.size(); ++i)
-        gPathRoot.push_back(::tolower(path[i]));
+    gPathRoot = path;
 }
 
 void OpenLogFile(const std::string& path)
