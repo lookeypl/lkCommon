@@ -25,6 +25,24 @@ WindowImage::WindowImage(uint32_t width, uint32_t height, void* data)
 {
 }
 
+WindowImage::WindowImage(WindowImage&& other)
+    : mWidth(std::move(other.mWidth))
+    , mHeight(std::move(other.mHeight))
+    , mDataPtr(other.mDataPtr)
+{
+    other.mDataPtr = nullptr;
+}
+
+WindowImage& WindowImage::operator=(WindowImage&& other)
+{
+    mWidth = std::move(other.mWidth);
+    mHeight = std::move(other.mHeight);
+    mDataPtr = other.mDataPtr;
+    other.mDataPtr = nullptr;
+
+    return *this;
+}
+
 WindowImage::~WindowImage()
 {
 }
