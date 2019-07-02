@@ -21,35 +21,35 @@ std::ostream& operator<<(std::ostream& os, const Matrix4& m)
 // Matrix4 creators
 Matrix4 Matrix4::CreateRHLookAt(const Vector4& pos, const Vector4& dir, const Vector4& up)
 {
-    Vector4 zAxis = pos - dir;
+    const Vector4 zAxis = pos - dir;
     zAxis.Normalize();
 
-    Vector4 xAxis = up.Cross(zAxis);
+    const Vector4 xAxis = up.Cross(zAxis);
     xAxis.Normalize();
 
-    Vector4 yAxis = zAxis.Cross(xAxis);
+    const Vector4 yAxis = zAxis.Cross(xAxis);
     // No normalization needed here, since we cross two already normalized Vector4s.
 
-    return Matrix4(         xAxis[0],          yAxis[0],          zAxis[0], 0.0f,
-                            xAxis[1],          yAxis[1],          zAxis[1], 0.0f,
-                            xAxis[2],          yAxis[2],          zAxis[2], 0.0f,
-                   -(xAxis.Dot(pos)), -(yAxis.Dot(pos)), -(zAxis.Dot(pos)), 1.0f);
+    return Matrix4(         xAxis[0],          xAxis[1],          xAxis[2], -(xAxis.Dot(pos)),
+                            yAxis[0],          yAxis[1],          yAxis[2], -(yAxis.Dot(pos)),
+                            zAxis[0],          zAxis[1],          zAxis[2], -(zAxis.Dot(pos)),
+                                0.0f,              0.0f,              0.0f,              1.0f);
 }
 
 Matrix4 Matrix4::CreateRHProjection(const float fov, const float aspectRatio, const float nearDist, const float farDist)
 {
-    float halfFovRad = LKCOMMON_DEG_TO_RADF(fov * 0.5f);
-    float yScale = 1.0f / tanf(halfFovRad); // aka. ctg(halfFov)
-    float xScale = yScale / aspectRatio;
+    const float halfFov = fov * 0.5f;
+    const float yScale = 1.0f / tanf(halfFov); // aka. ctg(halfFov)
+    const float xScale = yScale / aspectRatio;
 
-    float distDiff = nearDist - farDist;
-    float zVal1 = farDist / distDiff;
-    float zVal2 = (nearDist * farDist) / distDiff;
+    const float distDiff = nearDist - farDist;
+    const float zVal1 = farDist / distDiff;
+    const float zVal2 = (nearDist * farDist) / distDiff;
 
-    return Matrix4(xScale,   0.0f,  0.0f, 0.0f,
-                     0.0f, yScale,  0.0f, 0.0f,
-                     0.0f,   0.0f, zVal1,-1.0f,
-                     0.0f,   0.0f, zVal2, 0.0f);
+    return Matrix4(xScale,   0.0f,  0.0f,  0.0f,
+                     0.0f, yScale,  0.0f,  0.0f,
+                     0.0f,   0.0f, zVal1, zVal2,
+                     0.0f,   0.0f, -1.0f,  0.0f);
 }
 
 Matrix4 Matrix4::CreateRotationX(const float angle)
