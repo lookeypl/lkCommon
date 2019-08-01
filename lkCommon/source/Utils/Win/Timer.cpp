@@ -9,24 +9,25 @@ Timer::Timer()
     QueryPerformanceFrequency(&mFreq);
 }
 
-Timer::~Timer()
-{
-}
-
 void Timer::Start()
 {
-    QueryPerformanceCounter(&mStart);
+    LARGE_INTEGER start;
+    QueryPerformanceCounter(&start);
+    mStartPoint = static_cast<double>(start.QuadPart) / static_cast<double>(mFreq.QuadPart);
+}
+
+void Timer::Start(double startOffset)
+{
+    Start();
+    mStartPoint -= startOffset;
 }
 
 double Timer::Stop()
 {
     LARGE_INTEGER stop;
     QueryPerformanceCounter(&stop);
-    LONGLONG diff = stop.QuadPart - mStart.QuadPart;
-    if (diff < 0)
-        return 0.0;
-
-    return static_cast<double>(diff) / static_cast<double>(mFreq.QuadPart);
+    double stopPoint = static_cast<double>(stop.QuadPart) / static_cast<double>(mFreq.QuadPart);
+    return stopPoint - mStartPoint;
 }
 
 } // namespace Utils

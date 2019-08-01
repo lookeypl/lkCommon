@@ -59,6 +59,9 @@
     <ClCompile Include="Tests\Math\Matrix4Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\TimerTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

@@ -173,6 +173,7 @@
     <ClCompile Include="Tests\Utils\StaticStackTest.cpp" />
     <ClCompile Include="Tests\Utils\StringConvTest.cpp" />
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp" />
+    <ClCompile Include="Tests\Utils\TimerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
