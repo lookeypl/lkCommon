@@ -24,6 +24,7 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Utils/StaticStackTest.cpp
                        Tests/Utils/StringConvTest.cpp
                        Tests/Utils/ThreadPoolTest.cpp
+                       Tests/Utils/TimerTest.cpp
                        )
 
 ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}
