@@ -21,14 +21,9 @@ std::ostream& operator<<(std::ostream& os, const Matrix4& m)
 // Matrix4 creators
 Matrix4 Matrix4::CreateRHLookAt(const Vector4& pos, const Vector4& dir, const Vector4& up)
 {
-    const Vector4 zAxis = pos - dir;
-    zAxis.Normalize();
-
-    const Vector4 xAxis = up.Cross(zAxis);
-    xAxis.Normalize();
-
+    const Vector4 zAxis = (pos - dir).Normalize();
+    const Vector4 xAxis = up.Cross(zAxis).Normalize();
     const Vector4 yAxis = zAxis.Cross(xAxis);
-    // No normalization needed here, since we cross two already normalized Vector4s.
 
     return Matrix4(         xAxis[0],          xAxis[1],          xAxis[2], -(xAxis.Dot(pos)),
                             yAxis[0],          yAxis[1],          yAxis[2], -(yAxis.Dot(pos)),
