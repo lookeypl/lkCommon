@@ -25,6 +25,7 @@ lkCommon library is split into various categories, each contains a set of module
   * `Average` - Template for calculating an average of given type.
   * `Constants` - Various constants used throughout Math modules.
   * `Interpolator` - Base class for various interpolation routines. Supports only `Linear` so far.
+  * `Matrix4` - Fast, zero-overhead implementation of 4x4 matrix, using SSE instructions.
   * `Random` - Implementation of various randomization algorithms.
   * `RingAverage` - Template for calculating an average of given type, for given collection of numbers.
   * `Utilities` - Various math-related utilities, more of one-offs which don't fit in any particular category
@@ -42,6 +43,7 @@ lkCommon library is split into various categories, each contains a set of module
   * `ArenaObject` - Simple template overriding new/delete operators, forcing given object to be allocated using `ArenaAllocator`.
   * `ArgParser` - Argument parser class designed to easily digest argv's and make them easily reachable.
   * `Image` - Template designed to be an "image" - an MxN array of pixels. Used in tandem with `Pixel` module.
+  * `ImageLoader` - Module loading images from hard drive, supporting multiple backends. Used internally by `Image`.
   * `Logger` - Logging module, providing logging macros. Supports logging to stdout, file and Visual Studio output.
   * `Pixel` - Module containing an N-component pixel, to use in tandem with `Image` class, or as an object being a multiple-component color.
   * `Sort` - Implementation of various sorting algorithms.
@@ -55,22 +57,39 @@ lkCommon library is split into various categories, each contains a set of module
 Dependencies
 ------------
 
-I try to keep lkCommon with lowest dependencies possible. Right now the library
-depends only on Windows API on Windows and XCB library and libxcb-image in Linux systems.
+lkCommon's dependencies are:
+* libpng
+* zlib
+* gtest (for lkCommonTest only)
 
-If you decide to build tests for the library, they require Google Test Framework
-to build. The Framework can be acquired through Git submodules and is automatically
-attached to build with.
+All dependencies are downloadable through Git submodules:
+
+```
+$ git submodule update --init --recursive
+```
+
+Linux additionally needs libxcb to properly connect to the window system. Download them using your
+favorite package manager before building the project.
+
+On Linux all dependencies are added through CMake, so building the project will automatically add
+them up and build them accordingly.
+
+On Windows dependencies need to be built before using the library. For that, there is a Python 3.7
+script called `deps_builder.py`. In order for it to work, both `cmake` and `msbuild` must be visible
+in Windows' PATH environment variable.
+
+To make building process on Windows easier, deps builder script is hooked to Visual Studio's
+pre-build event and should fire up automagically, building everything. However, if you want to build
+all the deps at once and not think about it anymore, just run `Deps/deps_builder.py` in your
+terminal.
 
 
 Building for Windows
 --------------------
 
-Use provided `lkCommon.sln` solution file, compatible with Visual Studio 2017. CMake-generated build files should work, but I never tested
-if Windows CMake build works properly.
+Fetch submodules and use provided `lkCommon.sln` solution file, compatible with Visual Studio 2017.
+CMake-generated build files should work, but I never tested if Windows CMake build works properly.
 
-If you want to build `lkCommonTest` tests through solution, first run `Deps/prepare_deps.bat` in command line to pre-build Google Test Framework
-for Windows.
 
 Building for Linux
 ------------------

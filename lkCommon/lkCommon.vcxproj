@@ -157,7 +157,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -171,7 +171,7 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+      <Command>"$(SolutionDir)Deps\deps_builder.py" --noanim -p $(Platform) -c $(Configuration)</Command>
     </PreBuildEvent>
     <CustomBuildStep />
     <CustomBuildStep />
@@ -186,7 +186,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -201,7 +201,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+      <Command>"$(SolutionDir)Deps\deps_builder.py" --noanim -p $(Platform) -c $(Configuration)</Command>
     </PreBuildEvent>
     <CustomBuildStep />
     <CustomBuildStep />
@@ -219,10 +219,10 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+      <Command>"$(SolutionDir)Deps\deps_builder.py" --noanim -p $(Platform) -c $(Configuration)</Command>
     </PreBuildEvent>
     <CustomBuildStep />
     <CustomBuildStep />
@@ -240,10 +240,10 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
-      <Command>"$(SolutionDir)Deps\prepare_deps.bat" $(Platform) $(Configuration)</Command>
+      <Command>"$(SolutionDir)Deps\deps_builder.py" --noanim -p $(Platform) -c $(Configuration)</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
@@ -257,7 +257,4 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <Target Name="AfterClean">
-    <Exec Command="&quot;$(SolutionDir)Deps\prepare_deps.bat&quot; $(Platform) $(Configuration) Clean" />
-  </Target>
 </Project>

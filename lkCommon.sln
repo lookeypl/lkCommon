@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deps", "Deps", "{0232314F-540D-45DF-978D-F9224FA04088}"
 	ProjectSection(SolutionItems) = preProject
 		Deps\CMakeLists.txt = Deps\CMakeLists.txt
+		Deps\deps_builder.py = Deps\deps_builder.py
 		Deps\post_build_deps.bat = Deps\post_build_deps.bat
 		Deps\prepare_deps.bat = Deps\prepare_deps.bat
 	EndProjectSection
