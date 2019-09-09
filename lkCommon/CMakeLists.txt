@@ -68,6 +68,7 @@ IF(WIN32)
                                source/Utils/Win/Logger.cpp
                                source/Utils/Win/Timer.cpp
                                source/Utils/Win/StringConv.cpp
+                               source/Utils/Win/UUID.cpp
                                )
 ELSEIF(UNIX)
     SET(LKCOMMON_PLATFORM_SRCS source/System/Linux/FS.cpp
@@ -79,6 +80,7 @@ ELSEIF(UNIX)
                                source/Utils/Linux/Logger.cpp
                                source/Utils/Linux/StringConv.cpp
                                source/Utils/Linux/Timer.cpp
+                               source/Utils/Linux/UUID.cpp
                                source/Internal/Linux/XConnection.cpp
                                )
 ELSE()
@@ -106,6 +108,6 @@ TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
                        PRIVATE "-fPIC"
                        )
 
-TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread)
+TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread libuuid.a)
 
 LKCOMMON_COPY_RESULT(${LKCOMMON_TARGET})

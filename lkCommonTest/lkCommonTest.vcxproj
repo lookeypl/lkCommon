@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lkCommon.lib;gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lkCommon.lib;gtestd.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>"$(SolutionDir)Deps\deps_builder.py" --tests --noanim -p $(Platform) -c $(Configuration)</Command>
@@ -114,7 +114,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>lkCommon.lib;gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>lkCommon.lib;gtestd.lib;rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>"$(SolutionDir)Deps\deps_builder.py" --tests --noanim -p $(Platform) -c $(Configuration)</Command>
@@ -186,6 +186,7 @@
     <ClCompile Include="Tests\Utils\StringConvTest.cpp" />
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp" />
     <ClCompile Include="Tests\Utils\TimerTest.cpp" />
+    <ClCompile Include="Tests\Utils\UUIDTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

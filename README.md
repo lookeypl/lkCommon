@@ -52,6 +52,7 @@ lkCommon library is split into various categories, each contains a set of module
   * `StringConv` - Converters between String and WideString types. Mostly used by other modules for Windows-Linux compatibility purposes.
   * `ThreadPool` - A basic thread pool object, which assigns tasks from a queue to one of already running worker threads.
   * `Timer` - Timing module, uses high precision clocks available in the system.
+  * `UUID` - Universally Unique ID module, uses platform-specific system UUID libraries.
 
 
 Dependencies
@@ -87,7 +88,7 @@ terminal.
 Building for Windows
 --------------------
 
-Fetch submodules and use provided `lkCommon.sln` solution file, compatible with Visual Studio 2017.
+Fetch submodules and use provided `lkCommon.sln` solution file, compatible with Visual Studio 2019.
 CMake-generated build files should work, but I never tested if Windows CMake build works properly.
 
 

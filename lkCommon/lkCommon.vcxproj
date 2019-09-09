@@ -39,6 +39,7 @@
     <ClCompile Include="source\Utils\Win\Logger.cpp" />
     <ClCompile Include="source\Utils\Win\StringConv.cpp" />
     <ClCompile Include="source\Utils\Win\Timer.cpp" />
+    <ClCompile Include="source\Utils\Win\UUID.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="include\lkCommon\Utils\StringConv.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Timer.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\UUID.hpp" />
     <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp" />
   </ItemGroup>
   <ItemGroup>
