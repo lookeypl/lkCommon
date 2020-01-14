@@ -27,7 +27,7 @@ namespace lkCommon {
 namespace Utils {
 namespace Logger {
 
-void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg)
+void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg)
 {
     const char* levelStr = nullptr;
 
@@ -41,23 +41,28 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::stringstrea
     switch (level)
     {
     case LogLevel::DEBUG:
-        levelStr = "DEBUG";
+        levelStr = "[DEBUG] ";
         SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_GREEN);
         break;
     case LogLevel::INFO:
-        levelStr = " INF ";
+        levelStr = "[ INF ] ";
         break;
     case LogLevel::WARNING:
-        levelStr = " WRN ";
+        levelStr = "[ WRN ] ";
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         break;
     case LogLevel::ERR:
-        levelStr = "ERROR";
+        levelStr = "[ERROR] ";
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY);
         break;
     case LogLevel::MEMORY:
-        levelStr = " MEM ";
+        levelStr = "[ MEM ] ";
         SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN);
+        break;
+    case LogLevel::CALL:
+        levelStr = "[ CALL ] ";
+        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        break;
     }
 
     std::string path;
@@ -78,9 +83,9 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::stringstrea
     }
 
     std::stringstream fullMsg;
-    fullMsg << "[" << levelStr << "] "
+    fullMsg << levelStr
             << path << " @ " << line << ": "
-            << msg.str() << '\n';
+            << msg << '\n';
     std::cout << fullMsg.str();
     if (gLogFile.is_open())
         gLogFile << fullMsg.str();

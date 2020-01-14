@@ -26,6 +26,9 @@ namespace Utils {
  * resources). This is useful when user wants to keep track of all resources
  * which are allocated by the program. MEMORY logs are off by default - to
  * enable them, define LKCOMMON_LOG_MEMORY preprocessor macro.
+ * \li CALL - indicates a function call message (ex. logging input parameters).
+ * CALL logs are off by default - to enable them, define LKCOMMON_LOG_CALL
+ * preprocessor macro.
  *
  * Logger module writes messages to following predefined backends:
  * \li stdout - standard console output.
@@ -36,7 +39,7 @@ namespace Utils {
  * there are numerous LOG* defines which allow to directly print logs.
  *
  * @remarks Ideas/tasks to do with Logger:
- *   * Evolve Logger backends to be more sophisticated (ex. to allow in
+ *   * Evolve Logger backends to be more sophisticated (ex. to allow input)
  *   * File backend should create the file on start, not on first Log() call
  */
 namespace Logger {
@@ -57,6 +60,7 @@ enum class LogLevel: unsigned char
     INFO,
     DEBUG,
     MEMORY,
+    CALL,
 };
 
 /**
@@ -68,7 +72,7 @@ enum class LogLevel: unsigned char
  * @note This function should not be used directly. Instead, one of LOG* macros
  * should be used to print a message using Logger module.
  */
-void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg);
+void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg);
 
 /**
  * Sets project's root path to strip from log files.
@@ -98,11 +102,13 @@ void OpenLogFile(const std::string& path);
 } // namespace Utils
 } // namespace lkCommon
 
+
 #define LOG(level, msg) do { \
     std::stringstream ss; \
     ss << msg; \
-    lkCommon::Utils::Logger::Log(level, __FILE__, __LINE__, ss); \
+    lkCommon::Utils::Logger::Log(level, __FILE__, __LINE__, ss.str()); \
 } while(0)
+
 
 /**
  * @def LOGD
@@ -121,6 +127,8 @@ void OpenLogFile(const std::string& path);
  *
  * Macro used for logging Memory-related messages. Available only when
  * LKCOMMON_LOG_MEMORY macro is defined.
+ *
+ * @todo Figure out another way to enable Memory logs (log levels?)
  */
 #ifdef LKCOMMON_LOG_MEMORY
 #define LOGM(msg) LOG(lkCommon::Utils::Logger::LogLevel::MEMORY, msg)
@@ -129,16 +137,36 @@ void OpenLogFile(const std::string& path);
 #endif
 
 /**
+ * @def LOGC
+ *
+ * Macro used for logging function calls. Available only when
+ * LKCOMMON_LOG_CALL macro is defined at build time.
+ *
+ * @todo Figure out another way to enable Call logs (log levels?)
+ */
+#ifdef LKCOMMON_LOG_CALL
+#define LOGC(msg) LOG(lkCommon::Utils::Logger::LogLevel::CALL, msg)
+#else
+#define LOGC(msg) do { } while(0)
+#endif
+
+/**
+ * @def LOGI
+ *
  * Macro for logging information messages.
  */
 #define LOGI(msg) LOG(lkCommon::Utils::Logger::LogLevel::INFO, msg)
 
 /**
+ * @def LOGW
+ *
  * Macro for logging Warning messages.
  */
 #define LOGW(msg) LOG(lkCommon::Utils::Logger::LogLevel::WARNING, msg)
 
 /**
+ * @def LOGE
+ *
  * Macro for logging Error messages.
  */
 #define LOGE(msg) LOG(lkCommon::Utils::Logger::LogLevel::ERR, msg)

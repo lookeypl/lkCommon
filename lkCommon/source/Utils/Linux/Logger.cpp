@@ -18,7 +18,7 @@ namespace Logger {
 std::ofstream gLogFile;
 std::string gPathRoot;
 
-void Log(LogLevel level, const char* file, uint32_t line, const std::stringstream& msg)
+void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg)
 {
     const char* levelStr = nullptr;
     const char* colorStr = nullptr;
@@ -26,24 +26,29 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::stringstrea
     switch (level)
     {
     case LogLevel::DEBUG:
-        levelStr = " DBG ";
+        levelStr = "[ DBG ] ";
         colorStr = "\033[36m"; // Cyan (Blue | Green)
         break;
     case LogLevel::INFO:
-        levelStr = " INF ";
+        levelStr = "[ INF ] ";
         colorStr = "\033[39m"; // Default
         break;
     case LogLevel::WARNING:
-        levelStr = " WRN ";
+        levelStr = "[ WRN ] ";
         colorStr = "\033[93m"; // Bright Yellow (Red | Green)
         break;
     case LogLevel::ERR:
-        levelStr = "ERROR";
+        levelStr = "[ERROR] ";
         colorStr = "\033[91m"; // Light red
         break;
     case LogLevel::MEMORY:
-        levelStr = " MEM ";
+        levelStr = "[ MEM ] ";
         colorStr = "\033[33m"; // Yellow (Red | Green)
+        break;
+    case LogLevel::CALL:
+        levelStr = "[ CALL ] ";
+        colorStr = "\033[37m"; // White
+        break;
     }
 
     std::string path;
@@ -64,9 +69,9 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::stringstrea
     }
 
     std::stringstream fullMsg;
-    fullMsg << colorStr << "[" << levelStr << "] "
+    fullMsg << colorStr << levelStr
             << path << " @ " << line << ": "
-            << msg.str() << "\033[39m\n";
+            << msg << "\033[39m\n";
     std::cout << fullMsg.str();
     if (gLogFile.is_open())
         gLogFile << fullMsg.str();

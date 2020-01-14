@@ -7,4 +7,6 @@ TEST(Logger, LogTest)
     LOGW("Warning test log");
     LOGI("Info test log");
     LOGD("Debug test log");
+    LOGM("Memory test log");
+    LOGC("Call test log");
 }
