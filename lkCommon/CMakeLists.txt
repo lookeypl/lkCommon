@@ -87,8 +87,6 @@ ELSE()
     MESSAGE(FATAL_ERROR "Platform unsupported")
 ENDIF()
 
-ADD_DEFINITIONS(-msse4.1 -fPIC)
-
 ADD_LIBRARY(${LKCOMMON_TARGET}
             ${LKCOMMON_SRCS} ${LKCOMMON_HDRS}
             ${LKCOMMON_PLATFORM_SRCS}
@@ -107,6 +105,34 @@ TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
                        PRIVATE "-msse4.1"
                        PRIVATE "-fPIC"
                        )
+
+IF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                           PRIVATE "-O0"
+                           PRIVATE "-ggdb"
+                           )
+    TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET}
+                               PRIVATE _DEBUG
+                               )
+ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                           PRIVATE "-O2"
+                           )
+ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+
+IF(LKCOMMON_LOG_MEMORY)
+    TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET} PUBLIC LKCOMMON_LOG_MEMORY)
+    MESSAGE(STATUS "lkCommon: Memory logs ENABLED")
+ELSE(LKCOMMON_LOG_MEMORY)
+    MESSAGE(STATUS "lkCommon: Memory logs DISABLED")
+ENDIF(LKCOMMON_LOG_MEMORY)
+
+IF(LKCOMMON_LOG_CALL)
+    TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET} PUBLIC LKCOMMON_LOG_CALL)
+    MESSAGE(STATUS "lkCommon: Call logs ENABLED")
+ELSE(LKCOMMON_LOG_CALL)
+    MESSAGE(STATUS "lkCommon: Call logs DISABLED")
+ENDIF(LKCOMMON_LOG_CALL)
 
 TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread libuuid.a)
 

@@ -34,11 +34,28 @@ ADD_EXECUTABLE(${LKCOMMON_TEST_TARGET}
 
 ADD_DEPENDENCIES(${LKCOMMON_TEST_TARGET} ${LKCOMMON_TARGET} gtest)
 
-ADD_DEFINITIONS(-msse4.1 -fPIC)
-ADD_DEFINITIONS(-DLKCOMMON_ROOT_DIR="${LKCOMMON_ROOT_DIRECTORY}/"
-                -DLKCOMMON_LOG_MEMORY
-                -DLKCOMMON_LOG_CALL
-                )
+TARGET_COMPILE_OPTIONS(${LKCOMMON_TEST_TARGET}
+                       PRIVATE "-msse4.1"
+                       PRIVATE "-fPIC"
+                       )
+
+TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TEST_TARGET}
+                           PRIVATE -DLKCOMMON_ROOT_DIR="${LKCOMMON_ROOT_DIRECTORY}/"
+                           )
+
+IF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    TARGET_COMPILE_OPTIONS(${LKCOMMON_TEST_TARGET}
+                           PRIVATE "-O0"
+                           PRIVATE "-ggdb"
+                           )
+    TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TEST_TARGET}
+                               PRIVATE _DEBUG
+                               )
+ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    TARGET_COMPILE_OPTIONS(${LKCOMMON_TEST_TARGET}
+                           PRIVATE "-O2"
+                           )
+ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
 
 TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TEST_TARGET}
                            PUBLIC ${LKCOMMON_DIRECTORY}/include
