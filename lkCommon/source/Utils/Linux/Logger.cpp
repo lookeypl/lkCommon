@@ -27,7 +27,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
     {
     case LogLevel::DEBUG:
         levelStr = "[ DBG ] ";
-        colorStr = "\033[36m"; // Cyan (Blue | Green)
+        colorStr = "\033[96m"; // Bright Cyan (Blue | Green)
         break;
     case LogLevel::INFO:
         levelStr = "[ INF ] ";
@@ -39,7 +39,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
         break;
     case LogLevel::ERR:
         levelStr = "[ERROR] ";
-        colorStr = "\033[91m"; // Light red
+        colorStr = "\033[91m"; // Bright red
         break;
     case LogLevel::MEMORY:
         levelStr = "[ MEM ] ";
@@ -47,7 +47,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
         break;
     case LogLevel::CALL:
         levelStr = "[ CALL ] ";
-        colorStr = "\033[37m"; // White
+        colorStr = "\033[36m"; // Cyan
         break;
     }
 

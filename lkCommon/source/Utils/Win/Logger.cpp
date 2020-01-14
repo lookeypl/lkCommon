@@ -42,7 +42,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
     {
     case LogLevel::DEBUG:
         levelStr = "[DEBUG] ";
-        SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_GREEN);
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         break;
     case LogLevel::INFO:
         levelStr = "[ INF ] ";
@@ -61,7 +61,7 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
         break;
     case LogLevel::CALL:
         levelStr = "[ CALL ] ";
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE);
         break;
     }
 
@@ -90,13 +90,14 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
     if (gLogFile.is_open())
         gLogFile << fullMsg.str();
 
-    SetConsoleTextAttribute(console, conInfo.wAttributes);
 
     std::wstring wideMsg;
     if (StringToWString(fullMsg.str(), wideMsg))
     {
         OutputDebugStringW(wideMsg.c_str());
     }
+
+    SetConsoleTextAttribute(console, conInfo.wAttributes);
 }
 
 void SetRootPathToStrip(const std::string& path)

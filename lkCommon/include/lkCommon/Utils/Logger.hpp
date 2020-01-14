@@ -145,7 +145,11 @@ void OpenLogFile(const std::string& path);
  * @todo Figure out another way to enable Call logs (log levels?)
  */
 #ifdef LKCOMMON_LOG_CALL
-#define LOGC(msg) LOG(lkCommon::Utils::Logger::LogLevel::CALL, msg)
+#define LOGC(msg) do { \
+    std::stringstream ss; \
+    ss << '<' << __func__ << "> " << msg; \
+    lkCommon::Utils::Logger::Log(lkCommon::Utils::Logger::LogLevel::CALL, __FILE__, __LINE__, ss.str()); \
+} while(0)
 #else
 #define LOGC(msg) do { } while(0)
 #endif
