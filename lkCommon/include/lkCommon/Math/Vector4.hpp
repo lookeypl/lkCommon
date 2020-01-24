@@ -1,13 +1,27 @@
 #pragma once
 #define _LKCOMMON_MATH_VECTOR4_HPP_
 
-#include <xmmintrin.h>
 #include "lkCommon/lkCommon.hpp"
+
+#include <xmmintrin.h>
 
 
 namespace lkCommon {
 namespace Math {
 
+class Vector2;
+class Vector3;
+
+/**
+ * Zero-overhead 4-dimensional Vector class.
+ *
+ * Operations on this class are done via SSE instructions to speed up execution time.
+ *
+ * Casting this function to other Vector* classes will lose values from extra dimensions (ex. cast
+ * to Vector2 will only save X and Y coordinates).
+ *
+ * @todo Document this class properly
+ */
 class alignas(16) Vector4 final
 {
     union Vector4f
@@ -80,6 +94,10 @@ public:
     // Comparison
     bool operator==(const Vector4& other) const;
     bool operator!=(const Vector4& other) const;
+
+    // Casts
+    explicit operator Vector2() const;
+    explicit operator Vector3() const;
 
     // Friendships
     friend std::ostream& operator<<(std::ostream& os, const Vector4& v);

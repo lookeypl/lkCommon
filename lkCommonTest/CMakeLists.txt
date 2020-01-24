@@ -10,6 +10,8 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Math/Matrix4Test.cpp
                        Tests/Math/RingAverageTest.cpp
                        Tests/Math/UtilitiesTest.cpp
+                       Tests/Math/Vector2Test.cpp
+                       Tests/Math/Vector3Test.cpp
                        Tests/Math/Vector4Test.cpp
                        Tests/System/InfoTest.cpp
                        Tests/System/WindowTest.cpp

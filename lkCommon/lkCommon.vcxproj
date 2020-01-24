@@ -25,6 +25,8 @@
     <ClCompile Include="source\Math\LinearInterpolator.cpp" />
     <ClCompile Include="source\Math\Matrix4.cpp" />
     <ClCompile Include="source\Math\Utilities.cpp" />
+    <ClCompile Include="source\Math\Vector2.cpp" />
+    <ClCompile Include="source\Math\Vector3.cpp" />
     <ClCompile Include="source\Math\Vector4.cpp" />
     <ClCompile Include="source\System\Win\FS.cpp" />
     <ClCompile Include="source\System\Win\Info.cpp" />
@@ -57,6 +59,10 @@
     <ClInclude Include="include\lkCommon\Math\RingAverageImpl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Utilities.hpp" />
     <ClInclude Include="include\lkCommon\Math\UtilitiesImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Vector2.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Vector2Impl.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Vector3.hpp" />
+    <ClInclude Include="include\lkCommon\Math\Vector3Impl.hpp" />
     <ClInclude Include="include\lkCommon\Math\Vector4.hpp" />
     <ClInclude Include="include\lkCommon\Math\Vector4Impl.hpp" />
     <ClInclude Include="include\lkCommon\System\FS.hpp" />

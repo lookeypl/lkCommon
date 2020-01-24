@@ -3,6 +3,8 @@ SET(LKCOMMON_SRCS source/Math/CubicInterpolator.cpp
                   source/Math/LinearInterpolator.cpp
                   source/Math/Matrix4.cpp
                   source/Math/Utilities.cpp
+                  source/Math/Vector2.cpp
+                  source/Math/Vector3.cpp
                   source/Math/Vector4.cpp
                   source/Utils/ArenaAllocator.cpp
                   source/Utils/ArgParser.cpp
@@ -26,6 +28,10 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Math/RingAverageImpl.hpp
                   include/lkCommon/Math/Utilities.hpp
                   include/lkCommon/Math/UtilitiesImpl.hpp
+                  include/lkCommon/Math/Vector2.hpp
+                  include/lkCommon/Math/Vector2Impl.hpp
+                  include/lkCommon/Math/Vector3.hpp
+                  include/lkCommon/Math/Vector3Impl.hpp
                   include/lkCommon/Math/Vector4.hpp
                   include/lkCommon/Math/Vector4Impl.hpp
                   include/lkCommon/System/FS.hpp

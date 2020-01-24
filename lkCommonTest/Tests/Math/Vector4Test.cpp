@@ -2,6 +2,9 @@
 
 #include <lkCommon/Math/Vector4.hpp>
 
+#include <lkCommon/Math/Vector2.hpp>
+#include <lkCommon/Math/Vector3.hpp>
+
 using namespace lkCommon::Math;
 
 
@@ -17,9 +20,11 @@ const Vector4 resultMul(2.0f, 6.0f, 12.0f, 20.0f);
 const Vector4 resultMul2(2.0f, 4.0f, 6.0f, 8.0f);
 const Vector4 resultDiv(0.5f, 0.5f, 0.5f, 0.5f);
 const Vector4 resultDiv2(0.5f, 1.0f, 1.5f, 2.0f);
-const Vector4 resultPow(8.0f);
 const Vector4 resultCross(0.0f, 0.0f, 1.0f, 0.0f);
 const Vector4 resultNorm(1.0f, 0.0f, 0.0f, 0.0f);
+const Vector4 vectorToCast(1.0f, 2.0f, 3.0f, 4.0f);
+const Vector2 resultCastV2(1.0f, 2.0f);
+const Vector3 resultCastV3(1.0f, 2.0f, 3.0f);
 
 } // namespace
 
@@ -172,4 +177,20 @@ TEST(Vector4, NotEqual)
 
     ASSERT_TRUE(a != b);
     ASSERT_FALSE(a != c);
+}
+
+TEST(Vector4, CastToVector2)
+{
+    Vector4 v1(vectorToCast);
+    Vector2 v2 = static_cast<Vector2>(v1);
+
+    ASSERT_EQ(v2, resultCastV2);
+}
+
+TEST(Vector4, CastToVector3)
+{
+    Vector4 v1(vectorToCast);
+    Vector3 v2 = static_cast<Vector3>(v1);
+
+    ASSERT_EQ(v2, resultCastV3);
 }

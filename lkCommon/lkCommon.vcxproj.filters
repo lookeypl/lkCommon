@@ -105,6 +105,12 @@
     <ClCompile Include="source\Utils\Win\UUID.cpp">
       <Filter>source\Utils\Win</Filter>
     </ClCompile>
+    <ClCompile Include="source\Math\Vector2.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector3.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\lkCommon.hpp">
@@ -238,6 +244,18 @@
     </ClInclude>
     <ClInclude Include="include\lkCommon\Utils\UUID.hpp">
       <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector2.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector2Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector3.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector3Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

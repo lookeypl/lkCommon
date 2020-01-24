@@ -65,6 +65,12 @@
     <ClCompile Include="Tests\Utils\UUIDTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Math\Vector2Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Vector3Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

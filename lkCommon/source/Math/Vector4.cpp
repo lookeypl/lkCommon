@@ -1,11 +1,31 @@
 #include "lkCommon/Math/Vector4.hpp"
 
+#include "lkCommon/Math/Vector2.hpp"
+#include "lkCommon/Math/Vector3.hpp"
 #include <smmintrin.h>
 #include <cmath>
 
 
 namespace lkCommon {
 namespace Math {
+
+// Casts
+Vector4::operator Vector2() const
+{
+    return Vector2(
+        mValue.f[0],
+        mValue.f[1]
+    );
+}
+
+Vector4::operator Vector3() const
+{
+    return Vector3(
+        mValue.f[0],
+        mValue.f[1],
+        mValue.f[2]
+    );
+}
 
 // Friendships
 std::ostream& operator<<(std::ostream& os, const Vector4& v)
