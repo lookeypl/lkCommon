@@ -163,6 +163,7 @@ class DepsBuilder:
             if result.returncode is not 0:
                 print("FAILED")
                 print(str(result.stderr))
+                raise Exception("Build failed with error: " + str(result.stderr))
             else:
                 print("SUCCESS")
 
@@ -188,8 +189,7 @@ class DepsBuilder:
             "msbuild",
             solution,
             "/t:" + target,
-            "/p:Configuration=" + self.mCurrentConfig + ";Platform=" + self.mCurrentPlat,
-            "/p:OutDir=" + str(self.mOutputDir) + "\\"
+            "/p:Configuration=" + self.mCurrentConfig + ";Platform=" + self.mCurrentPlat
         ]
         self.CallStage("Building " + target, process)
 

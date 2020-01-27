@@ -72,8 +72,8 @@ IF(WIN32)
                                source/System/Win/Window.cpp
                                source/System/Win/WindowImage.cpp
                                source/Utils/Win/Logger.cpp
-                               source/Utils/Win/Timer.cpp
                                source/Utils/Win/StringConv.cpp
+                               source/Utils/Win/Timer.cpp
                                source/Utils/Win/UUID.cpp
                                )
 ELSEIF(UNIX)
@@ -106,25 +106,54 @@ TARGET_INCLUDE_DIRECTORIES(${LKCOMMON_TARGET}
                            PRIVATE ${LKCOMMON_DEPS_LIBPNG_CONF_INCLUDE_DIR}
                            )
 
-TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
-                       PRIVATE "-std=c++1y"
-                       PRIVATE "-msse4.1"
-                       PRIVATE "-fPIC"
-                       )
+# Compile options depend on platform
+IF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
+    TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                           PRIVATE -std:c++14
+                           PRIVATE -arch:SSE2
+                           )
 
-IF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
-                           PRIVATE "-O0"
-                           PRIVATE "-ggdb"
-                           )
+    # Inform MSVC that we use Unicode
     TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET}
-                               PRIVATE _DEBUG
+                               PRIVATE _UNICODE
                                )
-ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+
+    IF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                               PRIVATE -Od
+                               PRIVATE -Zi
+                               PRIVATE -DEBUG:FULL
+                               )
+        TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET}
+                                   PRIVATE _DEBUG
+                                   )
+    ELSE(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                               PRIVATE -O2
+                               PRIVATE -Oi
+                               )
+    ENDIF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+ELSE(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
-                           PRIVATE "-O2"
+                           PRIVATE "-std=c++1y"
+                           PRIVATE "-msse4.1"
+                           PRIVATE "-fPIC"
                            )
-ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+
+    IF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                               PRIVATE "-O0"
+                               PRIVATE "-ggdb"
+                               )
+        TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET}
+                                   PRIVATE _DEBUG
+                                   )
+    ELSE(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        TARGET_COMPILE_OPTIONS(${LKCOMMON_TARGET}
+                               PRIVATE "-O2"
+                               )
+    ENDIF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+ENDIF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
 
 IF(LKCOMMON_LOG_MEMORY)
     TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET} PUBLIC LKCOMMON_LOG_MEMORY)
@@ -140,6 +169,35 @@ ELSE(LKCOMMON_LOG_CALL)
     MESSAGE(STATUS "lkCommon: Call logs DISABLED")
 ENDIF(LKCOMMON_LOG_CALL)
 
-TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread libuuid.a)
+ADD_DEPENDENCIES(${LKCOMMON_TARGET} PostDepsBuild)
+
+IF(WIN32)
+    TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static)
+ELSEIF(UNIX)
+    TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static pthread libuuid.a)
+ENDIF(WIN32)
 
 LKCOMMON_COPY_RESULT(${LKCOMMON_TARGET})
+
+# Above TARGET_LINK_LIBRARIES won't actually add symbols to lkCommon.lib, just creates a dependency.
+# Actually add dependant static libraries on Windows via lib command.
+IF(WIN32)
+    IF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        SET(LKCOMMON_DEPS_ZLIB_LIBRARY zlibstaticd.lib)
+        SET(LKCOMMON_DEPS_LIBPNG_LIBRARY libpng16_staticd.lib)
+    ELSE(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+        SET(LKCOMMON_DEPS_ZLIB_LIBRARY zlibstatic.lib)
+        SET(LKCOMMON_DEPS_LIBPNG_LIBRARY libpng16_static.lib)
+    ENDIF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
+
+    ADD_CUSTOM_COMMAND(TARGET ${LKCOMMON_TARGET} POST_BUILD
+                       COMMAND cmake -E rename ${LKCOMMON_TARGET}.lib ${LKCOMMON_TARGET}_tolink.lib
+                       COMMAND lib.exe /OUT:${LKCOMMON_TARGET}.lib
+                                       ${LKCOMMON_TARGET}_tolink.lib
+                                       ${LKCOMMON_DEPS_OUTPUT_DIRECTORY}${LKCOMMON_DEPS_ZLIB_LIBRARY}
+                                       ${LKCOMMON_DEPS_OUTPUT_DIRECTORY}${LKCOMMON_DEPS_LIBPNG_LIBRARY}
+                                       rpcrt4.lib
+                       COMMAND cmake -E remove -f ${LKCOMMON_TARGET}_tolink.lib
+                       WORKING_DIRECTORY ${LKCOMMON_OUTPUT_DIRECTORY}
+                       COMMENT "Joining lkCommon.lib with static library dependencies" VERBATIM)
+ENDIF(WIN32)

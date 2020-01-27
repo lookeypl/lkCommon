@@ -185,7 +185,7 @@
     <CustomBuildStep />
     <PostBuildEvent>
       <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
-lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib"
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib" rpcrt4.lib
 del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -215,7 +215,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     <CustomBuildStep />
     <PostBuildEvent>
       <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
-lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib"
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib" rpcrt4.lib
 del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -236,7 +236,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     <CustomBuildStep />
     <PostBuildEvent>
       <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
-lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib"
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_static.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstatic.lib" rpcrt4.lib
 del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
@@ -255,7 +255,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>ren "$(OutDir)$(TargetName)$(TargetExt)" $(TargetName)_tolink$(TargetExt)
-lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib"
+lib.exe /OUT:"$(OutDir)$(TargetName)$(TargetExt)" "$(OutDir)$(TargetName)_tolink$(TargetExt)" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\libpng16_staticd.lib" "$(SolutionDir)Deps\Bin\$(Platform)\$(Configuration)\zlibstaticd.lib" rpcrt4.lib
 del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
