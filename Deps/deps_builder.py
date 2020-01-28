@@ -117,7 +117,7 @@ class DepsBuilder:
                 break
             sys.stdout.write("\r " + c + " ==> " + stepString + "...")
             sys.stdout.flush()
-            time.sleep(0.15)
+            time.sleep(0.2)
 
         sys.stdout.write("\r   ==> " + stepString + "... ")
         sys.stdout.flush()
@@ -139,10 +139,13 @@ class DepsBuilder:
             self.mAnimThread.join()
         sys.stdout.flush()
         print("\nInterrupt captured\n")
-        sys.exit(9)
+        sys.exit(1)
 
-    def CallStage(self, prompt, pargs):
+    def CallStage(self, prompt, pargs, stageId=0, stageCount=0):
         capture = not self.mArgs.verbose
+
+        if (stageCount > 0):
+            prompt = str(stageId) + "/" + str(stageCount) + " " + prompt
 
         if not self.mArgs.verbose and not self.mArgs.noanim:
             self.mAnimThread = threading.Thread(target=self.AnimProgress,
@@ -161,11 +164,16 @@ class DepsBuilder:
 
         if not self.mArgs.verbose:
             if result.returncode is not 0:
-                print("FAILED")
-                print(str(result.stderr))
-                raise Exception("Build failed with error: " + str(result.stderr))
+                if self.mArgs.noanim:
+                    print("   ==> " + prompt + "... FAILED")
+                else:
+                    print("FAILED")
+                raise Exception("Build failed. Rerun with -v option to see details.")
             else:
-                print("SUCCESS")
+                if self.mArgs.noanim:
+                    print("   ==> " + prompt + "... SUCCESS")
+                else:
+                    print("SUCCESS")
 
     def CMakeCreate(self):
         os.chdir(self.mCMakeDir)
@@ -181,7 +189,7 @@ class DepsBuilder:
 
         os.chdir(self.mScriptDir)
 
-    def MSBuild(self, project, target):
+    def MSBuild(self, project, target, stageId, stageCount):
         os.chdir(self.mCMakeDir)
 
         solution = project + ".sln"
@@ -191,7 +199,7 @@ class DepsBuilder:
             "/t:" + target,
             "/p:Configuration=" + self.mCurrentConfig + ";Platform=" + self.mCurrentPlat
         ]
-        self.CallStage("Building " + target, process)
+        self.CallStage("Building " + target, process, stageId, stageCount)
 
         os.chdir(self.mScriptDir)
 
@@ -251,11 +259,15 @@ class DepsBuilder:
             self.CMakeCreate()
 
         if self.mArgs.tests:
+            stageId = 0
             for testdep in self.mTestDeps:
-                self.MSBuild(testdep[0], testdep[1])
+                stageId += 1
+                self.MSBuild(testdep[0], testdep[1], stageId, len(self.mTestDeps))
         else:
+            stageId = 0
             for dep in self.mDeps:
-                self.MSBuild(dep[0], dep[1])
+                stageId += 1
+                self.MSBuild(dep[0], dep[1], stageId, len(self.mDeps))
 
         # touch build done file
         open(self.mBuildDoneFile, 'w').close()
@@ -293,7 +305,7 @@ def main():
     deps = [
         ("lkCommonDeps", "zlibstatic"),
         ("lkCommonDeps", "png_static"),
-        ("lkCommonDeps", "PostDepsBuild")
+        ("lkCommonDeps", "lkCommonDepsPostBuild")
     ]
 
     testDeps = [

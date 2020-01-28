@@ -29,6 +29,8 @@ lkCommon library is split into various categories, each contains a set of module
   * `Random` - Implementation of various randomization algorithms.
   * `RingAverage` - Template for calculating an average of given type, for given collection of numbers.
   * `Utilities` - Various math-related utilities, more of one-offs which don't fit in any particular category
+  * `Vector2` - Zero-overhead implementation of 2-element float vector.
+  * `Vector3` - Zero-overhead implementation of 3-element float vector.
   * `Vector4` - Fast, zero-overhead implementation of 4-element float vector, using SSE instructions.
 * `System` - Utilities related to system-specific elements.
   * `FS` - Functions useful for filesystem operations.
@@ -63,7 +65,7 @@ lkCommon's dependencies are:
 * zlib
 * gtest (for lkCommonTest only)
 
-All dependencies are downloadable through Git submodules:
+All dependencies are downloadable at a proper version through Git submodules:
 
 ```
 $ git submodule update --init --recursive
@@ -72,24 +74,25 @@ $ git submodule update --init --recursive
 Linux additionally needs libxcb to properly connect to the window system. Download them using your
 favorite package manager before building the project.
 
-On Linux all dependencies are added through CMake, so building the project will automatically add
-them up and build them accordingly.
+When building through CMake all dependencies are added to build process, so building the project
+will automatically add them up and build them.
 
-On Windows dependencies need to be built before using the library. For that, there is a Python 3.7
-script called `deps_builder.py`. In order for it to work, both `cmake` and `msbuild` must be visible
-in Windows' PATH environment variable.
+When building with Visual Studio, dependencies need to be built before using the library. For that,
+there is a Python 3.7 script called `deps_builder.py`. In order for it to work, both `cmake` and
+`msbuild` must be visible in Windows' PATH environment variable.
 
 To make building process on Windows easier, deps builder script is hooked to Visual Studio's
-pre-build event and should fire up automagically, building everything. However, if you want to build
-all the deps at once and not think about it anymore, just run `Deps/deps_builder.py` in your
-terminal.
+pre-build event and should fire up automagically, building each configuration as needed. However,
+if you want to build all the deps at once and not think about it anymore, just run
+`Deps/deps_builder.py` in your terminal.
 
 
 Building for Windows
 --------------------
 
-Fetch submodules and use provided `lkCommon.sln` solution file, compatible with Visual Studio 2019.
-CMake-generated build files should work, but I never tested if Windows CMake build works properly.
+Fetch submodules and preferably use provided `lkCommon.sln` solution file, compatible with Visual
+Studio 2019. CMake-generated build files should work too, but use out-of-source building to not
+overwrite original Solution/Project files.
 
 
 Building for Linux

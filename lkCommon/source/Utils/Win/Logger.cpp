@@ -103,6 +103,12 @@ void Log(LogLevel level, const char* file, uint32_t line, const std::string& msg
 void SetRootPathToStrip(const std::string& path)
 {
     gPathRoot = path;
+
+    for (char& c : gPathRoot)
+    {
+        if (c == '/')
+            c = '\\';
+    }
 }
 
 void OpenLogFile(const std::string& path)

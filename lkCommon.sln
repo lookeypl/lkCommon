@@ -14,8 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deps", "Deps", "{0232314F-5
 	ProjectSection(SolutionItems) = preProject
 		Deps\CMakeLists.txt = Deps\CMakeLists.txt
 		Deps\deps_builder.py = Deps\deps_builder.py
-		Deps\post_build_deps.bat = Deps\post_build_deps.bat
-		Deps\prepare_deps.bat = Deps\prepare_deps.bat
+		Deps\deps_post_build.bat = Deps\deps_post_build.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROOT", "ROOT", "{5C017181-922A-4203-933F-F94E186A1A7F}"

@@ -113,9 +113,10 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
                            PRIVATE -arch:SSE2
                            )
 
-    # Inform MSVC that we use Unicode
+    # Inform MSVC about preprocessor defines
     TARGET_COMPILE_DEFINITIONS(${LKCOMMON_TARGET}
                                PRIVATE _UNICODE
+                               PRIVATE _CRT_SECURE_NO_WARNINGS
                                )
 
     IF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
@@ -169,7 +170,7 @@ ELSE(LKCOMMON_LOG_CALL)
     MESSAGE(STATUS "lkCommon: Call logs DISABLED")
 ENDIF(LKCOMMON_LOG_CALL)
 
-ADD_DEPENDENCIES(${LKCOMMON_TARGET} PostDepsBuild)
+ADD_DEPENDENCIES(${LKCOMMON_TARGET} lkCommonDepsPostBuild)
 
 IF(WIN32)
     TARGET_LINK_LIBRARIES(${LKCOMMON_TARGET} PRIVATE zlibstatic png_static)

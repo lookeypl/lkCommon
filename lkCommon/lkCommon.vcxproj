@@ -171,7 +171,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -199,7 +199,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -226,7 +226,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_UNICODE;UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>
@@ -247,7 +247,7 @@ del "$(OutDir)$(TargetName)_tolink$(TargetExt)"</Command>
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)lkCommon\include\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\libpng\;$(SolutionDir)Deps\libpng\;$(SolutionDir)Deps\build\$(Platform)\$(Configuration)\zlib\;$(SolutionDir)Deps\zlib\;$(SolutionDir)lkCommon\source\Internal\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>WIN32;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_UNICODE;UNICODE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PreBuildEvent>

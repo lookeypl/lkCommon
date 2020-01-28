@@ -33,26 +33,26 @@ SET(PNG_BUILD_ZLIB ON CACHE BOOL "Custom zlib Location, else find_package is use
 
 ADD_SUBDIRECTORY(libpng)
 
-# Workaround to keep Deps/zlib submodule clean after build
-ADD_CUSTOM_TARGET(PostDepsBuild ALL DEPENDS zlibstatic png_static
-    COMMENT "Post build script output:"
-)
+# Custom target to perform some post-deps-build cleanups and moves
+ADD_CUSTOM_TARGET(lkCommonDepsPostBuild ALL DEPENDS zlibstatic png_static
+                  COMMENT "Deps post build commands"
+                  )
 
 IF(WIN32)
-    ADD_CUSTOM_COMMAND(TARGET PostDepsBuild POST_BUILD
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/post_build_deps.bat
-    )
+    ADD_CUSTOM_COMMAND(TARGET lkCommonDepsPostBuild POST_BUILD
+                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/deps_post_build.bat
+                       )
 ELSEIF(UNIX)
-    ADD_CUSTOM_COMMAND(TARGET PostDepsBuild POST_BUILD
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/post_build_deps.sh
-    )
+    ADD_CUSTOM_COMMAND(TARGET lkCommonDepsPostBuild POST_BUILD
+                       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/deps_post_build.sh
+                       )
 ENDIF()
 
 IF(WIN32 AND NOT LKCOMMON_DEPS_OUTPUT_DIRECTORY)
     SET(LKCOMMON_DEPS_OUTPUT_DIRECTORY ${LKCOMMON_DEPS_DIRECTORY}/Bin/${CMAKE_GENERATOR_PLATFORM}/${CMAKE_BUILD_TYPE}/ CACHE INTERNAL "lkCommonDeps output dir")
 ENDIF(WIN32 AND NOT LKCOMMON_DEPS_OUTPUT_DIRECTORY)
 
-ADD_CUSTOM_COMMAND(TARGET PostDepsBuild POST_BUILD
+ADD_CUSTOM_COMMAND(TARGET lkCommonDepsPostBuild POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:zlibstatic> ${LKCOMMON_DEPS_OUTPUT_DIRECTORY}
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:png_static> ${LKCOMMON_DEPS_OUTPUT_DIRECTORY}
                    VERBATIM
