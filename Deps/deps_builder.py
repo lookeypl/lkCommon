@@ -14,13 +14,14 @@ import time
 
 
 class DepsBuilder:
-    def __init__(self, projectName, generator, deps, testDeps, platforms, configurations):
+    def __init__(self, projectName, generator, testDefine, deps, testDeps, platforms, configurations):
         signal.signal(signal.SIGINT, self.InterruptHandler)
 
         self.mProjectName = projectName
         self.mGenerator = generator
         self.mDeps = deps
         self.mTestDeps = testDeps
+        self.mTestDefine = testDefine
         self.mPlatforms = platforms
         self.mConfigs = configurations
         self.mAnimThread = None
@@ -96,6 +97,9 @@ class DepsBuilder:
             self.mBuildDoneFileName = ".build_tests_done"
         else:
             self.mBuildDoneFileName = ".build_done"
+
+        if self.mArgs.tests and self.mTestDefine is None:
+            Exception("There's no test-related CMake define provided, cannot enable tests")
 
         print("Build details:")
         if self.mBuildAllPlats:
@@ -178,6 +182,11 @@ class DepsBuilder:
     def CMakeCreate(self):
         os.chdir(self.mCMakeDir)
 
+        if self.mArgs.tests:
+            enableTests = '1'
+        else:
+            enableTests = '0'
+
         process = [
             "cmake",
             "../../..",
@@ -185,6 +194,10 @@ class DepsBuilder:
             "-G", self.mGenerator,
             "-A", self.mCurrentPlat
         ]
+
+        if self.mTestDefine is not None:
+            process.append("-D" + self.mTestDefine + "=" + enableTests)
+
         self.CallStage("Creating build files for " + self.mCurrentPlat + "/" + self.mCurrentConfig, process)
 
         os.chdir(self.mScriptDir)
@@ -255,8 +268,7 @@ class DepsBuilder:
         if self.SetupBuildTree() is False:
             return
 
-        if not self.mArgs.tests:
-            self.CMakeCreate()
+        self.CMakeCreate()
 
         if self.mArgs.tests:
             stageId = 0
@@ -309,7 +321,8 @@ def main():
     ]
 
     testDeps = [
-        ("lkCommonDeps", "gtest")
+        ("lkCommonDeps", "gtest"),
+        ("lkCommonDeps", "lkCommonDepsTestsPostBuild")
     ]
 
     plats = [
@@ -325,6 +338,7 @@ def main():
     try:
         builder = DepsBuilder(projectName="lkCommon",
                               generator="Visual Studio 16 2019",
+                              testDefine="LKCOMMON_BUILD_TEST",
                               deps=deps, testDeps=testDeps,
                               platforms=plats, configurations=confs)
         builder.Build()
