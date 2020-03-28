@@ -8,7 +8,7 @@
 
 
 namespace lkCommon {
-namespace Utils {
+namespace Allocators {
 
 struct Arena
 {
@@ -38,7 +38,8 @@ struct Arena
  * size and new chunk is added to collection.
  *
  * It is assumed that objects in ArenaAllocator can be singularly freed, however this will only
- * decrease reference counter for given chunk. Such memory won't be possible to reclaim,
+ * decrease reference counter for given chunk. Such memory address won't be possible to reclaim
+ * until the entire Arena is emptied (refcount drops to zero).
  *
  * If need occurs, all used memory can be freed by FreeChunks function. This will automatically
  * invalidate all existing objects, so handle with care.
@@ -59,7 +60,6 @@ class ArenaAllocator
     std::mutex mAllocatorMutex;
 
     Arena* AddChunk();
-    Arena* FindFreeArena(size_t size);
     Arena* FindArenaByPointer(void* ptr);
 
 public:
@@ -158,5 +158,5 @@ public:
     }
 };
 
-} // namespace Utils
+} // namespace Allocators
 } // namespace lkCommon

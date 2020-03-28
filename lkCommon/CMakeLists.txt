@@ -1,4 +1,5 @@
-SET(LKCOMMON_SRCS source/Math/CubicInterpolator.cpp
+SET(LKCOMMON_SRCS source/Allocators/ArenaAllocator.cpp
+                  source/Math/CubicInterpolator.cpp
                   source/Math/Interpolator.cpp
                   source/Math/LinearInterpolator.cpp
                   source/Math/Matrix4.cpp
@@ -6,7 +7,6 @@ SET(LKCOMMON_SRCS source/Math/CubicInterpolator.cpp
                   source/Math/Vector2.cpp
                   source/Math/Vector3.cpp
                   source/Math/Vector4.cpp
-                  source/Utils/ArenaAllocator.cpp
                   source/Utils/ArgParser.cpp
                   source/Utils/ImageLoader.cpp
                   source/Utils/ThreadPool.cpp
@@ -14,6 +14,8 @@ SET(LKCOMMON_SRCS source/Math/CubicInterpolator.cpp
                   )
 
 SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
+                  include/lkCommon/Allocators/ArenaAllocator.hpp
+                  include/lkCommon/Allocators/ArenaObject.hpp
                   include/lkCommon/Math/Average.hpp
                   include/lkCommon/Math/AverageImpl.hpp
                   include/lkCommon/Math/Constants.hpp
@@ -41,8 +43,6 @@ SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/System/Memory.hpp
                   include/lkCommon/System/Window.hpp
                   include/lkCommon/System/WindowImage.hpp
-                  include/lkCommon/Utils/ArenaAllocator.hpp
-                  include/lkCommon/Utils/ArenaObject.hpp
                   include/lkCommon/Utils/ArgParser.hpp
                   include/lkCommon/Utils/Image.hpp
                   include/lkCommon/Utils/ImageImpl.hpp

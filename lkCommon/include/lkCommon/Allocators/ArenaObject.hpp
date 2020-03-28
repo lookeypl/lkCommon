@@ -6,7 +6,7 @@
 
 
 namespace lkCommon {
-namespace Utils {
+namespace Allocators {
 
 class ArenaObject
 {
@@ -25,5 +25,5 @@ public:
     }
 };
 
+} // namespace Allocators
 } // namespace lkCommon
-} // namespace Utils
