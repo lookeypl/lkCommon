@@ -166,6 +166,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tests\Allocators\ArenaAllocatorTest.cpp" />
+    <ClCompile Include="Tests\Allocators\MemoryObjectTest.cpp" />
+    <ClCompile Include="Tests\Allocators\MemoryTest.cpp" />
     <ClCompile Include="Tests\Internal\ImageLoaderTest.cpp" />
     <ClCompile Include="Tests\Math\AverageTest.cpp" />
     <ClCompile Include="Tests\Math\Matrix4Test.cpp" />
@@ -176,8 +179,6 @@
     <ClCompile Include="Tests\Math\Vector4Test.cpp" />
     <ClCompile Include="Tests\System\InfoTest.cpp" />
     <ClCompile Include="Tests\System\WindowTest.cpp" />
-    <ClCompile Include="Tests\Utils\ArenaObjectTest.cpp" />
-    <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp" />
     <ClCompile Include="Tests\Utils\ArgParserTest.cpp" />
     <ClCompile Include="Tests\Utils\ImageTest.cpp" />
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />

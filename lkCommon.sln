@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ROOT", "ROOT", "{5C017181-922A-4203-933F-F94E186A1A7F}"
 	ProjectSection(SolutionItems) = preProject
 		CMakeLists.txt = CMakeLists.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

@@ -21,6 +21,10 @@ of the project. Other modules were designed to be included separately (unless th
 in some way).
 
 lkCommon library is split into various categories, each contains a set of modules available for use:
+* `Allocators` - Collection of custom memory allocation routines, mostly done for speed
+  * `Memory` - Template for wrapping available Allocators and their functionalities into one interface.
+  * `MemoryObject` - Simple template overriding new/delete operators, forcing given object to be allocated using `Memory`.
+  * `ArenaAllocator` - Allocator speeding up allocating multiple small objects by using large memory arenas.
 * `Math` - Various collection of math-related modules.
   * `Average` - Template for calculating an average of given type.
   * `Constants` - Various constants used throughout Math modules.
@@ -41,8 +45,6 @@ lkCommon library is split into various categories, each contains a set of module
   * `Window` - Creates an OS window and provides control over it.
   * `WindowImage` - Additional utility class, used in tandem with `Utils/Image` template class.
 * `Utils` - Other various modules useful here and there
-  * `ArenaAllocator` - Allocator speeding up allocating multiple small objects by using large memory arenas.
-  * `ArenaObject` - Simple template overriding new/delete operators, forcing given object to be allocated using `ArenaAllocator`.
   * `ArgParser` - Argument parser class designed to easily digest argv's and make them easily reachable.
   * `Image` - Template designed to be an "image" - an MxN array of pixels. Used in tandem with `Pixel` module.
   * `ImageLoader` - Module loading images from hard drive, supporting multiple backends. Used internally by `Image`.

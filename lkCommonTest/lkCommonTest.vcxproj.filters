@@ -29,12 +29,6 @@
     <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp">
       <Filter>Tests\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Tests\Utils\ArenaAllocatorTest.cpp">
-      <Filter>Tests\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Tests\Utils\ArenaObjectTest.cpp">
-      <Filter>Tests\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Tests\Math\AverageTest.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
@@ -71,6 +65,15 @@
     <ClCompile Include="Tests\Math\Vector3Test.cpp">
       <Filter>Tests\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Allocators\ArenaAllocatorTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\MemoryObjectTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\MemoryTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">
@@ -87,6 +90,9 @@
     </Filter>
     <Filter Include="Tests\Internal">
       <UniqueIdentifier>{6504a7b0-6f97-4bbd-b557-9f8006fdb941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Allocators">
+      <UniqueIdentifier>{a1d483c4-2d90-4129-9da4-f59111734c2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

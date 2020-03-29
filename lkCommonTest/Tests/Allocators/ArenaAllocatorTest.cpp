@@ -1,9 +1,9 @@
-#include "lkCommon/Utils/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/ArenaAllocator.hpp"
 #include "lkCommon/System/Info.hpp"
 #include <gtest/gtest.h>
 #include <future>
 
-using namespace lkCommon::Utils;
+using namespace lkCommon::Allocators;
 
 namespace {
 
@@ -89,7 +89,7 @@ TEST(ArenaAllocator, FreeAndAllocate)
     memset(ptr, 0, ALLOCATION_SIZE_SMALL); // in case we hit the same region
 }
 
-TEST(ArenaAllocator, FreeChunksAndAllocate)
+TEST(ArenaAllocator, ClearAndAllocate)
 {
     ArenaAllocator allocator;
 
@@ -99,7 +99,7 @@ TEST(ArenaAllocator, FreeChunksAndAllocate)
     EXPECT_EQ(0, allocator.GetFreeChunkSpace());
     EXPECT_EQ(1, allocator.GetChunkCount());
 
-    allocator.FreeChunks();
+    allocator.Clear();
     EXPECT_EQ(PAGE_SIZE, allocator.GetFreeChunkSpace());
     EXPECT_EQ(0, allocator.GetChunkCount());
 
@@ -174,7 +174,7 @@ TEST(ArenaAllocator, AllocateMoreThanChunk)
     EXPECT_EQ(1, allocator.GetChunkCount());
 }
 
-TEST(ArenaAllocator, ClearUnusedChunks)
+TEST(ArenaAllocator, CollectGarbage)
 {
     ArenaAllocator allocator;
 
@@ -206,7 +206,7 @@ TEST(ArenaAllocator, ClearUnusedChunks)
     ASSERT_EQ(CHUNK_COUNT, allocator.GetChunkCount());
 
     // go go Gadget's garbage collector
-    allocator.ClearUnusedChunks();
+    allocator.CollectGarbage();
 
     // only one chunk should remain (last, biggest one), totally free
     ASSERT_EQ(1, allocator.GetChunkCount());

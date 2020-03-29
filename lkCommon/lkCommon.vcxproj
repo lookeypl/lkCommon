@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Allocators\ArenaAllocator.cpp" />
     <ClCompile Include="source\Internal\ImageLoaders\PNGImageLoader.cpp" />
     <ClCompile Include="source\Math\CubicInterpolator.cpp" />
     <ClCompile Include="source\Math\Interpolator.cpp" />
@@ -34,7 +35,6 @@
     <ClCompile Include="source\System\Win\Memory.cpp" />
     <ClCompile Include="source\System\Win\Window.cpp" />
     <ClCompile Include="source\System\Win\WindowImage.cpp" />
-    <ClCompile Include="source\Utils\ArenaAllocator.cpp" />
     <ClCompile Include="source\Utils\ArgParser.cpp" />
     <ClCompile Include="source\Utils\ImageLoader.cpp" />
     <ClCompile Include="source\Utils\ThreadPool.cpp" />
@@ -44,6 +44,9 @@
     <ClCompile Include="source\Utils\Win\UUID.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\lkCommon\Allocators\ArenaAllocator.hpp" />
+    <ClInclude Include="include\lkCommon\Allocators\MemoryObject.hpp" />
+    <ClInclude Include="include\lkCommon\Allocators\Memory.hpp" />
     <ClInclude Include="include\lkCommon\lkCommon.hpp" />
     <ClInclude Include="include\lkCommon\Math\Average.hpp" />
     <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp" />
@@ -72,8 +75,6 @@
     <ClInclude Include="include\lkCommon\System\Memory.hpp" />
     <ClInclude Include="include\lkCommon\System\Window.hpp" />
     <ClInclude Include="include\lkCommon\System\WindowImage.hpp" />
-    <ClInclude Include="include\lkCommon\Utils\ArenaAllocator.hpp" />
-    <ClInclude Include="include\lkCommon\Utils\ArenaObject.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ArgParser.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Image.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ImageImpl.hpp" />

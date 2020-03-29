@@ -1,4 +1,4 @@
-#include "lkCommon/Utils/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/ArenaAllocator.hpp"
 #include "lkCommon/System/Info.hpp"
 #include "lkCommon/System/Memory.hpp"
 #include "lkCommon/Utils/Logger.hpp"
@@ -23,7 +23,7 @@ LKCOMMON_INLINE size_t EnsureArenaFitsSize(size_t currentArenaSize, size_t toAll
 } // namespace
 
 namespace lkCommon {
-namespace Utils {
+namespace Allocators {
 
 ArenaAllocator::ArenaAllocator()
     : mPageSize(lkCommon::System::Info::GetPageSize())
@@ -36,7 +36,7 @@ ArenaAllocator::ArenaAllocator()
 ArenaAllocator::~ArenaAllocator()
 {
     // free all chunks
-    FreeChunks();
+    Clear();
 }
 
 Arena* ArenaAllocator::AddChunk()
@@ -124,7 +124,7 @@ void ArenaAllocator::Free(void* ptr)
     }
 }
 
-void ArenaAllocator::FreeChunks()
+void ArenaAllocator::Clear()
 {
     std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
 
@@ -140,7 +140,7 @@ void ArenaAllocator::FreeChunks()
     }
 }
 
-void ArenaAllocator::ClearUnusedChunks()
+void ArenaAllocator::CollectGarbage()
 {
     if (mArenas.size() <= 1)
         return;
@@ -157,5 +157,5 @@ void ArenaAllocator::ClearUnusedChunks()
     }
 }
 
-} // namespace Utils
+} // namespace Allocators
 } // namespace lkCommon

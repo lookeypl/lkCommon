@@ -11,6 +11,9 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
+                       Tests/Allocators/ArenaAllocatorTest.cpp
+                       Tests/Allocators/MemoryObjectTest.cpp
+                       Tests/Allocators/MemoryTest.cpp
                        Tests/Internal/ImageLoaderTest.cpp
                        Tests/Math/AverageTest.cpp
                        Tests/Math/Matrix4Test.cpp
@@ -21,8 +24,6 @@ SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Math/Vector4Test.cpp
                        Tests/System/InfoTest.cpp
                        Tests/System/WindowTest.cpp
-                       Tests/Utils/ArenaAllocatorTest.cpp
-                       Tests/Utils/ArenaObjectTest.cpp
                        Tests/Utils/ArgParserTest.cpp
                        Tests/Utils/ImageTest.cpp
                        Tests/Utils/LoggerTest.cpp

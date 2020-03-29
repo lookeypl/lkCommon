@@ -1,12 +1,13 @@
-#include "lkCommon/Utils/ArenaObject.hpp"
-#include "lkCommon/Utils/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/MemoryObject.hpp"
+#include "lkCommon/Allocators/Memory.hpp"
 #include <gtest/gtest.h>
 
-using namespace lkCommon::Utils;
+using namespace lkCommon::Allocators;
 
 namespace {
 
-class Object: public ArenaObject
+template <class Allocator>
+class Object: public MemoryObject<Allocator>
 {
 public:
     uint32_t mA;
@@ -31,17 +32,24 @@ const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
 } // namespace
 
 
-TEST(ArenaObject, CreateObject)
+template <typename Allocator>
+void TestMemoryObject()
 {
-    ArenaAllocator allocator;
+    Memory<Allocator> memory;
 
-    Object* a = new (allocator) Object(VALUE_A, VALUE_B);
+    Object<Allocator>* a = new (memory) Object<Allocator>(VALUE_A, VALUE_B);
 
     ASSERT_NE(nullptr, a);
     EXPECT_EQ(VALUE_A, a->mA);
     EXPECT_EQ(VALUE_B, a->mB);
 
-    allocator.Free(a);
+    Object<Allocator>::operator delete(a, memory);
 
     EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
+}
+
+
+TEST(MemoryObject, ArenaAllocator)
+{
+    TestMemoryObject<ArenaAllocator>();
 }

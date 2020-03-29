@@ -39,16 +39,9 @@ struct Arena
  *
  * It is assumed that objects in ArenaAllocator can be singularly freed, however this will only
  * decrease reference counter for given chunk. Such memory address won't be possible to reclaim
- * until the entire Arena is emptied (refcount drops to zero).
- *
- * If need occurs, all used memory can be freed by FreeChunks function. This will automatically
- * invalidate all existing objects, so handle with care.
+ * until the entire Arena is emptied (its refcount drops to zero).
  *
  * @note Allocated arenas are aligned to system's page size.
- *
- * @note To easily make an object Arena-allocable, use ArenaObject helper class.
- *
- * @sa lkCommon::Utils::ArenaObject
  */
 class ArenaAllocator
 {
@@ -108,7 +101,7 @@ public:
      * @p ptr Pointer to object to free.
      *
      * This function will find chunk to which pointer belongs and decrease allocated object count
-     * at that chunk. If chunk has zero allocations, it will be marked for reuse.
+     * at that chunk. If chunk has zero allocations, it will be marked for reuse or cleanup.
      */
     void Free(void* ptr);
 
@@ -120,7 +113,7 @@ public:
      * After this call object is still usable and Allocate() can be called again for
      * new chunk allocation.
      */
-    void FreeChunks();
+    void Clear();
 
     /**
      * Goes through all allocated chunks and clears chunks whose reference count is equal to zero
@@ -128,7 +121,7 @@ public:
      *
      * If there's only one chunk, function does nothing.
      */
-    void ClearUnusedChunks();
+    void CollectGarbage();
 
     /**
      * Returns free space in currently active chunk of data.
