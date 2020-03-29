@@ -32,7 +32,6 @@ ArenaAllocator::ArenaAllocator()
     : mPageSize(lkCommon::System::Info::GetPageSize())
     , mArenaSize(mPageSize)
     , mArenas()
-    , mAllocatorMutex()
 {
 }
 
@@ -72,8 +71,6 @@ Arena* ArenaAllocator::FindArenaByPointer(void* ptr)
 
 void* ArenaAllocator::Allocate(size_t size)
 {
-    std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
-
     size = std::max(size, sizeof(uint32_t)); // to ensure we'll be able to fit magic
     Arena* arena;
 
@@ -110,8 +107,6 @@ void* ArenaAllocator::Allocate(size_t size)
 
 void ArenaAllocator::Free(void* ptr)
 {
-    std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
-
     Arena* arena = FindArenaByPointer(ptr);
     LKCOMMON_ASSERT(arena != nullptr, "Invalid pointer provided to free");
 
@@ -133,8 +128,6 @@ void ArenaAllocator::Free(void* ptr)
 
 void ArenaAllocator::Clear()
 {
-    std::lock_guard<std::mutex> allocatorGuard(mAllocatorMutex);
-
     if (!mArenas.empty())
     {
         for (auto& c: mArenas)

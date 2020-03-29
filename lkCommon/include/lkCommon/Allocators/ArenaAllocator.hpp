@@ -3,8 +3,6 @@
 #include "lkCommon/lkCommon.hpp"
 
 #include <list>
-#include <thread>
-#include <mutex>
 
 
 namespace lkCommon {
@@ -50,7 +48,6 @@ class ArenaAllocator
     size_t mPageSize;
     size_t mArenaSize;
     ArenaCollection mArenas;
-    std::mutex mAllocatorMutex;
 
     Arena* AddChunk();
     Arena* FindArenaByPointer(void* ptr);
@@ -90,8 +87,6 @@ public:
      * For best performance, allocated chunks should have way smaller size than chunk size. If
      * there will be an allocation of size higher than current chunk size, Allocator will increase
      * the chunk size to fit an object of given size, plus padding necessary to align to page size.
-     *
-     * This call is thread-safe.
      */
     void* Allocate(size_t size);
 

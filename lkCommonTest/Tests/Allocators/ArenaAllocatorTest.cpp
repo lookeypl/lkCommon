@@ -113,41 +113,6 @@ TEST(ArenaAllocator, ClearAndAllocate)
     EXPECT_EQ(1, allocator.GetChunkCount());
 }
 
-TEST(ArenaAllocator, AllocateMultipleThreads)
-{
-    ArenaAllocator allocator;
-
-    std::vector<void*> memPtrs(THREAD_COUNT);
-    std::vector<std::future<void*>> mFutures;
-    mFutures.reserve(THREAD_COUNT);
-
-    ASSERT_EQ(PAGE_SIZE, allocator.GetFreeChunkSpace());
-
-    auto threadFunc = [&allocator]() -> void* {
-        return allocator.Allocate(ALLOCATION_SIZE_SMALL);
-    };
-
-    for (uint32_t i = 0; i < THREAD_COUNT; ++i)
-    {
-        mFutures.emplace_back(std::move(std::async(std::launch::async, threadFunc)));
-    }
-
-    for (uint32_t i = 0; i < THREAD_COUNT; ++i)
-    {
-        memPtrs[i] = mFutures[i].get();
-        EXPECT_NE(nullptr, memPtrs[i]);
-    }
-
-    // ensure addresses did not overlap
-    for (uint32_t i = 0; i < THREAD_COUNT; ++i)
-    {
-        for (uint32_t j = i + 1; j < THREAD_COUNT; ++j)
-        {
-            EXPECT_NE(memPtrs[i], memPtrs[j]);
-        }
-    }
-}
-
 TEST(ArenaAllocator, AllocateTwoBlocksChunkSize)
 {
     ArenaAllocator allocator;
