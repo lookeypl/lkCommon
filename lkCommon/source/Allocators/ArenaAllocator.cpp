@@ -8,7 +8,10 @@
 
 namespace {
 
-const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
+#ifdef _DEBUG
+    // Dead area magic is only used in Debug
+    const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
+#endif // _DEBUG
 
 LKCOMMON_INLINE size_t EnsureArenaFitsSize(size_t currentArenaSize, size_t toAllocSize)
 {
@@ -112,9 +115,13 @@ void ArenaAllocator::Free(void* ptr)
     Arena* arena = FindArenaByPointer(ptr);
     LKCOMMON_ASSERT(arena != nullptr, "Invalid pointer provided to free");
 
-    uint32_t* u32ptr = reinterpret_cast<uint32_t*>(ptr);
-    LKCOMMON_ASSERT(*u32ptr != DEAD_AREA_MAGIC, "Attempted double-free");
-    *u32ptr = DEAD_AREA_MAGIC;
+    #ifdef _DEBUG
+        // check if area wasn't freed already and set given memory part as dead
+        // in Release this is compiled-out for speed.
+        uint32_t* u32ptr = reinterpret_cast<uint32_t*>(ptr);
+        LKCOMMON_ASSERT(*u32ptr != DEAD_AREA_MAGIC, "Attempted double-free");
+        *u32ptr = DEAD_AREA_MAGIC;
+    #endif // _DEBUG
 
     --arena->referenceCount;
     if (arena->referenceCount == 0)

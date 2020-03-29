@@ -66,8 +66,13 @@ TEST(ArenaAllocator, Free)
 
     allocator.Free(ptr1);
 
+    // Dead area magic is put into memory only on Debug builds, on Release
+    // assertions related to it are removed
+#ifdef _DEBUG
     EXPECT_EQ(DEAD_AREA_MAGIC, *ptr1);
     EXPECT_NE(DEAD_AREA_MAGIC, *ptr2);
+#endif // _DEBUG
+
     EXPECT_EQ(1, allocator.GetChunkCount());
 }
 

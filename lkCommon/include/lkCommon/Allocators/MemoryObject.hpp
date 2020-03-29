@@ -8,6 +8,13 @@
 namespace lkCommon {
 namespace Allocators {
 
+/**
+ * Helper template to enforce use of selected memory allocator.
+ *
+ * This template privatizes default new/delete operators and puts up placement
+ * new operators instead, using requrested Allocator. Use this template via
+ * inheritance.
+ */
 template <typename Allocator>
 class MemoryObject
 {

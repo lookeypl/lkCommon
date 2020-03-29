@@ -45,7 +45,9 @@ void TestMemoryObject()
 
     Object<Allocator>::operator delete(a, memory);
 
-    EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
+    #ifdef _DEBUG
+        EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
+    #endif // _DEBUG
 }
 
 
