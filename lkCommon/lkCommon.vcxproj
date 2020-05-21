@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\lkCommon\Allocators\ArenaAllocator.hpp" />
+    <ClInclude Include="include\lkCommon\Allocators\ConcurrentMemory.hpp" />
     <ClInclude Include="include\lkCommon\Allocators\MemoryObject.hpp" />
     <ClInclude Include="include\lkCommon\Allocators\Memory.hpp" />
     <ClInclude Include="include\lkCommon\lkCommon.hpp" />

@@ -1,7 +1,6 @@
 #include "lkCommon/Allocators/ArenaAllocator.hpp"
 #include "lkCommon/System/Info.hpp"
 #include <gtest/gtest.h>
-#include <future>
 
 using namespace lkCommon::Allocators;
 
@@ -12,7 +11,6 @@ const size_t CUSTOM_CHUNK_SIZE = PAGE_SIZE * 4;
 const size_t CUSTOM_CHUNK_SIZE_NOT_PADDED = (PAGE_SIZE * 3) + 1;
 
 const size_t ALLOCATION_SIZE_SMALL = 16;
-const size_t THREAD_COUNT = 16;
 const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
 
 } // namespace

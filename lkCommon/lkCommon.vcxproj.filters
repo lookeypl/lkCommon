@@ -266,6 +266,9 @@
     <ClInclude Include="include\lkCommon\Allocators\MemoryObject.hpp">
       <Filter>include\lkCommon\Allocators</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\ConcurrentMemory.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

@@ -1,35 +1,40 @@
 #pragma once
 
 #include "lkCommon/lkCommon.hpp"
-#include "ArenaAllocator.hpp" // TODO REMOVE
+
+#include <mutex>
+#include <thread>
 
 
 namespace lkCommon {
 namespace Allocators {
 
 /**
- * A Memory allocated by custom lkCommon Allocator.
+ * A thread-safe alternative to Memory template.
  *
  * This class provides an unified interface for all Allocator classes provided
  * by lkCommon library. For even more simplicity & ease-of-use, classes can
- * derive after MemoryObject.
+ * derive after ConcurrentMemoryObject.
  *
  * If need occurs, all used memory can be freed by using Clear() function.
  *
  * On some Allocators it's worth to call CollectGarbage() function regularly
  * to clean some leftover, unused data blocks.
  *
- * This template only serves as a passthrough and provides no extra
- * functionalities. For thread-safe version of Memory, see ConcurrentMemory.
+ * This template serves both as a passthrough and automatically locks a mutex
+ * when entering thread-sensitive functions (Allocate and Free). Other
+ * functions are assumed to be called by main thread so they are NOT
+ * thread-safe.
  *
- * @sa ConcurrentMemory
- * @sa MemoryObject
+ * @sa Memory
+ * @sa ConcurrentMemoryObject
  * @sa ArenaAllocator
  */
 template <typename Allocator>
-class Memory
+class ConcurrentMemory
 {
     Allocator mAllocator;
+    std::mutex mMutex;
 
 public:
     /**
@@ -40,6 +45,7 @@ public:
      */
     LKCOMMON_INLINE void* Allocate(size_t size)
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         return mAllocator.Allocate(size);
     }
 
@@ -50,6 +56,7 @@ public:
      */
     LKCOMMON_INLINE void Free(void* ptr)
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         mAllocator.Free(ptr);
     }
 

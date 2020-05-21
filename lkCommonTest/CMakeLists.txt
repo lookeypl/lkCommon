@@ -12,6 +12,7 @@ ENDIF(WIN32)
 
 SET(LKCOMMON_TEST_SRCS Main.cpp
                        Tests/Allocators/ArenaAllocatorTest.cpp
+                       Tests/Allocators/ConcurrentMemoryTest.cpp
                        Tests/Allocators/MemoryObjectTest.cpp
                        Tests/Allocators/MemoryTest.cpp
                        Tests/Internal/ImageLoaderTest.cpp

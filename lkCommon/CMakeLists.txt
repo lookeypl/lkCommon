@@ -15,7 +15,9 @@ SET(LKCOMMON_SRCS source/Allocators/ArenaAllocator.cpp
 
 SET(LKCOMMON_HDRS include/lkCommon/lkCommon.hpp
                   include/lkCommon/Allocators/ArenaAllocator.hpp
-                  include/lkCommon/Allocators/ArenaObject.hpp
+                  include/lkCommon/Allocators/ConcurrentMemory.hpp
+                  include/lkCommon/Allocators/Memory.hpp
+                  include/lkCommon/Allocators/MemoryObject.hpp
                   include/lkCommon/Math/Average.hpp
                   include/lkCommon/Math/AverageImpl.hpp
                   include/lkCommon/Math/Constants.hpp
