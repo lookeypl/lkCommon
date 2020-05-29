@@ -170,6 +170,7 @@
     <ClCompile Include="Tests\Allocators\ConcurrentMemoryTest.cpp" />
     <ClCompile Include="Tests\Allocators\MemoryObjectTest.cpp" />
     <ClCompile Include="Tests\Allocators\MemoryTest.cpp" />
+    <ClCompile Include="Tests\Allocators\StackAllocatorTest.cpp" />
     <ClCompile Include="Tests\Internal\ImageLoaderTest.cpp" />
     <ClCompile Include="Tests\Math\AverageTest.cpp" />
     <ClCompile Include="Tests\Math\Matrix4Test.cpp" />

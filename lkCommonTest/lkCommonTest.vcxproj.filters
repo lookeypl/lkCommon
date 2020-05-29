@@ -77,6 +77,9 @@
     <ClCompile Include="Tests\Allocators\ConcurrentMemoryTest.cpp">
       <Filter>Tests\Allocators</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Allocators\StackAllocatorTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

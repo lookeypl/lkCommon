@@ -1,4 +1,6 @@
 #include "lkCommon/Allocators/Memory.hpp"
+#include "lkCommon/Allocators/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/StackAllocator.hpp"
 #include <gtest/gtest.h>
 
 
@@ -75,4 +77,24 @@ TEST(Memory, ArenaAllocator_Clear)
 TEST(Memory, ArenaAllocator_CollectGarbage)
 {
     TestCollectGarbage<ArenaAllocator>();
+}
+
+TEST(Memory, StackAllocator_Allocate)
+{
+    TestAllocate<StackAllocator<512>>();
+}
+
+TEST(Memory, StackAllocator_Free)
+{
+    TestFree<StackAllocator<512>>();
+}
+
+TEST(Memory, StackAllocator_Clear)
+{
+    TestClear<StackAllocator<512>>();
+}
+
+TEST(Memory, StackAllocator_CollectGarbage)
+{
+    TestCollectGarbage<StackAllocator<512>>();
 }

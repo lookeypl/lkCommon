@@ -1,5 +1,7 @@
 #include "lkCommon/Allocators/MemoryObject.hpp"
 #include "lkCommon/Allocators/Memory.hpp"
+#include "lkCommon/Allocators/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/StackAllocator.hpp"
 #include <gtest/gtest.h>
 
 using namespace lkCommon::Allocators;
@@ -44,14 +46,15 @@ void TestMemoryObject()
     EXPECT_EQ(VALUE_B, a->mB);
 
     Object<Allocator>::operator delete(a, memory);
-
-    #ifdef _DEBUG
-        EXPECT_EQ(DEAD_AREA_MAGIC, *(reinterpret_cast<uint32_t*>(a)));
-    #endif // _DEBUG
 }
 
 
 TEST(MemoryObject, ArenaAllocator)
 {
     TestMemoryObject<ArenaAllocator>();
+}
+
+TEST(MemoryObject, StackAllocator)
+{
+    TestMemoryObject<StackAllocator<512>>();
 }

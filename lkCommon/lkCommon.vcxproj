@@ -48,6 +48,7 @@
     <ClInclude Include="include\lkCommon\Allocators\ConcurrentMemory.hpp" />
     <ClInclude Include="include\lkCommon\Allocators\MemoryObject.hpp" />
     <ClInclude Include="include\lkCommon\Allocators\Memory.hpp" />
+    <ClInclude Include="include\lkCommon\Allocators\StackAllocator.hpp" />
     <ClInclude Include="include\lkCommon\lkCommon.hpp" />
     <ClInclude Include="include\lkCommon\Math\Average.hpp" />
     <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp" />
