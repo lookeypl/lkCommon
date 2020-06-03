@@ -51,6 +51,7 @@ lkCommon library is split into various categories, each contains a set of module
   * `Logger` - Logging module, providing logging macros. Supports logging to stdout, file and Visual Studio output.
   * `Pixel` - Module containing an N-component pixel, to use in tandem with `Image` class, or as an object being a multiple-component color.
   * `Sort` - Implementation of various sorting algorithms.
+  * `Stack` - Template with LIFO container (aka. stack) implementation allocated on heap using fixed size.
   * `StaticQueue` - Template with FIFO container queue implementation using fixed size and zero dynamic allocations.
   * `StaticStack` - Template with LIFO container (aka. stack) implementation using fixed size and zero dynamic allocations.
   * `StringConv` - Converters between String and WideString types. Mostly used by other modules for Windows-Linux compatibility purposes.

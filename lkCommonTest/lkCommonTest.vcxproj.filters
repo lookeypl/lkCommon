@@ -80,6 +80,9 @@
     <ClCompile Include="Tests\Allocators\StackAllocatorTest.cpp">
       <Filter>Tests\Allocators</Filter>
     </ClCompile>
+    <ClCompile Include="Tests\Utils\StackTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tests">

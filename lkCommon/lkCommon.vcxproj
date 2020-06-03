@@ -86,6 +86,8 @@
     <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Sort.hpp" />
     <ClInclude Include="include\lkCommon\Utils\SortImpl.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\Stack.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\StackImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\StaticQueue.hpp" />
     <ClInclude Include="include\lkCommon\Utils\StaticQueueImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\StaticStack.hpp" />

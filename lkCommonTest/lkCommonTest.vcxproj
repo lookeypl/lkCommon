@@ -186,6 +186,7 @@
     <ClCompile Include="Tests\Utils\LoggerTest.cpp" />
     <ClCompile Include="Tests\Utils\PixelTest.cpp" />
     <ClCompile Include="Tests\Utils\SortTest.cpp" />
+    <ClCompile Include="Tests\Utils\StackTest.cpp" />
     <ClCompile Include="Tests\Utils\StaticQueueTest.cpp" />
     <ClCompile Include="Tests\Utils\StaticStackTest.cpp" />
     <ClCompile Include="Tests\Utils\StringConvTest.cpp" />

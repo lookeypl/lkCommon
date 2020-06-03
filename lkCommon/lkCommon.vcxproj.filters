@@ -272,6 +272,12 @@
     <ClInclude Include="include\lkCommon\Allocators\StackAllocator.hpp">
       <Filter>include\lkCommon\Allocators</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Stack.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StackImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
