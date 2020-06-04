@@ -278,6 +278,12 @@
     <ClInclude Include="include\lkCommon\Utils\StackImpl.hpp">
       <Filter>include\lkCommon\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ObjectPool.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ObjectPoolImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

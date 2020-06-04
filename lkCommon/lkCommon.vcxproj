@@ -82,6 +82,8 @@
     <ClInclude Include="include\lkCommon\Utils\ImageImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\ImageLoader.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Logger.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\ObjectPool.hpp" />
+    <ClInclude Include="include\lkCommon\Utils\ObjectPoolImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Pixel.hpp" />
     <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp" />
     <ClInclude Include="include\lkCommon\Utils\Sort.hpp" />
