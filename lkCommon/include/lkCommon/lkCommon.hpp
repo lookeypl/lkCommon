@@ -1,10 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Main library header containing commonly used defines throughout the
- * project.
- */
-
 #pragma once
 
 #include <cstring>
