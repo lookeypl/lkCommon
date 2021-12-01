@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Image template class declaration
- */
-
 #pragma once
 #define _LKCOMMON_UTILS_IMAGE_HPP_
 

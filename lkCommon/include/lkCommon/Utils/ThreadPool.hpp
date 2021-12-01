@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Basic Thread Pool implementation
- */
-
 #pragma once
 
 #include <vector>

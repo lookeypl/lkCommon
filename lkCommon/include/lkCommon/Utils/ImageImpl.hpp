@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Image module implementation
- */
-
 #pragma once
 
 #ifndef _LKCOMMON_UTILS_IMAGE_HPP_

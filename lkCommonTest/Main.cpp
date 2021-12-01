@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Main file for lkRay Tests
- */
-
 #include <gtest/gtest.h>
 #include <lkCommon/System/FS.hpp>
 #include <lkCommon/Utils/Logger.hpp>

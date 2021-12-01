@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Pixel utility template class implementation.
- */
-
 #pragma once
 
 #ifndef _LKCOMMON_UTILS_PIXEL_HPP_

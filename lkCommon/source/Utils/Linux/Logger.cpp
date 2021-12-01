@@ -1,9 +1,3 @@
-/**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Logger module implementation
- */
-
 #include "lkCommon/Utils/Logger.hpp"
 
 #include <fstream>

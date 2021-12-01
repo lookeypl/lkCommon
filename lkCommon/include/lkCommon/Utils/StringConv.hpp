@@ -1,8 +1,12 @@
+#pragma once
+
+#include <string>
+
+
+namespace lkCommon {
+namespace Utils {
+
 /**
- * @file
- * @author LKostyra (costyrra.xl@gmail.com)
- * @brief  Module supporting conversion between Char Strings and Wide Char Strings
- *
  * @note There are differences in encoding for both supported platforms,
  * which are Windows and Linux - Windows systems use UTF-16 encoding for
  * non-ASCII sign support, while Linux based platforms use UTF-8. Additionally,
@@ -13,14 +17,6 @@
  * Windows and rarely should be used while interacting with lkCommon API, or
  * while implementing different lkCommon modules on Linux.
  */
-
-#pragma once
-
-#include <string>
-
-
-namespace lkCommon {
-namespace Utils {
 
 /**
  * Converts Char String to Wide Char String
