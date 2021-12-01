@@ -3,7 +3,7 @@ lkCommon
 
 lkCommon is a library with commonly used code in other projects on my profile.
 
-Most contents of this library were based on my [uni ABench project](https://github.com/lkostyra/abench).
+Most contents of this library were based on my [uni ABench project](https://github.com/lookeypl/abench).
 After finishing it I decided to save parts of its code here for further development and
 in case I need to use it in other projects of my own, without reimplementing everything
 once again.
