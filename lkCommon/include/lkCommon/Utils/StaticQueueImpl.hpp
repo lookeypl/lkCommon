@@ -72,7 +72,7 @@ void StaticQueue<T, N>::Emplace(Args&&... args)
 }
 
 template <typename T, size_t N>
-T StaticQueue<T, N>::Pop()
+T&& StaticQueue<T, N>::Pop()
 {
     LKCOMMON_ASSERT(Size() != 0, "Queue empty");
     ++mStart;
@@ -81,10 +81,10 @@ T StaticQueue<T, N>::Pop()
     {
         mStart = 0;
         mWrapped = false;
-        return mObjects[N - 1];
+        return std::move(mObjects[N - 1]);
     }
 
-    return mObjects[mStart - 1];
+    return std::move(mObjects[mStart - 1]);
 }
 
 } // namespace Utils

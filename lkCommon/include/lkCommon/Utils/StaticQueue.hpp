@@ -49,11 +49,9 @@ public:
     void Emplace(Args&&... args);
 
     /**
-     * Get an element from a queue.
-     *
-     * @return Last inserted element.
+     * Move an element from queue
      */
-    T Pop();
+    T&& Pop();
 
     /**
      * Acquire queue's max possible size.
@@ -72,6 +70,11 @@ public:
             return N - mStart + mEnd;
         else
             return mEnd - mStart;
+    }
+
+    LKCOMMON_INLINE bool Empty() const
+    {
+        return (mStart == mEnd);
     }
 };
 

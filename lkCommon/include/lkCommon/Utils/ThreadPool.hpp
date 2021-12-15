@@ -1,12 +1,12 @@
 #pragma once
 
 #include <vector>
-#include <queue>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 #include <functional>
 
+#include <lkCommon/Utils/StaticQueue.hpp>
 #include <lkCommon/System/Info.hpp>
 #include <lkCommon/lkCommon.hpp>
 
@@ -89,7 +89,7 @@ struct Thread
 class ThreadPool
 {
     using ThreadContainer = std::vector<Thread>;
-    using TaskContainer = std::queue<Task>;
+    using TaskContainer = lkCommon::Utils::StaticQueue<Task, 1024>;
     using LockGuard = std::lock_guard<std::mutex>;
     using UniqueLock = std::unique_lock<std::mutex>;
 

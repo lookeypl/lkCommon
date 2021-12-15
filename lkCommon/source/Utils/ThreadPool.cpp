@@ -114,11 +114,11 @@ void ThreadPool::DispatchThreadFunction()
             UniqueLock dispatchThreadLock(mPoolStateMutex);
             mDispatchThreadCV.wait(dispatchThreadLock, [this]
             {
-                return ((!mTaskQueue.empty()) && (mAvailableWorkerThreads > 0)) || mExitFlag;
+                return ((!mTaskQueue.Empty()) && (mAvailableWorkerThreads > 0)) || mExitFlag;
             });
         }
 
-        if (mExitFlag && mTaskQueue.empty() && mAvailableWorkerThreads == mWorkerThreads.size())
+        if (mExitFlag && mTaskQueue.Empty() && mAvailableWorkerThreads == mWorkerThreads.size())
         {
             mTasksDoneCV.notify_all();
             break;
@@ -127,7 +127,7 @@ void ThreadPool::DispatchThreadFunction()
         // TODO THIS MIGHT SPIN-LOOP DISPATCH THREAD
         // Situation where ExitFlag == true and there are no working threads available,
         // then CV above will never wait. Try to avoid that.
-        if (mAvailableWorkerThreads > 0 && !mTaskQueue.empty())
+        if (mAvailableWorkerThreads > 0 && !mTaskQueue.Empty())
         {
             // get first free thread (should be available)
             uint32_t thread = 0;
@@ -150,8 +150,7 @@ void ThreadPool::DispatchThreadFunction()
                 LockGuard lock(mPoolStateMutex);
 
                 mAvailableWorkerThreads--;
-                t.assignedTask = std::move(mTaskQueue.front());
-                mTaskQueue.pop();
+                t.assignedTask = mTaskQueue.Pop();
             }
 
             {
@@ -225,7 +224,7 @@ void ThreadPool::AddTask(TaskCallback&& callback)
 {
     {
         LockGuard lock(mPoolStateMutex);
-        mTaskQueue.emplace(std::move(callback));
+        mTaskQueue.Push(std::move(callback));
     }
     mDispatchThreadCV.notify_all();
 }
@@ -235,7 +234,7 @@ void ThreadPool::WaitForTasks()
     UniqueLock lock(mPoolStateMutex);
     mTasksDoneCV.wait(lock, [this]
     {
-        return (mTaskQueue.empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
+        return (mTaskQueue.Empty()) && (mAvailableWorkerThreads == mWorkerThreads.size());
     });
 }
 
