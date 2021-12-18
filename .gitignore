@@ -18,6 +18,8 @@ Makefile
 # Output dir and files
 /Bin
 /bin
+Release
+Debug
 *.a
 *.so
 
