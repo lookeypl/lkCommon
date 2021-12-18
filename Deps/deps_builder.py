@@ -11,12 +11,22 @@ import subprocess
 import sys
 import threading
 import time
+import datetime
+
+
+def SecondsToHumanReadableString(time):
+    min, sec = divmod(int(time), 60)
+    if sec < 10:
+        return str(min) + "m 0" + str(sec) + "s"
+    else:
+        return str(min) + "m " + str(sec) + "s"
 
 
 class DepsBuilder:
-    def __init__(self, projectName, generator, testDefine, deps, testDeps, platforms, configurations):
+    def __init__(self, projectName, generator, requirements, deps, testDeps, testDefine, platforms, configurations):
         signal.signal(signal.SIGINT, self.InterruptHandler)
 
+        self.mRequirements = requirements
         self.mProjectName = projectName
         self.mGenerator = generator
         self.mDeps = deps
@@ -28,6 +38,7 @@ class DepsBuilder:
         self.mAnimDone = False
         self.mBuildAllPlats = False
         self.mBuildAllConfigs = False
+        self.mThreads = 0
 
         if platforms is None:
             self.mPlatforms = ["x64"]
@@ -41,7 +52,7 @@ class DepsBuilder:
 
         print("=== " + self.mProjectName + " dependency builder ===\n")
 
-        if platform.system() is not "Windows":
+        if platform.system() != "Windows":
             print("This script is designed to work under Windows to help build dependencies for MSVC.")
             print("Linux builds directly include CMake projects, so this script is not necessary. In")
             print("order to build dependencies on Linux, just run CMake on the project and everything")
@@ -59,8 +70,10 @@ class DepsBuilder:
                             help="Clean given platform/configuration.")
         parser.add_argument('--noanim', dest='noanim', action="store_true",
                             help="Disable progress animation (useful for non-terminal enviroments, ex. VS Output window)")
-        parser.add_argument('--tests', dest='tests', action="store_true",
-                            help="Include dependencies required for running tests.")
+        parser.add_argument('-t', '--threads', dest='threads', nargs='?', default="",
+                            help="Build on multiple threads. Leave empty to use max CPU count.")
+        parser.add_argument('--tests', dest='tests', action="store_true", default=False,
+                            help="Build dependencies necessary to run tests.")
 
         try:
             self.mArgs = parser.parse_args()
@@ -90,16 +103,26 @@ class DepsBuilder:
             print('\n')
             sys.exit(1)
 
+        if self.mArgs.threads != "" and self.mArgs.threads is not None:
+            try:
+                self.mThreads = int(self.mArgs.threads)
+            except:
+                print("Provided thread count is invalid, must be an integer")
+                sys.exit(1)
+
+            if self.mThreads <= 0:
+                print("Provided thread count is invalid, should be 1 or more")
+                sys.exit(1)
+
+
         if self.mBuildAllPlats or self.mBuildAllConfigs:
             print() # for clear output sake
 
-        if self.mArgs.tests:
-            self.mBuildDoneFileName = ".build_tests_done"
+        self.mBuildTestDeps = self.mArgs.tests
+        if self.mBuildTestDeps:
+            self.mBuildDoneFileName = ".tests_build_done"
         else:
             self.mBuildDoneFileName = ".build_done"
-
-        if self.mArgs.tests and self.mTestDefine is None:
-            Exception("There's no test-related CMake define provided, cannot enable tests")
 
         print("Build details:")
         if self.mBuildAllPlats:
@@ -111,31 +134,27 @@ class DepsBuilder:
         else:
             print("    Configuration: " + self.mArgs.config)
         print("    Clean: " + str(self.mArgs.clean))
-        print("    Build test deps: " + str(self.mArgs.tests) + "\n")
+        if self.mThreads > 0:
+            print("    Thread count: " + str(self.mThreads))
+        else:
+            print("    Thread count: Max available")
+        print("    Build test deps: " + str(self.mBuildTestDeps))
 
-    def AnimProgress(self, stepString):
+    def AnimProgress(self, stepString, startTime=0):
         self.mAnimDone = False
 
         for c in itertools.cycle('\\|/-'):
             if self.mAnimDone:
                 break
-            sys.stdout.write("\r " + c + " ==> " + stepString + "...")
+            messageEnd = "..."
+            if startTime != 0:
+                messageEnd += " (" + SecondsToHumanReadableString(time.perf_counter() - startTime) + ")"
+            sys.stdout.write("\r " + c + " ==> " + stepString + messageEnd)
             sys.stdout.flush()
             time.sleep(0.2)
 
         sys.stdout.write("\r   ==> " + stepString + "... ")
         sys.stdout.flush()
-
-    def IsCallable(self, exe):
-        print("   ==> Checking for " + exe + "... ", end='')
-        path = shutil.which(exe)
-        if path is not None:
-            print("FOUND")
-            return True
-        else:
-            print("NOT FOUND")
-            print("Make sure " + exe + " is visible in PATH env variable before using this script.")
-            return False
 
     def InterruptHandler(self, sig, frame):
         self.mAnimDone = True
@@ -145,15 +164,21 @@ class DepsBuilder:
         print("\nInterrupt captured\n")
         sys.exit(1)
 
-    def CallStage(self, prompt, pargs, stageId=0, stageCount=0):
+    def CallStage(self, prompt, pargs, stageId=0, stageCount=0, measureTime=False):
         capture = not self.mArgs.verbose
 
-        if (stageCount > 0):
+        if (stageCount > 1):
             prompt = str(stageId) + "/" + str(stageCount) + " " + prompt
 
+        if measureTime:
+            processStart = time.perf_counter()
+
         if not self.mArgs.verbose and not self.mArgs.noanim:
+            animArgs = [prompt]
+            if measureTime:
+                animArgs.append(processStart)
             self.mAnimThread = threading.Thread(target=self.AnimProgress,
-                                                args=[prompt])
+                                                args=animArgs)
             self.mAnimThread.start()
         else:
             print("   ==> " + prompt + "... ")
@@ -161,31 +186,33 @@ class DepsBuilder:
         sys.stdout.flush()
         result = subprocess.run(pargs, capture_output=capture)
 
+        if measureTime:
+            processTime = time.perf_counter() - processStart
+
         if self.mAnimThread is not None:
             self.mAnimDone = True
             self.mAnimThread.join()
             self.mAnimThread = None
 
         if not self.mArgs.verbose:
-            if result.returncode is not 0:
-                if self.mArgs.noanim:
-                    print("   ==> " + prompt + "... FAILED")
-                else:
-                    print("FAILED")
-                raise Exception("Build failed. Rerun with -v option to see details.")
+            if result.returncode == 0:
+                resultMsg = "SUCCESS"
             else:
-                if self.mArgs.noanim:
-                    print("   ==> " + prompt + "... SUCCESS")
-                else:
-                    print("SUCCESS")
+                resultMsg = "FAILED"
+
+            if measureTime:
+                resultMsg += " (" + SecondsToHumanReadableString(processTime) + ")"
+
+            if self.mArgs.noanim:
+                print("   ==> " + prompt + "... " + resultMsg)
+            else:
+                print(resultMsg)
+
+        if result.returncode != 0:
+            raise Exception("Build failed. Rerun with -v option to see details.")
 
     def CMakeCreate(self):
         os.chdir(self.mCMakeDir)
-
-        if self.mArgs.tests:
-            enableTests = '1'
-        else:
-            enableTests = '0'
 
         process = [
             "cmake",
@@ -195,10 +222,10 @@ class DepsBuilder:
             "-A", self.mCurrentPlat
         ]
 
-        if self.mTestDefine is not None:
-            process.append("-D" + self.mTestDefine + "=" + enableTests)
+        if self.mBuildTestDeps:
+            process.append("-D" + self.mTestDefine + "=1")
 
-        self.CallStage("Creating build files for " + self.mCurrentPlat + "/" + self.mCurrentConfig, process)
+        self.CallStage("Creating build files for " + self.mCurrentPlat + "/" + self.mCurrentConfig, process, measureTime=True)
 
         os.chdir(self.mScriptDir)
 
@@ -206,25 +233,34 @@ class DepsBuilder:
         os.chdir(self.mCMakeDir)
 
         solution = project + ".sln"
+        threadArg = "/m"
+        if self.mThreads > 0:
+            threadArg += ":" + str(self.mThreads)
+
         process = [
             "msbuild",
             solution,
+            threadArg,
             "/t:" + target,
             "/p:Configuration=" + self.mCurrentConfig + ";Platform=" + self.mCurrentPlat
         ]
-        self.CallStage("Building " + target, process, stageId, stageCount)
+
+        if self.mThreads == 1:
+            self.CallStage("Building " + target, process, stageId, stageCount, measureTime=True)
+        else:
+            self.CallStage("Building", process, stageId, stageCount, measureTime=True)
 
         os.chdir(self.mScriptDir)
 
-    def CheckEnv(self):
-        if not self.IsCallable("cmake"):
-            raise OSError()
-
-        if not self.IsCallable("msbuild"):
-            raise OSError()
+    def CheckRequirements(self):
+        for r in self.mRequirements:
+            if r() is False:
+                raise OSError("Build requirements not met")
 
     def SwitchCWDToScriptRoot(self):
-        os.chdir(os.path.dirname(sys.argv[0]))
+        path = os.path.dirname(os.path.realpath(sys.argv[0]))
+        print("   ==> Switching CWD to " + path)
+        os.chdir(path)
 
     def SetupBuildTree(self):
         if not self.mArgs.clean:
@@ -270,25 +306,34 @@ class DepsBuilder:
 
         self.CMakeCreate()
 
-        if self.mArgs.tests:
-            stageId = 0
-            for testdep in self.mTestDeps:
-                stageId += 1
-                self.MSBuild(testdep[0], testdep[1], stageId, len(self.mTestDeps))
+        stageId = 0
+
+        if self.mBuildTestDeps:
+            deps = self.mTestDeps
         else:
-            stageId = 0
-            for dep in self.mDeps:
+            deps = self.mDeps
+
+        if self.mThreads == 1:
+            # Build step-by-step on single-threaded build
+            for dep in deps:
                 stageId += 1
                 self.MSBuild(dep[0], dep[1], stageId, len(self.mDeps))
+        else:
+            # Multithreaded builds run faster if you trigger just the last step
+            # Then MSBuild will be able to work on multiple projects at once
+            stageId = 1
+            dep = deps[-1]
+            self.MSBuild(dep[0], dep[1], stageId, stageId)
 
         # touch build done file
         open(self.mBuildDoneFile, 'w').close()
 
     def Build(self):
-        print("Build progress:")
-        self.CheckEnv()
-        self.SwitchCWDToScriptRoot()
+        buildStartTime = time.perf_counter()
 
+        print("Build progress:")
+        self.SwitchCWDToScriptRoot()
+        self.CheckRequirements()
         if self.mBuildAllPlats and self.mBuildAllConfigs:
             for p in self.mPlatforms:
                 for c in self.mConfigs:
@@ -310,10 +355,64 @@ class DepsBuilder:
             self.mCurrentConfig = self.mArgs.config
             self.BuildCurrent()
 
-        print("\nScript is done\n")
+        buildTotalTime = time.perf_counter() - buildStartTime
+        print("\nScript is done (took " + SecondsToHumanReadableString(buildTotalTime) + ")\n")
+
+
+def IsCallable(exe):
+    print("   ==> Checking for " + exe + "... ", end='')
+    path = shutil.which(exe)
+    if path is not None:
+        print("OK")
+        return True
+    else:
+        print("NOT FOUND")
+        print("Make sure " + exe + " is visible in PATH env variable before using this script.")
+        return False
+
+def IsNonEmptyDir(dir):
+    if os.path.isdir(dir) and len(os.listdir(dir)) > 0:
+        return True
+    else:
+        return False
+
+def HasCMake():
+    return IsCallable("cmake")
+
+def HasMSBuild():
+    return IsCallable("msbuild")
+
+def HasSubmodules():
+    print("   ==> Checking for submodules... ", end='')
+    # TODO move below array to __main__ to have all "configuration" elements
+    #      in one common place
+    submodules = [
+        "googletest",
+        "libpng",
+        "zlib"
+    ]
+
+    hasAllSubmodules = True
+    for s in submodules:
+        if not IsNonEmptyDir(s):
+            hasAllSubmodules = False
+
+    if hasAllSubmodules:
+        print("OK")
+        return True
+    else:
+        print("FAILED")
+        print("Download required submodules via: git submodule update --init --recursive")
+        return False
 
 
 def main():
+    reqs = [
+        HasCMake,
+        HasMSBuild,
+        HasSubmodules
+    ]
+
     deps = [
         ("lkCommonDeps", "zlibstatic"),
         ("lkCommonDeps", "png_static"),
@@ -325,9 +424,10 @@ def main():
         ("lkCommonDeps", "lkCommonDepsTestsPostBuild")
     ]
 
+    testDefine = "LKCOMMON_BUILD_TEST"
+
     plats = [
-        "x64",
-        "Win32"
+        "x64"
     ]
 
     confs = [
@@ -337,10 +437,9 @@ def main():
 
     try:
         builder = DepsBuilder(projectName="lkCommon",
-                              generator="Visual Studio 16 2019",
-                              testDefine="LKCOMMON_BUILD_TEST",
-                              deps=deps, testDeps=testDeps,
-                              platforms=plats, configurations=confs)
+                              generator="Visual Studio 17 2022",
+                              requirements=reqs, deps=deps, testDeps=testDeps,
+                              testDefine=testDefine, platforms=plats, configurations=confs)
         builder.Build()
     except Exception as e:
         print("Exception occured while building:")
