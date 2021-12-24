@@ -1,4 +1,5 @@
 #include "lkCommon/Allocators/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/Memory.hpp"
 #include "lkCommon/System/Info.hpp"
 #include "lkCommon/System/Memory.hpp"
 #include "lkCommon/Utils/Logger.hpp"
@@ -7,11 +8,6 @@
 
 
 namespace {
-
-#ifdef _DEBUG
-    // Dead area magic is only used in Debug
-    const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
-#endif // _DEBUG
 
 LKCOMMON_INLINE size_t EnsureArenaFitsSize(size_t currentArenaSize, size_t toAllocSize)
 {
@@ -114,8 +110,8 @@ void ArenaAllocator::Free(void* ptr)
         // check if area wasn't freed already and set given memory part as dead
         // in Release this is compiled-out for speed.
         uint32_t* u32ptr = reinterpret_cast<uint32_t*>(ptr);
-        LKCOMMON_ASSERT(*u32ptr != DEAD_AREA_MAGIC, "Attempted double-free");
-        *u32ptr = DEAD_AREA_MAGIC;
+        LKCOMMON_ASSERT(*u32ptr != LKCOMMON_MEMORY_FREE_AREA, "Attempted double-free");
+        *u32ptr = LKCOMMON_MEMORY_FREE_AREA;
     #endif // _DEBUG
 
     --arena->referenceCount;

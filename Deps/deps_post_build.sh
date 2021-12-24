@@ -2,7 +2,7 @@
 
 pushd . > /dev/null
 cd $(dirname "${BASH_SOURCE[0]}")
-echo -n "Current deirectory is "; pwd
+echo -n "Current directory is "; pwd
 
 
 # move zconf.h.included back to zconf.h

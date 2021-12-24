@@ -1,4 +1,5 @@
 #include "lkCommon/Allocators/ArenaAllocator.hpp"
+#include "lkCommon/Allocators/Memory.hpp"
 #include "lkCommon/System/Info.hpp"
 #include <gtest/gtest.h>
 
@@ -11,7 +12,6 @@ const size_t CUSTOM_CHUNK_SIZE = PAGE_SIZE * 4;
 const size_t CUSTOM_CHUNK_SIZE_NOT_PADDED = (PAGE_SIZE * 3) + 1;
 
 const size_t ALLOCATION_SIZE_SMALL = 16;
-const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
 
 } // namespace
 
@@ -67,8 +67,8 @@ TEST(ArenaAllocator, Free)
     // Dead area magic is put into memory only on Debug builds, on Release
     // assertions related to it are removed
 #ifdef _DEBUG
-    EXPECT_EQ(DEAD_AREA_MAGIC, *ptr1);
-    EXPECT_NE(DEAD_AREA_MAGIC, *ptr2);
+    EXPECT_EQ(LKCOMMON_MEMORY_FREE_AREA, *ptr1);
+    EXPECT_NE(LKCOMMON_MEMORY_FREE_AREA, *ptr2);
 #endif // _DEBUG
 
     EXPECT_EQ(1, allocator.GetChunkCount());

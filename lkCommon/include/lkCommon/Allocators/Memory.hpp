@@ -7,6 +7,18 @@ namespace lkCommon {
 namespace Allocators {
 
 /**
+ * @def LKCOMMON_MEMORY_FREE_AREA
+ *
+ * A value used mostly by memory-allocation-related pieces for marking a memory
+ * area as already freed. This is mostly used only in debug configurations, since
+ * such checks should be compiled out on Release code for performance.
+ *
+ * If debug code encounters this variable, most probably it is an attempt to
+ * double-free
+ */
+#define LKCOMMON_MEMORY_FREE_AREA 0xF5EEA53A
+
+/**
  * A Memory allocated by custom lkCommon Allocator.
  *
  * This class provides an unified interface for all Allocator classes provided

@@ -18,8 +18,11 @@ namespace Allocators {
 template <typename Allocator>
 class MemoryObject
 {
-    static void* operator new(size_t) { return nullptr; }
-    static void operator delete(void*) { }
+    // Default new/delete shouldn't return NULL so we have to do this,
+    // otherwise some compilers have an issue. We privatize these calls anyway
+    // to prevent out-of-allocator allocation so it doesn't matter what's here.
+    static void* operator new(size_t) { return LKCOMMON_MEMORY_FREE_AREA; }
+    static void operator delete(void*) {}
 
 public:
     LKCOMMON_INLINE static void* operator new(size_t size, Memory<Allocator>& memory)

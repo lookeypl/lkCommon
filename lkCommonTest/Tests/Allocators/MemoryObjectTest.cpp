@@ -29,8 +29,6 @@ public:
 const uint32_t VALUE_A = 0x0000000F;
 const uint32_t VALUE_B = 42;
 
-const uint32_t DEAD_AREA_MAGIC = 0xDEADBEEF;
-
 } // namespace
 
 
