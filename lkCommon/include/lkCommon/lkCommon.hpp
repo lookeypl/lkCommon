@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstring>
+#include <cstdint>
+
 #include "lkCommon/Utils/Logger.hpp"
 
 /**
