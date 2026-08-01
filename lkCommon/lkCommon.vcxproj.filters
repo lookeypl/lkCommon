@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{c488a317-26eb-4019-8bc8-bc54dae53372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{93ef2703-bda1-476a-b8e6-24210c3762c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Math">
+      <UniqueIdentifier>{da8c8d1b-7095-4900-896b-2332eb58d1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\System">
+      <UniqueIdentifier>{78390684-39e9-4fcc-a812-bdb96f057f48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Utils">
+      <UniqueIdentifier>{8e957dab-a18f-45c5-b3e7-4f03a0b2b71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon">
+      <UniqueIdentifier>{2ddd14c7-daf1-46c5-8fe2-a23af339ee47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\Math">
+      <UniqueIdentifier>{f6dc3812-67d9-4299-8f2c-22de125c5b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\System">
+      <UniqueIdentifier>{a9c43c50-c7aa-481e-b304-ef358a4c2ea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\Utils">
+      <UniqueIdentifier>{964da1fe-6501-4e8f-b75c-c7aa2280e961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\System\Win">
+      <UniqueIdentifier>{e793cc2e-f630-4701-8d4a-6f93f8deb17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Utils\Win">
+      <UniqueIdentifier>{5c207b01-67a4-49e0-a9a5-a74b02aac96b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Internal">
+      <UniqueIdentifier>{338a2d77-0a05-4f2d-aee8-c37914cb1b9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Internal\ImageLoaders">
+      <UniqueIdentifier>{d2a932e2-1b3e-4709-8a37-54769f310482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\lkCommon\Allocators">
+      <UniqueIdentifier>{806bf139-872e-4dc6-8637-cb62875a2eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\Allocators">
+      <UniqueIdentifier>{8f76c674-59bc-4061-8aee-32998707b70e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Math\CubicInterpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Interpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\LinearInterpolator.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector4.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\FS.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Info.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Library.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Window.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\Logger.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\StringConv.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\Timer.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\ThreadPool.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\Memory.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Utilities.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\System\Win\WindowImage.cpp">
+      <Filter>source\System\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\ArgParser.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\ImageLoader.cpp">
+      <Filter>source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Internal\ImageLoaders\PNGImageLoader.cpp">
+      <Filter>source\Internal\ImageLoaders</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Matrix4.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Utils\Win\UUID.cpp">
+      <Filter>source\Utils\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector2.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Math\Vector3.cpp">
+      <Filter>source\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Allocators\ArenaAllocator.cpp">
+      <Filter>source\Allocators</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\lkCommon\lkCommon.hpp">
+      <Filter>include\lkCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Constants.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\CubicInterpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Interpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\LinearInterpolator.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RingAverage.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RingAverageImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector4.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\FS.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Info.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\KeyCodes.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Library.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Window.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Image.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Logger.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Pixel.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\PixelImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Sort.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\SortImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StringConv.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ThreadPool.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Timer.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector4Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\Memory.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Random.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Utilities.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\RandomImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ImageImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\System\WindowImage.hpp">
+      <Filter>include\lkCommon\System</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Average.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\AverageImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ArgParser.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticStack.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticStackImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\UtilitiesImpl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ImageLoader.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Internal\ImageLoaders\PNGImageLoader.hpp">
+      <Filter>source\Internal\ImageLoaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticQueue.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StaticQueueImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Matrix4.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Matrix4Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\UUID.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector2.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector2Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector3.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Math\Vector3Impl.hpp">
+      <Filter>include\lkCommon\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\ArenaAllocator.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\Memory.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\MemoryObject.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\ConcurrentMemory.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Allocators\StackAllocator.hpp">
+      <Filter>include\lkCommon\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\Stack.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\StackImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ObjectPool.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\lkCommon\Utils\ObjectPoolImpl.hpp">
+      <Filter>include\lkCommon\Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+</Project>

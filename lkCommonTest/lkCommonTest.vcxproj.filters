@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Tests\System\WindowTest.cpp">
+      <Filter>Tests\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\LoggerTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Vector4Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\ImageTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\RingAverageTest.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\SortTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\PixelTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\System\InfoTest.cpp">
+      <Filter>Tests\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\ThreadPoolTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\AverageTest.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\ArgParserTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\StaticStackTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\UtilitiesTest.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Internal\ImageLoaderTest.cpp">
+      <Filter>Tests\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\StringConvTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\StaticQueueTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Matrix4Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\TimerTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\UUIDTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Vector2Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Math\Vector3Test.cpp">
+      <Filter>Tests\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\ArenaAllocatorTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\MemoryObjectTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\MemoryTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\ConcurrentMemoryTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Allocators\StackAllocatorTest.cpp">
+      <Filter>Tests\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\Utils\StackTest.cpp">
+      <Filter>Tests\Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{b1bc89d0-5608-41a6-9db0-93dc91f06190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Math">
+      <UniqueIdentifier>{774a6070-22d2-41b2-91ff-8991519aa5e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\System">
+      <UniqueIdentifier>{8fd12019-fe8a-4cae-85c2-7ed4ac781e5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Utils">
+      <UniqueIdentifier>{f09b3d21-8bbc-4c30-86c9-e5db37d71b7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Internal">
+      <UniqueIdentifier>{6504a7b0-6f97-4bbd-b557-9f8006fdb941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tests\Allocators">
+      <UniqueIdentifier>{a1d483c4-2d90-4129-9da4-f59111734c2b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+</Project>

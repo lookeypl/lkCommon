@@ -1,0 +1,9 @@
+[submodule "Deps/googletest"]
+	path = Deps/googletest
+	url = https://github.com/google/googletest
+[submodule "Deps/libpng"]
+	path = Deps/libpng
+	url = https://github.com/glennrp/libpng
+[submodule "Deps/zlib"]
+	path = Deps/zlib
+	url = https://github.com/madler/zlib
